@@ -47,18 +47,18 @@ for j = 1:numCompareImages
     
     currentCompareImg = reshape(imgsToCompare(j,:,:),[height width]);
     
-    %this is where to put the error function
-    diffImage = (currentCompareImg-baseImage).^2;
-    errors(j) = mean(diffImage(:));
+    %error is computed here
+    errors(j) = mseImage(baseImage,currentCompareImg);
 end
 
 [errorVals,bestImgs] = sort(errors);
+sortedImgs = imgsToCompare(bestImgs,:,:);
 
 figure
 subplot(4,4,1);
 imagesc(baseImage);
 for i = 1:15
-   imgToShow = reshape(imgsToCompare(bestImgs(i),:,:),[height width]); 
+   imgToShow = reshape(sortedImgs(i,:,:),[height width]); 
    subplot(4,4,i+1);
    imagesc(imgToShow);
 end
