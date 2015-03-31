@@ -15,14 +15,22 @@ load('kaggleData.mat');
 
 %%
 
+%generates random images
+%{
 numCompareImages = 30000;
 numImages = size(X2tr,1);
 imgNums = randperm(numImages);
 imageNumsToCompare = imgNums(1:numCompareImages);
 randImgNum = imgNums(numCompareImages+1);
-
 baseImage = reshape(X2tr(randImgNum,:),[21 21]);
 imgsToCompare = reshape(X2tr(imageNumsToCompare,:),[numCompareImages 21 21]);
+%}
+
+%use random image for base and all images for ones to compare
+numImages = size(X2tr,1);
+randImgNum = ceil(rand(1,1)*numImages);
+baseImage = reshape(X2tr(randImgNum,:),[21 21]);
+imgsToCompare = reshape(X2tr,[numImages 21 21]);
 
 %%
 
@@ -47,12 +55,10 @@ end
 [errorVals,bestImgs] = sort(errors);
 
 figure
+subplot(4,4,1);
 imagesc(baseImage);
-colorbar
-figure
 for i = 1:15
    imgToShow = reshape(imgsToCompare(bestImgs(i),:,:),[height width]); 
-   subplot(3,5,i);
+   subplot(4,4,i+1);
    imagesc(imgToShow);
-   colorbar;
 end
