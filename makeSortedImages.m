@@ -16,9 +16,11 @@ for j = 1:numCompareImages
     currentCompareImg = reshape(imgsToCompare(j,:,:),[height width]);
     
     %error is computed here
-    %errors(j) = mseImage(baseImage,currentCompareImg);
+    errors(j) = mseImage(baseImage,currentCompareImg);
     %errors(j) = meanErrorImage(baseImage,currentCompareImg);
-    errors(j) = classErrorImage(baseImage,currentCompareImg);
+    %errors(j) = classErrorImage(baseImage,currentCompareImg);
+    %errors(j) = classDistErrorImage(baseImage,currentCompareImg);
+    %errors(j) = classMseErrorImage(baseImage,currentCompareImg);
 end
 
 [errorVals,bestImgs] = sort(errors);
