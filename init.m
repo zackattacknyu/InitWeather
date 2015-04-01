@@ -35,6 +35,8 @@ imgsToCompare = reshape(X2tr,[numImages 21 21]);
 %%
 
 [sortedImgs,~,~] = makeSortedImages(baseImage,imgsToCompare);
+height = size(imgsToCompare,2);
+width = size(imgsToCompare,3);
 
 figure
 subplot(4,4,1);
