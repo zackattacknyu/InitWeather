@@ -123,4 +123,7 @@ for i = 1:15
    axis image;
 end
 
+%%
+save('goodPatches1.mat','randPatches');
+
 
