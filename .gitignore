@@ -9,3 +9,4 @@
 *.pdf
 /*.synctex.gz
 /train/
+/allGTimages.mat
