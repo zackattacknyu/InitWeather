@@ -106,6 +106,22 @@ for j=1:nImgs
 end
 
 %%
+load('goodPatches1.mat');
+goodPatches1 = randPatches;
+load('goodPatches2.mat');
+goodPatches2 = randPatches;
+load('goodPatches3.mat');
+goodPatches3 = randPatches;
+randPatches = cat(1,goodPatches1,goodPatches2,goodPatches3);
+
+%%
+save('goodPatches.mat','randPatches');
+
+%%
+load('goodPatches.mat');
+%%
+
+patchSize = 30;
 numImages = size(randPatches,1);
 randImgNum = ceil(rand(1,1)*numImages);
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
@@ -115,6 +131,7 @@ baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 figure
 subplot(4,4,1);
 imagesc(baseImage);
+colormap bone;
 axis image;
 for i = 1:15
    imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
@@ -122,7 +139,11 @@ for i = 1:15
    imagesc(imgToShow);
    axis image;
 end
-
+%%
+figure
+imagesc(baseImage);
+colormap bone;
+colorbar;
 %%
 save('goodPatches4.mat','randPatches');
 
