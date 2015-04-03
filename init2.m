@@ -41,23 +41,52 @@ end
 save('allGTimages.mat','allImgs','-v7.3');
 
 %%
+load('allGTimages.mat');
 
+%%
+
+nImgs = size(allImgs,1);
+imgSize = [size(allImgs,2) size(allImgs,3)];
 randImgIds = randperm(nImgs);
-numPatches = 100;
-patchSize = 21;
+numPatches = 20;
+patchSize = 20;
 randPatches = zeros(numPatches,patchSize,patchSize);
+imgIndex = 1;
 
-for j=1:numPatches
-   randStartInd = ceil(rand(1,2).*(size(gt1) - [patchSize patchSize]));
-   randStartRow = randStartInd(1);
-   randStartCol = randStartInd(2);
-   
-   curImage = reshape(allImgs(randImgIds(j),:,:),size(gt1));
-   randPatch = curImage(...
-       randStartRow:(randStartRow+patchSize-1),...
-       randStartCol:(randStartCol+patchSize-1));
-   
-   randPatches(j,:,:) = randPatch;
+%the min that the mean of the patch must be to use the patch
+patchMeanThreshold = 2;
+
+for j=1:nImgs
+    
+    curImage = reshape(allImgs(randImgIds(j),:,:),imgSize);
+    
+    %makes sure threshold is met for whole image before trying to select a
+    %patch
+    if(mean(curImage(:)) > patchMeanThreshold)
+        done = false;
+        while(~done)
+            randStartInd = ceil(rand(1,2).*(imgSize - [patchSize patchSize]));
+           randStartRow = randStartInd(1);
+           randStartCol = randStartInd(2);
+           randPatch = curImage(...
+               randStartRow:(randStartRow+patchSize-1),...
+               randStartCol:(randStartCol+patchSize-1));
+
+           %makes sure threshold is met
+           if(mean(randPatch(:)) > patchMeanThreshold)
+              done = true; 
+           end
+        end
+
+
+       randPatches(imgIndex,:,:) = randPatch;
+       imgIndex = imgIndex + 1;
+    end
+    
+    if(imgIndex > numPatches)
+       break; 
+    end
+    
 end
 
 %%
