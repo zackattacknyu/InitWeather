@@ -40,6 +40,26 @@ end
 
 save('allGTimages.mat','allImgs','-v7.3');
 
+%%
+
+randImgIds = randperm(nImgs);
+numPatches = 100;
+patchSize = 21;
+randPatches = zeros(numPatches,patchSize,patchSize);
+
+for j=1:numPatches
+   randStartInd = ceil(rand(1,2).*(size(gt1) - [patchSize patchSize]));
+   randStartRow = randStartInd(1);
+   randStartCol = randStartInd(2);
+   
+   curImage = reshape(allImgs(randImgIds(j),:,:),size(gt1));
+   randPatch = curImage(...
+       randStartRow:(randStartRow+patchSize-1),...
+       randStartCol:(randStartCol+patchSize-1));
+   
+   randPatches(j,:,:) = randPatch;
+end
+
 
 
 
