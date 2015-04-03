@@ -56,7 +56,7 @@ imgIndex = 1;
 
 %the min that the sum of the patch must be to use the patch
 %   this helps ensure there is a discrenable structure in the patch
-patchSumThreshold = 100000;
+patchSumThreshold = 300000;
 
 for j=1:nImgs
     
