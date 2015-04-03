@@ -48,13 +48,14 @@ load('allGTimages.mat');
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
 randImgIds = randperm(nImgs);
-numPatches = 20;
+numPatches = 200;
 patchSize = 30;
 maxAttempts = 50;
 randPatches = zeros(numPatches,patchSize,patchSize);
 imgIndex = 1;
 
-%the min that the mean of the patch must be to use the patch
+%the min that the sum of the patch must be to use the patch
+%   this helps ensure there is a discrenable structure in the patch
 patchSumThreshold = 100000;
 
 for j=1:nImgs
@@ -108,10 +109,12 @@ baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 figure
 subplot(4,4,1);
 imagesc(baseImage);
+axis image;
 for i = 1:15
    imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
    subplot(4,4,i+1);
    imagesc(imgToShow);
+   axis image;
 end
 
 
