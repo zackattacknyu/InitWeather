@@ -60,6 +60,20 @@ for j=1:numPatches
    randPatches(j,:,:) = randPatch;
 end
 
+%%
+numImages = size(randPatches,1);
+randImgNum = ceil(rand(1,1)*numImages);
+baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
+[sortedImgs,~,~] = makeSortedImages(baseImage,randPatches);
+
+figure
+subplot(4,4,1);
+imagesc(baseImage);
+for i = 1:15
+   imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
+   subplot(4,4,i+1);
+   imagesc(imgToShow);
+end
 
 
