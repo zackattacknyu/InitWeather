@@ -48,13 +48,14 @@ load('allGTimages.mat');
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
 randImgIds = randperm(nImgs);
-numPatches = 200;
+numPatches = 20;
 patchSize = 30;
+maxAttempts = 50;
 randPatches = zeros(numPatches,patchSize,patchSize);
 imgIndex = 1;
 
 %the min that the mean of the patch must be to use the patch
-patchMeanThreshold = 2;
+patchSumThreshold = 100000;
 
 for j=1:nImgs
     
@@ -62,9 +63,11 @@ for j=1:nImgs
     
     %makes sure threshold is met for 
     %   whole image before trying to select a patch
-    if(mean(curImage(:)) > patchMeanThreshold)
+    if(sum(curImage(:)) > patchSumThreshold)
         done = false;
+        attemptNo = 0;
         while(~done)
+            attemptNo = attemptNo + 1;
             randStartInd = ceil(rand(1,2).*(imgSize - [patchSize patchSize]));
            randStartRow = randStartInd(1);
            randStartCol = randStartInd(2);
@@ -73,14 +76,20 @@ for j=1:nImgs
                randStartCol:(randStartCol+patchSize-1));
 
            %makes sure threshold is met
-           if(mean(randPatch(:)) > patchMeanThreshold)
+           if(sum(randPatch(:)) > patchSumThreshold)
+              done = true;
+              randPatches(imgIndex,:,:) = randPatch;
+              imgIndex = imgIndex + 1;
+           end
+           
+           %give up on this patch if too many attempts
+           if(attemptNo > maxAttempts)
               done = true; 
            end
         end
 
 
-       randPatches(imgIndex,:,:) = randPatch;
-       imgIndex = imgIndex + 1;
+       
     end
     
     if(imgIndex > numPatches)
