@@ -48,7 +48,7 @@ load('allGTimages.mat');
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
 randImgIds = randperm(nImgs);
-numPatches = 200;
+numPatches = 300;
 patchSize = 30;
 maxAttempts = 50;
 randPatches = zeros(numPatches,patchSize,patchSize);
@@ -81,6 +81,10 @@ for j=1:nImgs
               done = true;
               randPatches(imgIndex,:,:) = randPatch;
               imgIndex = imgIndex + 1;
+              
+              if(mod(imgIndex,20) == 0)
+                 imgIndex 
+              end
            end
            
            %give up on this patch if too many attempts
@@ -88,14 +92,16 @@ for j=1:nImgs
               done = true; 
            end
         end
-
-
-       
     end
     
     if(imgIndex > numPatches)
        break; 
     end
+    
+    if(mod(j,20) == 0)
+       j 
+    end
+    
     
 end
 
