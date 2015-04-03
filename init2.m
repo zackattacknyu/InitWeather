@@ -48,8 +48,8 @@ load('allGTimages.mat');
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
 randImgIds = randperm(nImgs);
-numPatches = 20;
-patchSize = 20;
+numPatches = 200;
+patchSize = 30;
 randPatches = zeros(numPatches,patchSize,patchSize);
 imgIndex = 1;
 
@@ -60,8 +60,8 @@ for j=1:nImgs
     
     curImage = reshape(allImgs(randImgIds(j),:,:),imgSize);
     
-    %makes sure threshold is met for whole image before trying to select a
-    %patch
+    %makes sure threshold is met for 
+    %   whole image before trying to select a patch
     if(mean(curImage(:)) > patchMeanThreshold)
         done = false;
         while(~done)
