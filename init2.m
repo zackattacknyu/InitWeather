@@ -124,6 +124,6 @@ for i = 1:15
 end
 
 %%
-save('goodPatches1.mat','randPatches');
+save('goodPatches2.mat','randPatches');
 
 
