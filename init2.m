@@ -106,6 +106,9 @@ for j=1:nImgs
 end
 
 %%
+save('goodPatches4.mat','randPatches');
+
+%%
 load('goodPatches1.mat');
 goodPatches1 = randPatches;
 load('goodPatches2.mat');
@@ -123,7 +126,11 @@ load('goodPatches.mat');
 
 patchSize = 30;
 numImages = size(randPatches,1);
-randImgNum = ceil(rand(1,1)*numImages);
+
+%randImgNum = ceil(rand(1,1)*numImages);
+%image 142 in good patches produced some good results
+randImgNum = 142;
+
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
 [sortedImgs,~,~] = makeSortedImages(baseImage,randPatches);
@@ -131,7 +138,7 @@ baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 figure
 subplot(4,4,1);
 imagesc(baseImage);
-colormap bone;
+%colormap bone;
 axis image;
 for i = 1:15
    imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
@@ -144,7 +151,8 @@ figure
 imagesc(baseImage);
 colormap bone;
 colorbar;
-%%
-save('goodPatches4.mat','randPatches');
+
+
+
 
 
