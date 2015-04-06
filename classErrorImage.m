@@ -1,8 +1,8 @@
-function [ error ] = classErrorImage( baseImage,compareImage )
+function [ error ] = classErrorImage( baseImage,compareImage,numBins )
 %MSEIMAGE Summary of this function goes here
 %   Detailed explanation goes here
 
-[baseImageBinned,compareImageBinned] = getBinnedImages(baseImage,compareImage);
+[baseImageBinned,compareImageBinned] = getBinnedImages(baseImage,compareImage,numBins);
 
 equMatrix = (baseImageBinned~=compareImageBinned);
 numEntries = size(equMatrix,1)*size(equMatrix,2);

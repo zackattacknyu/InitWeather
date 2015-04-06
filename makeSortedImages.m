@@ -23,11 +23,11 @@ for j = 1:numCompareImages
         case 2
             errors(j) = meanErrorImage(baseImage,currentCompareImg);
         case 3
-            errors(j) = classErrorImage(baseImage,currentCompareImg);
+            errors(j) = classErrorImage(baseImage,currentCompareImg,64);
         case 4
-            errors(j) = classDistErrorImage(baseImage,currentCompareImg);
+            errors(j) = classDistErrorImage(baseImage,currentCompareImg,64);
         case 5
-            errors(j) = classMseErrorImage(baseImage,currentCompareImg);
+            errors(j) = classMseErrorImage(baseImage,currentCompareImg,64);
     end
 end
 
