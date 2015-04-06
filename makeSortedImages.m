@@ -12,6 +12,8 @@ height = size(imgsToCompare,2);
 width = size(imgsToCompare,3);
 errors = zeros(1,numCompareImages);
 
+numBins = 91;
+
 for j = 1:numCompareImages
     
     currentCompareImg = reshape(imgsToCompare(j,:,:),[height width]);
@@ -23,11 +25,11 @@ for j = 1:numCompareImages
         case 2
             errors(j) = meanErrorImage(baseImage,currentCompareImg);
         case 3
-            errors(j) = classErrorImage(baseImage,currentCompareImg,64);
+            errors(j) = classErrorImage(baseImage,currentCompareImg,numBins);
         case 4
-            errors(j) = classDistErrorImage(baseImage,currentCompareImg,64);
+            errors(j) = classDistErrorImage(baseImage,currentCompareImg,numBins);
         case 5
-            errors(j) = classMseErrorImage(baseImage,currentCompareImg,64);
+            errors(j) = classMseErrorImage(baseImage,currentCompareImg,numBins);
     end
 end
 
