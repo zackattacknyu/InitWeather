@@ -1,4 +1,5 @@
-function [ sortedImgs,errorVals,bestImgs ] = makeSortedImages( baseImage,imgsToCompare )
+function [ sortedImgs,errorVals,bestImgs ] = makeSortedImages( ...
+baseImage,imgsToCompare, errorMethod )
 %MAKESORTEDIMAGES Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -16,11 +17,18 @@ for j = 1:numCompareImages
     currentCompareImg = reshape(imgsToCompare(j,:,:),[height width]);
     
     %error is computed here
-    errors(j) = mseImage(baseImage,currentCompareImg);
-    %errors(j) = meanErrorImage(baseImage,currentCompareImg);
-    %errors(j) = classErrorImage(baseImage,currentCompareImg);
-    %errors(j) = classDistErrorImage(baseImage,currentCompareImg);
-    %errors(j) = classMseErrorImage(baseImage,currentCompareImg);
+    switch errorMethod
+        case 1
+            errors(j) = mseImage(baseImage,currentCompareImg);
+        case 2
+            errors(j) = meanErrorImage(baseImage,currentCompareImg);
+        case 3
+            errors(j) = classErrorImage(baseImage,currentCompareImg);
+        case 4
+            errors(j) = classDistErrorImage(baseImage,currentCompareImg);
+        case 5
+            errors(j) = classMseErrorImage(baseImage,currentCompareImg);
+    end
 end
 
 [errorVals,bestImgs] = sort(errors);

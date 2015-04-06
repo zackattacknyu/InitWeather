@@ -133,7 +133,7 @@ randImgNum = 142;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
-[sortedImgs,~,~] = makeSortedImages(baseImage,randPatches);
+[sortedImgs,~,~] = makeSortedImages(baseImage,randPatches,2);
 
 figure
 subplot(4,4,1);
@@ -151,7 +151,6 @@ figure
 imagesc(baseImage);
 colormap bone;
 colorbar;
-
 
 
 
