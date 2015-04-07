@@ -15,3 +15,8 @@ For the binning, they were put into 91 bins, thus each was separated by 0.1 mm
 
 In comparisons2,
 For the binning, they were put into 9 bins, thus each was separated by 1 mm
+
+Methods to try from that website:
+Bias
+Yes/No Comparison
+Scale Decomposition Methods
