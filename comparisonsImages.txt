@@ -1,0 +1,17 @@
+Each row shows the least error images and uses a different method
+The first image is always that base image since it would have the least error with itself
+
+From top to bottom
+Row 1: Mean Squared Error
+Row 2: Mean Error
+Row 3: Classification Error (you bin the mm/hr values and see how much error there is)
+Row 4: Classification Distance Error (bin the values, then do mean error on binned values)
+Row 5: Classification MSE (bin the values, do mse on binned values)
+
+Values range from 0 to 9097
+
+In comparisons1,
+For the binning, they were put into 91 bins, thus each was separated by 0.1 mm
+
+In comparisons2,
+For the binning, they were put into 9 bins, thus each was separated by 1 mm

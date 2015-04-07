@@ -131,14 +131,17 @@ numImages = size(randPatches,1);
 %image 142 in good patches produced some good results
 %   also image 196 is good
 %randImgNum = 142;
-randImgNum = 196;
+%randImgNum = 196;
+randImgNum = 396;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
+%{
 figure
 imagesc(baseImage);
 colormap jet;
 colorbar;
+%}
 
 figure
 for method = 1:5
