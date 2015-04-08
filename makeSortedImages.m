@@ -13,6 +13,7 @@ width = size(imgsToCompare,3);
 errors = zeros(1,numCompareImages);
 
 numBins = 91;
+minThreshold = 100;
 
 for j = 1:numCompareImages
     
@@ -30,6 +31,8 @@ for j = 1:numCompareImages
             errors(j) = classDistErrorImage(baseImage,currentCompareImg,numBins);
         case 5
             errors(j) = classMseErrorImage(baseImage,currentCompareImg,numBins);
+        case 6
+            errors(j) = yesNoErrorImage(baseImage,currentCompareImg,minThreshold);
     end
 end
 

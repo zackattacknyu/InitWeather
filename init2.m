@@ -131,8 +131,8 @@ numImages = size(randPatches,1);
 %image 142 in good patches produced some good results
 %   also image 196 is good
 %randImgNum = 142;
-%randImgNum = 196;
-randImgNum = 396;
+randImgNum = 196;
+%randImgNum = 396;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
@@ -143,12 +143,15 @@ colormap jet;
 colorbar;
 %}
 
+numMethods = 6;
+numPlots = 8;
+
 figure
-for method = 1:5
+for method = 1:numMethods
     [sortedImgs,~,~] = makeSortedImages(baseImage,randPatches,method);
-    for i = 1:5
+    for i = 1:numPlots
        imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
-       subplot(5,5,(method-1)*5 + i);
+       subplot(numMethods,numPlots,(method-1)*numPlots + i);
        imagesc(imgToShow);
        colormap jet;
        axis image;
