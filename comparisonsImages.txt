@@ -7,6 +7,7 @@ Row 2: Mean Error
 Row 3: Classification Error (you bin the mm/hr values and see how much error there is)
 Row 4: Classification Distance Error (bin the values, then do mean error on binned values)
 Row 5: Classification MSE (bin the values, do mse on binned values)
+Row 6: Yes/No Error (Yes is if pixel>100, No otherwise. Measures error in yes/no predictions on two images)
 
 Values range from 0 to 9097
 
@@ -18,5 +19,4 @@ For the binning, they were put into 9 bins, thus each was separated by 1 mm
 
 Methods to try from that website:
 Bias
-Yes/No Comparison
 Scale Decomposition Methods
