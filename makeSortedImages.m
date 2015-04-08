@@ -12,7 +12,7 @@ height = size(imgsToCompare,2);
 width = size(imgsToCompare,3);
 errors = zeros(1,numCompareImages);
 
-numBins = 9;
+numBins = 91;
 minThreshold = 100;
 
 for j = 1:numCompareImages
