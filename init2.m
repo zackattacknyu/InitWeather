@@ -131,8 +131,8 @@ numImages = size(randPatches,1);
 %image 142 in good patches produced some good results
 %   also image 196 is good
 %randImgNum = 142;
-randImgNum = 196;
-%randImgNum = 396;
+%randImgNum = 196;
+randImgNum = 396;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
