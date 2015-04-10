@@ -130,6 +130,7 @@ save('negativePatches.mat','randPatches');
 %%
 load('negativePatches.mat');
 
+%%
 %{
 load('goodPatches1.mat');
 goodPatches1 = randPatches;
@@ -148,12 +149,18 @@ load('goodPatches.mat');
 patchSize = 30;
 numImages = size(randPatches,1);
 
-randImgNum = ceil(rand(1,1)*numImages);
+%randImgNum = ceil(rand(1,1)*numImages);
+
 %image 142 in good patches produced some good results
-%   also image 196 is good
+%   also image 196,396 is good
 %randImgNum = 142;
 %randImgNum = 196;
 %randImgNum = 396;
+
+%The following images produced good results for neg ones: 36, 496, 835
+%randImgNum=36;
+%randImgNum=496;
+randImgNum=835;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
