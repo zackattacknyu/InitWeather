@@ -61,8 +61,8 @@ imgIndex = 1;
 %patchSumMaxThreshold = Inf;
 
 %used to select negative examples with little rainfall
-patchSumMinThreshold = 500;
-patchSumMaxThreshold = 1000;
+patchMinThreshold = 200;
+patchMaxThreshold = 800;
 
 for j=1:nImgs
     
@@ -70,7 +70,8 @@ for j=1:nImgs
     
     %makes sure threshold is met for 
     %   whole image before trying to select a patch
-    if(sum(curImage(:)) > patchSumMinThreshold)
+    %if(sum(curImage(:)) > patchMinThreshold)
+    if(max(curImage(:)) > patchMinThreshold)
         done = false;
         attemptNo = 0;
         while(~done)
@@ -83,8 +84,9 @@ for j=1:nImgs
                randStartCol:(randStartCol+patchSize-1));
 
            %makes sure threshold is met
-           patchSum = sum(randPatch(:));
-           if(patchSum < patchSumMaxThreshold && patchSum > patchSumMinThreshold)
+           %patchSum = sum(randPatch(:));
+           patchSum = max(randPatch(:));
+           if(patchSum < patchMaxThreshold && patchSum > patchMinThreshold)
               done = true;
               randPatches(imgIndex,:,:) = randPatch;
               imgIndex = imgIndex + 1;
@@ -113,9 +115,9 @@ for j=1:nImgs
 end
 
 %%
-save('goodPatches4.mat','randPatches');
+save('negativePatches3.mat','randPatches');
 
-%%
+%{
 load('goodPatches1.mat');
 goodPatches1 = randPatches;
 load('goodPatches2.mat');
@@ -124,11 +126,11 @@ load('goodPatches3.mat');
 goodPatches3 = randPatches;
 randPatches = cat(1,goodPatches1,goodPatches2,goodPatches3);
 
-%%
 save('goodPatches.mat','randPatches');
 
-%%
 load('goodPatches.mat');
+%}
+
 %%
 
 patchSize = 30;
