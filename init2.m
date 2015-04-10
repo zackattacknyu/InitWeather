@@ -117,6 +117,19 @@ end
 %%
 save('negativePatches3.mat','randPatches');
 
+%%
+load('negativePatches1.mat');
+goodPatches1 = randPatches;
+load('negativePatches2.mat');
+goodPatches2 = randPatches;
+load('negativePatches3.mat');
+goodPatches3 = randPatches;
+randPatches = cat(1,goodPatches1,goodPatches2,goodPatches3);
+save('negativePatches.mat','randPatches');
+
+%%
+load('negativePatches.mat');
+
 %{
 load('goodPatches1.mat');
 goodPatches1 = randPatches;
@@ -125,7 +138,6 @@ goodPatches2 = randPatches;
 load('goodPatches3.mat');
 goodPatches3 = randPatches;
 randPatches = cat(1,goodPatches1,goodPatches2,goodPatches3);
-
 save('goodPatches.mat','randPatches');
 
 load('goodPatches.mat');
