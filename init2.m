@@ -56,7 +56,13 @@ imgIndex = 1;
 
 %the min that the sum of the patch must be to use the patch
 %   this helps ensure there is a discrenable structure in the patch
-patchSumThreshold = 300000;
+%old settings
+%patchSumMinThreshold = 300000;
+%patchSumMaxThreshold = Inf;
+
+%used to select negative examples with little rainfall
+patchSumMinThreshold = 500;
+patchSumMaxThreshold = 1000;
 
 for j=1:nImgs
     
@@ -64,7 +70,7 @@ for j=1:nImgs
     
     %makes sure threshold is met for 
     %   whole image before trying to select a patch
-    if(sum(curImage(:)) > patchSumThreshold)
+    if(sum(curImage(:)) > patchSumMinThreshold)
         done = false;
         attemptNo = 0;
         while(~done)
@@ -77,7 +83,8 @@ for j=1:nImgs
                randStartCol:(randStartCol+patchSize-1));
 
            %makes sure threshold is met
-           if(sum(randPatch(:)) > patchSumThreshold)
+           patchSum = sum(randPatch(:));
+           if(patchSum < patchSumMaxThreshold && patchSum > patchSumMinThreshold)
               done = true;
               randPatches(imgIndex,:,:) = randPatch;
               imgIndex = imgIndex + 1;
@@ -127,12 +134,12 @@ load('goodPatches.mat');
 patchSize = 30;
 numImages = size(randPatches,1);
 
-%randImgNum = ceil(rand(1,1)*numImages);
+randImgNum = ceil(rand(1,1)*numImages);
 %image 142 in good patches produced some good results
 %   also image 196 is good
 %randImgNum = 142;
 %randImgNum = 196;
-randImgNum = 396;
+%randImgNum = 396;
 
 baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
 
