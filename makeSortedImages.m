@@ -33,6 +33,8 @@ for j = 1:numCompareImages
             errors(j) = classMseErrorImage(baseImage,currentCompareImg,numBins);
         case 6
             errors(j) = yesNoErrorImage(baseImage,currentCompareImg,minThreshold);
+        case 7
+            errors(j) = yesNoWeightedErrorImage(baseImage,currentCompareImg,minThreshold);
     end
 end
 
