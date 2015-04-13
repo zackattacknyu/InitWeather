@@ -57,12 +57,13 @@ imgIndex = 1;
 %the min that the sum of the patch must be to use the patch
 %   this helps ensure there is a discrenable structure in the patch
 %old settings
-%patchSumMinThreshold = 300000;
-%patchSumMaxThreshold = Inf;
+patchMinThreshold = 300000;
+patchMaxThreshold = Inf;
 
 %used to select negative examples with little rainfall
-patchMinThreshold = 200;
-patchMaxThreshold = 800;
+%   should switch to max as threshold when enabling this one
+%patchMinThreshold = 200;
+%patchMaxThreshold = 800;
 
 for j=1:nImgs
     
@@ -70,8 +71,8 @@ for j=1:nImgs
     
     %makes sure threshold is met for 
     %   whole image before trying to select a patch
-    %if(sum(curImage(:)) > patchMinThreshold)
-    if(max(curImage(:)) > patchMinThreshold)
+    if(sum(curImage(:)) > patchMinThreshold)
+    %if(max(curImage(:)) > patchMinThreshold)
         done = false;
         attemptNo = 0;
         while(~done)
@@ -84,8 +85,8 @@ for j=1:nImgs
                randStartCol:(randStartCol+patchSize-1));
 
            %makes sure threshold is met
-           %patchSum = sum(randPatch(:));
-           patchSum = max(randPatch(:));
+           patchSum = sum(randPatch(:));
+           %patchSum = max(randPatch(:));
            if(patchSum < patchMaxThreshold && patchSum > patchMinThreshold)
               done = true;
               randPatches(imgIndex,:,:) = randPatch;
@@ -140,9 +141,10 @@ load('goodPatches3.mat');
 goodPatches3 = randPatches;
 randPatches = cat(1,goodPatches1,goodPatches2,goodPatches3);
 save('goodPatches.mat','randPatches');
-
-load('goodPatches.mat');
 %}
+%%
+load('goodPatches.mat');
+
 
 %%
 
@@ -151,8 +153,7 @@ numImages = size(randPatches,1);
 
 %randImgNum = ceil(rand(1,1)*numImages);
 
-%image 142 in good patches produced some good results
-%   also image 196,396 is good
+%The following images produced good results for pos ones: 142, 196, 396
 %randImgNum = 142;
 %randImgNum = 196;
 %randImgNum = 396;
@@ -171,7 +172,7 @@ colormap jet;
 colorbar;
 %}
 
-numMethods = 6;
+numMethods = 7;
 numPlots = 8;
 
 figure
