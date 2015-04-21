@@ -48,7 +48,7 @@ load('allGTimages.mat');
 %obtains a very large sample of patches
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
-numPatchesPerImage = 10;
+numPatchesPerImage = 40;
 patchSize = 30;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
@@ -72,7 +72,7 @@ for j=1:nImgs
        patchSum(imgIndex) = sum(randPatch(:));
        imgIndex = imgIndex+1;
        
-       if(mod(imgIndex,200) == 0)
+       if(mod(imgIndex,1000) == 0)
          imgIndex 
        end
 
@@ -82,14 +82,12 @@ end
 %%
 
 [N,data] = hist(patchSum,30);
-%semilogy(data,N);
-ft = fittype({'log(x)','1'});
-X = zeros(size(data'));
-X(:,1) = data';
-Y = N';
-ft1 = fit(X,Y,ft);
+semilogy(N);
 
-plot(ft1,X,Y)
+%%
+
+
+
 %%
 
 patchSize = 30;
