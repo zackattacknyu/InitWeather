@@ -78,15 +78,43 @@ for j=1:nImgs
 
     end
 end
+%%
+
+total = 0;
+numBins = 30;
+for binNum=1:30
+    total = total + sum(N)/(numBins*N(binNum));
+end
+
+
 
 %%
 
-[N,data] = hist(patchSum,30);
-semilogy(N);
+numBins = 30;
+[N,data] = hist(patchSum,numBins);
+%semilogy(N);
 
-%%
+%obtains a very large sample of patches
+nImgs = size(randPatches,1);
+patchSize = 30;
+patchSum = zeros(1,numTotalPatches);
+numTotal = 2000;
+newPatches = zeros(numTotal,patchSize,patchSize);
+imgIndex = 1;
 
+for j=1:nImgs
+    
+    curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
+    patchSum = sum(curImage(:));
+    [~,binNum] = min(abs(data-patchSum));
+    
+    probPicking = sum(N)/(numBins*N(binNum));
+    %CONTINUE THIS LOOP LATER
 
+   if(mod(j,1000) == 0)
+     imgIndex 
+   end
+end
 
 %%
 
