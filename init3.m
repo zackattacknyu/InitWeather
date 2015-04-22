@@ -78,15 +78,6 @@ for j=1:nImgs
 
     end
 end
-%%
-
-total = 0;
-numBins = 30;
-for binNum=1:30
-    total = total + sum(N)/(numBins*N(binNum));
-end
-
-
 
 %%
 
@@ -102,14 +93,41 @@ numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
 imgIndex = 1;
 
+%get normalization constant
+normFactor = 0;
+binSum = sum(N);
+for i=1:numBins
+    if(N(i) > 0)
+        normFactor = normFactor + binSum/(N(i)*numBins);
+    end
+   
+end
+
+%%
+
+randomPicks = rand(1,nImgs);
+imgIndex = 1;
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
     patchSum = sum(curImage(:));
     [~,binNum] = min(abs(data-patchSum));
     
-    probPicking = sum(N)/(numBins*N(binNum));
-    %CONTINUE THIS LOOP LATER
+    if(N(binNum) > 0)
+        probPicking = sum(N)/(numBins*N(binNum)*normFactor);
+    else
+        probPicking = 1;
+    end
+    
+    %ensures it is picked with a certain probability
+    if(randomPicks(j) < probPicking)
+        newPatches(imgIndex,:,:) = randPatches(j,:,:);
+        imgIndex = imgIndex + 1;
+    end
+    
+    if(imgIndex > numTotal)
+       break; 
+    end
 
    if(mod(j,1000) == 0)
      imgIndex 
