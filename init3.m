@@ -53,7 +53,7 @@ patchSize = 30;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
-randPatches = zeros(numPatchesPerImage*nImgs,patchSize,patchSize);
+randPatches = zeros(numTotalPatches,patchSize,patchSize);
 imgIndex = 1;
 
 for j=1:nImgs
@@ -70,6 +70,7 @@ for j=1:nImgs
            randStartCol:(randStartCol+patchSize-1));
        
        patchSum(imgIndex) = sum(randPatch(:));
+       randPatches(imgIndex,:,:) = randPatch;
        imgIndex = imgIndex+1;
        
        if(mod(imgIndex,1000) == 0)
@@ -81,10 +82,10 @@ end
 
 %%
 
-numBins = 100;
+numBins = 30;
 [N,data] = hist(patchSum,numBins);
-%semilogy(N);
-
+semilogy(N);
+%%
 %obtains a very large sample of patches
 nImgs = size(randPatches,1);
 patchSize = 30;
@@ -102,25 +103,27 @@ for i=1:numBins
    
 end
 
-%%
-
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
+probPicking = zeros(1,nImgs);
+binsPicked = ones(1,numTotal);
+binNum = ones(1,nImgs);
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
-    patchSum = sum(curImage(:));
-    [~,binNum] = min(abs(data-patchSum));
+    patchSum(j) = sum(curImage(:));
+    [~,binNum(j)] = min(abs(data-patchSum(j)));
     
     if(N(binNum) > 0)
-        probPicking = sum(N)/(numBins*N(binNum)*normFactor);
+        probPicking(j) = sum(N)/(numBins*N(binNum(j)));
     else
-        probPicking = 1;
+        probPicking(j) = 1;
     end
     
     %ensures it is picked with a certain probability
-    if(randomPicks(j) < probPicking)
+    if(randomPicks(j) < probPicking(j))
         newPatches(imgIndex,:,:) = randPatches(j,:,:);
+        binsPicked(imgIndex) = binNum(j);
         imgIndex = imgIndex + 1;
     end
     
@@ -133,6 +136,7 @@ for j=1:nImgs
    end
 end
 
+newPatches = newPatches(1:(imgIndex-1),:,:);
 %%
 
 patchSize = 30;
