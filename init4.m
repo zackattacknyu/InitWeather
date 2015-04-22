@@ -48,7 +48,7 @@ load('allGTimages.mat');
 %obtains a very large sample of patches
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
-numPatchesPerImage = 40;
+numPatchesPerImage = 4;
 patchSize = 30;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
@@ -56,7 +56,7 @@ patchSum = zeros(1,numTotalPatches);
 randPatches = zeros(numTotalPatches,patchSize,patchSize);
 imgIndex = 1;
 
-for j=1:nImgs
+for j=1:2:nImgs
     
     curImage = reshape(allImgs(j,:,:),imgSize);
     
