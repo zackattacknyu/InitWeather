@@ -92,45 +92,29 @@ load('largePatchSet.mat');
 numBins = 30;
 [N,data] = hist(patchSum,numBins);
 semilogy(N);
+
+%%
+%specific to now
+N = N(11:30);
+data = data(11:30);
 %%
 %obtains a very large sample of patches
 nImgs = size(randPatches,1);
 patchSize = 30;
-patchSum = zeros(1,numTotalPatches);
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
+numPickedInBin = zeros(1,30);
+numPerBinMax = 50;
 
-%get normalization constant
-normFactor = 0;
-binSum = sum(N);
-for i=1:numBins
-    if(N(i) > 0)
-        normFactor = normFactor + binSum/(N(i)*numBins);
-    end
-   
-end
-
-randomPicks = rand(1,nImgs);
-imgIndex = 1;
-probPicking = zeros(1,nImgs);
-binsPicked = ones(1,numTotal);
-binNum = ones(1,nImgs);
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
-    patchSum(j) = sum(curImage(:));
-    [~,binNum(j)] = min(abs(data-patchSum(j)));
+    patchSum = sum(curImage(:));
+    [~,binNum] = min(abs(data-patchSum));
     
-    if(N(binNum) > 0)
-        probPicking(j) = sum(N)/(numBins*N(binNum(j)));
-    else
-        probPicking(j) = 1;
-    end
-    
-    %ensures it is picked with a certain probability
-    if(randomPicks(j) < probPicking(j))
+    if(numPickedInBin(binNum) < numPerBinMax)
+        numPickedInBin(binNum) = numPickedInBin(binNum) + 1;
         newPatches(imgIndex,:,:) = randPatches(j,:,:);
-        binsPicked(imgIndex) = binNum(j);
         imgIndex = imgIndex + 1;
     end
     
