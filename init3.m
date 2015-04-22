@@ -81,7 +81,7 @@ end
 
 %%
 
-numBins = 30;
+numBins = 100;
 [N,data] = hist(patchSum,numBins);
 %semilogy(N);
 
@@ -91,7 +91,6 @@ patchSize = 30;
 patchSum = zeros(1,numTotalPatches);
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
-imgIndex = 1;
 
 %get normalization constant
 normFactor = 0;
