@@ -129,7 +129,7 @@ newPatches = newPatches(1:(imgIndex-1),:,:);
 
 %%
 
-save('newPatches.mat','newPatches','-v7.3');
+save('rejectionSamplingPatches.mat','newPatches','-v7.3');
 
 %%
 
@@ -151,7 +151,8 @@ for h = 1:numHoriz
        imageNumbers = imagesInEachBin{binNum};         
        binNum = binNum+1;
        if(~isempty(imageNumbers))
-           imgToShow = reshape(newPatches(imageNumbers(1),:,:),[patchSize patchSize]); 
+           curImageNum = floor(rand(1,1)*length(imageNumbers))+1;
+           imgToShow = reshape(newPatches(imageNumbers(curImageNum),:,:),[patchSize patchSize]); 
            subplot(numHoriz,numVert,binNum-1);
            imagesc(imgToShow,[0 8000]);
            colormap jet;
