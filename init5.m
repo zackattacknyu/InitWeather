@@ -82,48 +82,52 @@ end
 
 %%
 
+nPatches = size(randPatches,1);
+patchSum = zeros(1,nPatches);
+for i=1:nPatches
+    curPatch = randPatches(i,:,:);
+    patchSum(i) = sum(curPatch(:));
+end
+
+%%
+
 numBins = 30;
 [N,data] = hist(patchSum,numBins);
-semilogy(N);
+semilogy(data,N);
+
+%%
+
+%tried fitting it to exponential
+f = fit(data',N','exp1');
+plot(f,data,N)
+%%
+
+%gets the min/max patchSum
+minSum = min(patchSum);
+maxSum = max(patchSum);
+
 %%
 %obtains a very large sample of patches
 nImgs = size(randPatches,1);
 patchSize = 30;
-patchSum = zeros(1,numTotalPatches);
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
-
-%get normalization constant
-normFactor = 0;
-binSum = sum(N);
-for i=1:numBins
-    if(N(i) > 0)
-        normFactor = normFactor + binSum/(N(i)*numBins);
-    end
-   
-end
+b = 0.0001148;
 
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
 probPicking = zeros(1,nImgs);
-binsPicked = ones(1,numTotal);
-binNum = ones(1,nImgs);
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
-    patchSum(j) = sum(curImage(:));
-    [~,binNum(j)] = min(abs(data-patchSum(j)));
     
-    if(N(binNum) > 0)
-        probPicking(j) = sum(N)/(numBins*N(binNum(j)));
-    else
-        probPicking(j) = 1;
-    end
+    %tries using exponential for probability
+    curSumImage = sum(curImage(:));
+    probPicking(j) = exp(b*(curSumImage-maxSum));
     
     %ensures it is picked with a certain probability
     if(randomPicks(j) < probPicking(j))
         newPatches(imgIndex,:,:) = randPatches(j,:,:);
-        binsPicked(imgIndex) = binNum(j);
         imgIndex = imgIndex + 1;
     end
     
