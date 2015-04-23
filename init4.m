@@ -133,7 +133,22 @@ save('rejectionSamplingPatches.mat','newPatches','-v7.3');
 
 %%
 
-load('newPatches.mat');
+load('rejectionSamplingPatches.mat');
+
+%%
+
+%obtain earth-mover distance
+patch1 = reshape(newPatches(34,:,:),[patchSize patchSize]);
+patch2 = reshape(newPatches(56,:,:),[patchSize patchSize]);
+%{
+figure
+imagesc(patch1)
+figure
+imagesc(patch2)
+%}
+w = ones(patchSize,1);
+[x,f] = emd(patch1,patch2,w,w,groundDist);
+
 %%
 
 %display random images from our set
