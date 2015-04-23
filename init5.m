@@ -98,8 +98,17 @@ semilogy(data,N);
 %%
 
 %tried fitting it to exponential
-f = fit(data',N','exp1');
-plot(f,data,N)
+f = fit(data(4:30)',N(4:30)','exp1');
+x = 0:2:max(data);
+aVal = f.a; bVal = f.b;
+y = aVal*exp(bVal.*x);
+figure
+semilogy(x,y);
+hold on
+semilogy(data,N);
+legend('Best Fit Line','Original Data');
+hold off
+%plot(f,data,N)
 %%
 
 %gets the min/max patchSum
