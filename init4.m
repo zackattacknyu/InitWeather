@@ -94,18 +94,14 @@ numBins = 30;
 semilogy(N);
 
 %%
-%specific to now
-N = N(11:30);
-data = data(11:30);
-%%
 %obtains a very large sample of patches
 nImgs = size(randPatches,1);
 patchSize = 30;
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
-numPickedInBin = zeros(1,30);
+numPickedInBin = zeros(1,numBins);
 numPerBinMax = 50;
-
+imgIndex = 1;
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
@@ -128,7 +124,35 @@ for j=1:nImgs
 end
 
 newPatches = newPatches(1:(imgIndex-1),:,:);
+
 %%
+
+save('newPatches.mat','newPatches','-v7.3');
+%%
+
+%display random images from our set
+
+patchSize = 30;
+numImages = size(newPatches,1);
+
+numHoriz = 6;
+numVert = 6;
+
+
+figure
+for h = 1:numHoriz
+    for v = 1:numVert
+        randImgNum = floor(rand(1,1)*numImages)+1;
+       imgToShow = reshape(newPatches(randImgNum,:,:),[patchSize patchSize]); 
+       subplot(numHoriz,numVert,numHoriz*(h-1)+v);
+       imagesc(imgToShow);
+       colormap jet;
+       axis image;
+    end
+end
+
+%%
+
 
 patchSize = 30;
 numImages = size(randPatches,1);
