@@ -121,7 +121,6 @@ nImgs = size(randPatches,1);
 patchSize = 30;
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
-b = 0.0001148;
 
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
@@ -132,7 +131,7 @@ for j=1:nImgs
     
     %tries using exponential for probability
     curSumImage = sum(curImage(:));
-    probPicking(j) = exp(b*(curSumImage-maxSum));
+    probPicking(j) = exp(-f.b*(curSumImage-maxSum));
     
     %ensures it is picked with a certain probability
     if(randomPicks(j) < probPicking(j))
