@@ -48,7 +48,7 @@ load('allGTimages.mat');
 %obtains a very large sample of patches
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
-numPatchesPerImage = 30;
+numPatchesPerImage = 40;
 patchSize = 30;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
@@ -82,37 +82,48 @@ end
 
 %%
 
-save('largePatchSet.mat','randPatches','patchSum','-v7.3');
-
-%%
-
-load('largePatchSet.mat');
-
-%%
 numBins = 30;
 [N,data] = hist(patchSum,numBins);
-%semilogy(N);
-
+semilogy(N);
+%%
 %obtains a very large sample of patches
 nImgs = size(randPatches,1);
 patchSize = 30;
+patchSum = zeros(1,numTotalPatches);
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
-numPickedInBin = zeros(1,numBins);
-numPerBinMax = 50;
-imgIndex = 1;
-imagesInEachBin = cell(1,numBins);
 
+%get normalization constant
+normFactor = 0;
+binSum = sum(N);
+for i=1:numBins
+    if(N(i) > 0)
+        normFactor = normFactor + binSum/(N(i)*numBins);
+    end
+   
+end
+
+randomPicks = rand(1,nImgs);
+imgIndex = 1;
+probPicking = zeros(1,nImgs);
+binsPicked = ones(1,numTotal);
+binNum = ones(1,nImgs);
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
-    patchSum = sum(curImage(:));
-    [~,binNum] = min(abs(data-patchSum));
+    patchSum(j) = sum(curImage(:));
+    [~,binNum(j)] = min(abs(data-patchSum(j)));
     
-    if(numPickedInBin(binNum) < numPerBinMax)
-        numPickedInBin(binNum) = numPickedInBin(binNum) + 1;
+    if(N(binNum) > 0)
+        probPicking(j) = sum(N)/(numBins*N(binNum(j)));
+    else
+        probPicking(j) = 1;
+    end
+    
+    %ensures it is picked with a certain probability
+    if(randomPicks(j) < probPicking(j))
         newPatches(imgIndex,:,:) = randPatches(j,:,:);
-        imagesInEachBin{binNum} = [imagesInEachBin{binNum} imgIndex];
+        binsPicked(imgIndex) = binNum(j);
         imgIndex = imgIndex + 1;
     end
     
@@ -126,50 +137,7 @@ for j=1:nImgs
 end
 
 newPatches = newPatches(1:(imgIndex-1),:,:);
-
 %%
-
-save('newPatches.mat','newPatches','-v7.3');
-
-%%
-
-load('newPatches.mat');
-%%
-
-%display random images from our set
-
-patchSize = 30;
-numImages = size(newPatches,1);
-
-numHoriz = 5;
-numVert = 6;
-binNum = 1;
-
-figure
-for h = 1:numHoriz
-    for v = 1:numVert
-       imageNumbers = imagesInEachBin{binNum};         
-       binNum = binNum+1;
-       if(~isempty(imageNumbers))
-           imgToShow = reshape(newPatches(imageNumbers(1),:,:),[patchSize patchSize]); 
-           subplot(numHoriz,numVert,binNum-1);
-           imagesc(imgToShow,[0 8000]);
-           colormap jet;
-           axis image;
-       end
-       
-    end
-end
-
-%%
-imgToShow = reshape(newPatches(imageNumbers(1),:,:),[patchSize patchSize]); 
-imagesc(imgToShow,[0 8000]);
-colormap jet;
-colorbar;
-axis image;
-
-%%
-
 
 patchSize = 30;
 numImages = size(randPatches,1);
