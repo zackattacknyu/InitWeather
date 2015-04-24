@@ -114,9 +114,22 @@ hold off
 %gets the min/max patchSum
 minSum = min(patchSum);
 maxSum = max(patchSum);
+%%
 
+%does a test of the prob function
+aVal = f.a; bVal=f.b;
+totalProb = 0;
+probs = zeros(1,maxSum);
+otherFactor = 10*(exp(bVal*maxSum)-1)/bVal;
+for i = 1:maxSum
+    probs(i)=(bVal*otherFactor)/(exp(bVal*i)*(1-exp(-bVal*maxSum)));
+end
 %%
 %obtains a very large sample of patches
+minSum = min(patchSum);
+maxSum = max(patchSum);
+aVal = f.a; bVal=f.b;
+
 nImgs = size(randPatches,1);
 patchSize = 30;
 numTotal = 2000;
@@ -125,13 +138,14 @@ newPatches = zeros(numTotal,patchSize,patchSize);
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
 probPicking = zeros(1,nImgs);
+probabilityFactor = 2*(exp(bVal*maxSum)-1)/(1-exp(-bVal*maxSum));
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
     
     %tries using exponential for probability
     curSumImage = sum(curImage(:));
-    probPicking(j) = exp(-f.b*(curSumImage-maxSum));
+    probPicking(j) = probabilityFactor/(exp(bVal*curSumImage));
     
     %ensures it is picked with a certain probability
     if(randomPicks(j) < probPicking(j))
@@ -149,32 +163,28 @@ for j=1:nImgs
 end
 
 newPatches = newPatches(1:(imgIndex-1),:,:);
+
 %%
 
 patchSize = 30;
-numImages = size(randPatches,1);
+numImages = size(newPatches,1);
 
-baseImage = reshape(randPatches(randImgNum,:,:),[patchSize patchSize]);
-
-%{
-figure
-imagesc(baseImage);
-colormap jet;
-colorbar;
-%}
-
-numMethods = 7;
-numPlots = 8;
+numHoriz = 5;
+numVert = 6;
+imageNum = 1;
 
 figure
-for method = 1:numMethods
-    [sortedImgs,~,~] = makeSortedImages(baseImage,randPatches,method);
-    for i = 1:numPlots
-       imgToShow = reshape(sortedImgs(i,:,:),[patchSize patchSize]); 
-       subplot(numMethods,numPlots,(method-1)*numPlots + i);
-       imagesc(imgToShow);
+for h = 1:numHoriz
+    for v = 1:numVert
+       
+       curImageNum = floor(rand(1,1)*length(numImages))+1;
+       imgToShow = reshape(newPatches(curImageNum,:,:),[patchSize patchSize]); 
+       subplot(numHoriz,numVert,imageNum);
+       imageNum = imageNum + 1;
+       imagesc(imgToShow,[0 8000]);
        colormap jet;
        axis image;
+       
     end
 end
 
