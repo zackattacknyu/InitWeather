@@ -98,13 +98,18 @@ semilogy(data,N);
 %%
 
 %tried fitting it to exponential
-f = fit(data(4:30)',N(4:30)','exp1');
-x = 0:2:max(data);
-aVal = f.a; bVal = f.b;
-y = aVal*exp(bVal.*x);
+f1 = fit(data(1:4)',N(1:4)','exp1');
+f2 = fit(data(5:30)',N(5:30)','exp1');
+x1 = 0:2:data(4);
+x2 = 0:2:max(data);
+a1 = f1.a; b1 = f1.b;
+a2 = f2.a; b2 = f2.b;
+y1 = a1*exp(b1.*x1);
+y2 = a2*exp(b2.*x2);
 figure
-semilogy(x,y);
+semilogy(x1,y1);
 hold on
+semilogy(x2,y2);
 semilogy(data,N);
 legend('Best Fit Line','Original Data');
 hold off
