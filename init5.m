@@ -108,21 +108,23 @@ hold on
 semilogy(data,N);
 legend('Best Fit Line','Original Data');
 hold off
-%plot(f,data,N)
-%%
-
-%gets the min/max patchSum
-minSum = min(patchSum);
 maxSum = max(patchSum);
 %%
 
 %does a test of the prob function
+%{
+We want to have p(x)q(x)=K
+ p(x) is the probability of sum x
+ q(x) is probability that we pick sum x
+ K is number we want in the same bin as x
+We thus let q(x) = K/p(x) 
+    and normalize q(x) by its max
+You then end up with q(x)=exp(bVal(M-x))
+%}
 aVal = f.a; bVal=f.b;
-totalProb = 0;
 probs = zeros(1,maxSum);
-otherFactor = 10*(exp(bVal*maxSum)-1)/bVal;
 for i = 1:maxSum
-    probs(i)=(bVal*otherFactor)/(exp(bVal*i)*(1-exp(-bVal*maxSum)));
+    probs(i)=exp(bVal*(maxSum-i));
 end
 %%
 %obtains a very large sample of patches
@@ -138,14 +140,13 @@ newPatches = zeros(numTotal,patchSize,patchSize);
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
 probPicking = zeros(1,nImgs);
-probabilityFactor = 2*(exp(bVal*maxSum)-1)/(1-exp(-bVal*maxSum));
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
     
     %tries using exponential for probability
     curSumImage = sum(curImage(:));
-    probPicking(j) = probabilityFactor/(exp(bVal*curSumImage));
+    probPicking(j) = exp(bVal*(maxSum-curSumImage));
     
     %ensures it is picked with a certain probability
     if(randomPicks(j) < probPicking(j))
