@@ -111,7 +111,7 @@ semilogy(x1,y1);
 hold on
 semilogy(x2,y2);
 semilogy(data,N);
-legend('Best Fit Line','Original Data');
+legend('Best Fit Line 1', 'Best Fit Line 2','Original Data');
 hold off
 maxSum = max(patchSum);
 %%
@@ -145,13 +145,19 @@ newPatches = zeros(numTotal,patchSize,patchSize);
 randomPicks = rand(1,nImgs);
 imgIndex = 1;
 probPicking = zeros(1,nImgs);
+cutoff = (log(a2)-log(a1))/(b1-b2);
 for j=1:nImgs
     
     curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
     
     %tries using exponential for probability
     curSumImage = sum(curImage(:));
-    probPicking(j) = exp(bVal*(maxSum-curSumImage));
+    if(curSumImage < cutoff)
+        probPicking(j) = exp(b1*(maxSum-curSumImage));
+    else
+        probPicking(j) = exp(b2*(maxSum-curSumImage));
+    end
+    
     
     %ensures it is picked with a certain probability
     if(randomPicks(j) < probPicking(j))
