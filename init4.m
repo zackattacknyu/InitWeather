@@ -141,7 +141,12 @@ load('rejectionSamplingPatches.mat');
 patchSize = 30;
 
 %obtain earth-mover distance
-img1Num = 360; img2Num = 342;
+
+%{
+Image 360 and 342 gave us EMD of 3.8089
+Image 361 and 342 gave us EMD of 3.5532
+%}
+img1Num = 361; img2Num = 342;
 patch1 = reshape(newPatches(img1Num,:,:),[patchSize patchSize]);
 patch2 = reshape(newPatches(img2Num,:,:),[patchSize patchSize]);
 
@@ -171,7 +176,6 @@ imagesc(patch2Resized2)
 axis image
 
 %%
-
 [weight1, pixelLocs1] = getFeatureWeight(patch1Resized2);
 [weight2, pixelLocs2] = getFeatureWeight(patch2Resized2);
 
