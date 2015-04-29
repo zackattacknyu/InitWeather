@@ -48,17 +48,18 @@ load('allGTimages.mat');
 %obtains a very large sample of patches
 nImgs = size(allImgs,1);
 imgSize = [size(allImgs,2) size(allImgs,3)];
-numPatchesPerImage = 30;
+numPatchesPerImage = 50;
 patchSize = 30;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
 randPatches = zeros(numTotalPatches,patchSize,patchSize);
+randIndices = randperm(nImgs);
 imgIndex = 1;
 
 for j=1:nImgs
     
-    curImage = reshape(allImgs(j,:,:),imgSize);
+    curImage = reshape(allImgs(randIndices(j),:,:),imgSize);
     
     for k = 1:numPatchesPerImage
         
@@ -137,17 +138,44 @@ load('rejectionSamplingPatches.mat');
 
 %%
 
+patchSize = 30;
+
 %obtain earth-mover distance
-patch1 = reshape(newPatches(34,:,:),[patchSize patchSize]);
-patch2 = reshape(newPatches(56,:,:),[patchSize patchSize]);
-%{
+img1Num = 360; img2Num = 342;
+patch1 = reshape(newPatches(img1Num,:,:),[patchSize patchSize]);
+patch2 = reshape(newPatches(img2Num,:,:),[patchSize patchSize]);
+
+patch1Resized = imresize(patch1,0.5);
+patch2Resized = imresize(patch2,0.5);
+patch1Resized2 = imresize(patch1,0.25);
+patch2Resized2 = imresize(patch2,0.25);
+
 figure
+subplot(3,2,1)
 imagesc(patch1)
-figure
+axis image
+subplot(3,2,2)
 imagesc(patch2)
-%}
-w = ones(patchSize,1);
-[x,f] = emd(patch1,patch2,w,w,groundDist);
+axis image
+subplot(3,2,3)
+imagesc(patch1Resized)
+axis image
+subplot(3,2,4)
+imagesc(patch2Resized)
+axis image
+subplot(3,2,5)
+imagesc(patch1Resized2)
+axis image
+subplot(3,2,6)
+imagesc(patch2Resized2)
+axis image
+
+%%
+
+[weight1, pixelLocs1] = getFeatureWeight(patch1Resized2);
+[weight2, pixelLocs2] = getFeatureWeight(patch2Resized2);
+
+[x,f] = emd(pixelLocs1,pixelLocs2,weight1,weight2,@getPixelDist);
 
 %%
 
@@ -169,7 +197,7 @@ for h = 1:numHoriz
            curImageNum = floor(rand(1,1)*length(imageNumbers))+1;
            imgToShow = reshape(newPatches(imageNumbers(curImageNum),:,:),[patchSize patchSize]); 
            subplot(numHoriz,numVert,binNum-1);
-           imagesc(imgToShow,[0 8000]);
+           imagesc(imgToShow,[0 max(max(max(newPatches)))]);
            colormap jet;
            axis image;
        end
