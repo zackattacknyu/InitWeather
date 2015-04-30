@@ -146,7 +146,9 @@ patchSize = 30;
 Image 360 and 342 gave us EMD of 3.8089
 Image 361 and 342 gave us EMD of 3.5532
 %}
-img1Num = 361; img2Num = 342;
+imgNums = floor(rand(1,2)*size(newPatches,1) + 1);
+img1Num = imgNums(1); img2Num = imgNums(2);
+%%
 patch1 = reshape(newPatches(img1Num,:,:),[patchSize patchSize]);
 patch2 = reshape(newPatches(img2Num,:,:),[patchSize patchSize]);
 
