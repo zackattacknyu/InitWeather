@@ -17,12 +17,14 @@ Image 990 and 502 gives us EMD of 3.2038
 Image 990 seems like 991 and 998
 
 image 992 and 993 seem like good ones
+
+Image 994 and 995 got an optimal. It terminated. 
 %}
 imgNums = floor(rand(1,2)*size(newPatches,1) + 1);
 img1Num = imgNums(1); img2Num = imgNums(2);
 %%
-img1Num = 991;
-img2Num = 998;
+img1Num = 994;
+img2Num = 995;
 patch1 = reshape(newPatches(img1Num,:,:),[patchSize patchSize]);
 patch2 = reshape(newPatches(img2Num,:,:),[patchSize patchSize]);
 
@@ -56,6 +58,8 @@ axis image
 [weight2, pixelLocs2] = getFeatureWeight(patch2Resized2);
 
 [x,f] = emd(pixelLocs1,pixelLocs2,weight1,weight2,@getPixelDist);
+
+%%
 
 
 
