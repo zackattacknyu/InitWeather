@@ -145,6 +145,9 @@ patchSize = 30;
 %{
 Image 360 and 342 gave us EMD of 3.8089
 Image 361 and 342 gave us EMD of 3.5532
+
+Image 991 and 998 give us 3.3001 and those seem like good ones 
+    to compare
 %}
 imgNums = floor(rand(1,2)*size(newPatches,1) + 1);
 img1Num = imgNums(1); img2Num = imgNums(2);
