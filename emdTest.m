@@ -23,35 +23,49 @@ Image 994 and 995 got an optimal. It terminated.
 imgNums = floor(rand(1,2)*size(newPatches,1) + 1);
 img1Num = imgNums(1); img2Num = imgNums(2);
 %%
-img1Num = 994;
-img2Num = 995;
-patch1 = reshape(newPatches(img1Num,:,:),[patchSize patchSize]);
-patch2 = reshape(newPatches(img2Num,:,:),[patchSize patchSize]);
+resizeFactor = 0.2;
 
+baseImageNum = 995;
+basePatch = reshape(newPatches(baseImageNum,:,:),[patchSize patchSize]);
+basePatchResized = imresize(basePatch,resizeFactor);
+[baseWeight,basePixelLocs] = getFeatureWeight(basePatchResized);
+
+imageNums = [342 502 991 992 993 994 995 998];
+nImages = length(imageNums);
+patches = cell(1,nImages);
+patchesResized = cell(1,nImages);
+emdDists = zeros(1,nImages);
+curMaxPixel = 0;
+for i = 1:nImages
+    curPatch = reshape(newPatches(imageNums(i),:,:),[patchSize patchSize]);
+    patches{i} = curPatch;
+    curMaxPixel = max(max(max(curPatch)),curMaxPixel);
+    curPatchResized = imresize(curPatch,resizeFactor);
+    patchesResized{i} = curPatchResized;
+    [weight,pixelLocs] = getFeatureWeight(curPatchResized);
+    [~,f] = emd(pixelLocs,basePixelLocs,weight,baseWeight,@getPixelDist);
+    emdDists(i) = f;
+end
+
+[~,bestIndices] = sort(emdDists);
+%{
 patch1Resized = imresize(patch1,0.5);
 patch2Resized = imresize(patch2,0.5);
 patch1Resized2 = imresize(patch1,0.1);
 patch2Resized2 = imresize(patch2,0.1);
+%}
 
 figure
-subplot(3,2,1)
-imagesc(patch1)
-axis image
-subplot(3,2,2)
-imagesc(patch2)
-axis image
-subplot(3,2,3)
-imagesc(patch1Resized)
-axis image
-subplot(3,2,4)
-imagesc(patch2Resized)
-axis image
-subplot(3,2,5)
-imagesc(patch1Resized2)
-axis image
-subplot(3,2,6)
-imagesc(patch2Resized2)
-axis image
+for j=1:nImages
+   subplot(2,nImages,j);
+   imagesc(patches{bestIndices(j)},[0 curMaxPixel]);
+   axis image
+end
+for j=1:nImages
+   subplot(2,nImages,nImages + j);
+   imagesc(patchesResized{bestIndices(j)},[0 curMaxPixel]);
+   axis image
+end
 
 %%
 [weight1, pixelLocs1] = getFeatureWeight(patch1Resized2);
