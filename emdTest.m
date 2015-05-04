@@ -24,6 +24,7 @@ imgNums = floor(rand(1,2)*size(newPatches,1) + 1);
 img1Num = imgNums(1); img2Num = imgNums(2);
 %%
 resizeFactor = 0.2;
+patchSize = 30;
 
 baseImageNum = 995;
 basePatch = reshape(newPatches(baseImageNum,:,:),[patchSize patchSize]);
@@ -36,6 +37,8 @@ patches = cell(1,nImages);
 patchesResized = cell(1,nImages);
 emdDists = zeros(1,nImages);
 curMaxPixel = 0;
+alpha1 = 1e-4;
+alpha2 = 1e-8;
 for i = 1:nImages
     curPatch = reshape(newPatches(imageNums(i),:,:),[patchSize patchSize]);
     patches{i} = curPatch;
@@ -44,6 +47,13 @@ for i = 1:nImages
     patchesResized{i} = curPatchResized;
     [weight,pixelLocs] = getFeatureWeight(curPatchResized);
     [~,f] = emd(pixelLocs,basePixelLocs,weight,baseWeight,@getPixelDist);
+    
+    %approach where we add alpha(x - x^)
+    %f = f + alpha1*abs(sum(sum(curPatchResized)) - sum(sum(basePatchResized)));
+    
+    %approach where ad add alpha*(x-x^)^2
+    f = f + alpha2*(sum(sum(curPatchResized)) - sum(sum(basePatchResized)))^2;
+    
     emdDists(i) = f;
 end
 
