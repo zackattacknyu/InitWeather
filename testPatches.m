@@ -81,7 +81,28 @@ load('goodMSEpatches2.mat');
 
 %%
 
-numPatches = 12;
-for k = 1:numPatches
-   sum(sum(patches{k})) 
+patchSize = 20;
+basePatch = patches{1};
+[baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
+
+nImages = length(patches);
+emdDists = zeros(1,nImages);
+curMaxPixel = 0;
+alpha1 = 1e-4;
+alpha2 = 1e-8;
+for i = 1:nImages
+    curPatch = patches{i};
+    curMaxPixel = max(max(max(curPatch)),curMaxPixel);
+    [weight,pixelLocs] = getFeatureWeight(curPatch);
+    [~,f] = emd(pixelLocs,basePixelLocs,weight,baseWeight,@getPixelDist);
+    
+    %approach where we add alpha(x - x^)
+    %f = f + alpha1*abs(sum(sum(curPatchResized)) - sum(sum(basePatchResized)));
+    
+    %approach where ad add alpha*(x-x^)^2
+    %f = f + alpha2*(sum(sum(curPatchResized)) - sum(sum(basePatchResized)))^2;
+    
+    emdDists(i) = f;
 end
+
+[~,bestIndices] = sort(emdDists);
