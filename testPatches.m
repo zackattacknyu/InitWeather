@@ -1,13 +1,17 @@
-patchSize = 500;
-numPatches = 12;
-maxRadius = 50;
-minRadius = 2;
-centerVariation = 150;
+patchSize = 20;
+numRows = 3;
+numCol = 4;
+numPatches = numRows*numCol;
+maxRadius = 7;
+minRadius = 1;
+centerVariation = 4;
 
 patches = cell(1,numPatches);
 center = floor([patchSize/2 patchSize/2]);
 centerVariants = floor(centerVariation*rand(numPatches,2));
 centers = repmat(center,numPatches,1) + centerVariants;
+
+%makes the first one the baseline
 centers(1,:) = center;
 centerVariants(1,:) = [0 0];
 
@@ -65,6 +69,15 @@ save('goodMSEpatches.mat','patches','basePatch','-v7.3');
 
 %these are the ones for the 500x500 patches
 load('goodMSEpatches.mat');
+
+%%
+
+%these are the ones for the 20x20 patches
+save('goodMSEpatches2.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the 20x20 patches
+load('goodMSEpatches2.mat');
 
 %%
 
