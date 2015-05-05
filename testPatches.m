@@ -90,7 +90,7 @@ load('goodMSEpatches3.mat');
 
 %%
 
-patchSize = 20;
+patchSize = 10;
 basePatch = patches{1};
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 
@@ -110,8 +110,13 @@ for i = 1:nImages
     
     %approach where ad add alpha*(x-x^)^2
     %f = f + alpha2*(sum(sum(curPatchResized)) - sum(sum(basePatchResized)))^2;
-    
+    f
     emdDists(i) = f;
 end
 
 [~,bestIndices] = sort(emdDists);
+
+%%
+
+%got good results with 10 by 10 patches
+save('goodEMDResults.mat','patches','basePatch','bestIndices','emdDists','-v7.3');
