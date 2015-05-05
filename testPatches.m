@@ -1,20 +1,20 @@
 patchSize = 500;
 numPatches = 12;
-patches = cell(1,numPatches);
-patch1 = zeros(patchSize,patchSize);
-patch2 = zeros(patchSize,patchSize);
-
-center = floor([patchSize/2 patchSize/2]);
+maxRadius = 50;
+minRadius = 2;
 centerVariation = 150;
+
+patches = cell(1,numPatches);
+center = floor([patchSize/2 patchSize/2]);
 centerVariants = floor(centerVariation*rand(numPatches,2));
 centers = repmat(center,numPatches,1) + centerVariants;
 centers(1,:) = center;
 centerVariants(1,:) = [0 0];
-radius = 50;
+
 
 for k = 1:numPatches
    newPatch = zeros(patchSize,patchSize);
-   curRadius = 50*rand(1,1);
+   curRadius = maxRadius*rand(1,1) + minRadius;
    for i = 1:patchSize
        for j = 1:patchSize
            dist = norm([i j] - centers(k,:));
@@ -56,3 +56,19 @@ end
 
 distsFromCenter = sqrt(centerVariants(:,1).^2 + centerVariants(:,2).^2);
 distsFromCenter(indices)
+
+%%
+
+%these are the ones for the 500x500 patches
+save('goodMSEpatches.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the 500x500 patches
+load('goodMSEpatches.mat');
+
+%%
+
+numPatches = 12;
+for k = 1:numPatches
+   sum(sum(patches{k})) 
+end
