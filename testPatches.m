@@ -57,7 +57,7 @@ for k = 1:numPatches
    imagesc(patches{indices(k)})
 end
 %}
-
+%%
 distsFromCenter = sqrt(centerVariants(:,1).^2 + centerVariants(:,2).^2);
 distsFromCenter(indices)
 
@@ -120,3 +120,21 @@ end
 
 %got good results with 10 by 10 patches
 save('goodEMDResults.mat','patches','basePatch','bestIndices','emdDists','-v7.3');
+
+%%
+
+figure
+colormap bone;
+colorbar;
+for k = 1:numPatches
+   subplot(3,4,k);
+   imagesc(patches{bestIndices(k)})
+end
+
+figure
+colormap bone;
+colorbar;
+for k = 1:numPatches
+   subplot(3,4,k);
+   imagesc(patches{indices(k)})
+end
