@@ -1,8 +1,8 @@
-patchSize = 20;
+patchSize = 10;
 numRows = 3;
 numCol = 4;
 numPatches = numRows*numCol;
-maxRadius = 7;
+maxRadius = 6;
 minRadius = 1;
 centerVariation = 4;
 
@@ -78,6 +78,15 @@ save('goodMSEpatches2.mat','patches','basePatch','-v7.3');
 
 %these are the ones for the 20x20 patches
 load('goodMSEpatches2.mat');
+
+%%
+
+%these are the ones for the 10x10 patches
+save('goodMSEpatches3.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the 10x10 patches
+load('goodMSEpatches3.mat');
 
 %%
 
