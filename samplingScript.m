@@ -13,7 +13,8 @@ ST4 = load([trnImgDir 'ST4/' imgId(1:end-2) '.mat']);
 gt1 = ST4.I;
 
 %%
-allImgs = zeros([nImgs size(gt1)]);
+%allImgs = zeros([nImgs size(gt1)]);
+allImgs = cell(1,nImgs);
 
 %%
 
@@ -26,7 +27,7 @@ for i = 1:nImgs
     ST4 = load([trnImgDir 'ST4/' imgId(1:end-2) '.mat']);
     gt = ST4.I;
     
-    allImgs(i,:,:) = gt;
+    allImgs{i} = gt;
     
     if(mod(i,10)==0)
        i 
@@ -38,32 +39,31 @@ end
 
 %%
 
-save('allGTimages.mat','allImgs','-v7.3');
+save('gtImages.mat','allImgs','-v7.3');
 
 %%
-load('allGTimages.mat');
+load('gtImages.mat');
 
 %%
 
 %obtains a very large sample of patches
-nImgs = size(allImgs,1);
-imgSize = [size(allImgs,2) size(allImgs,3)];
+nImgs = length(allImgs);
 numPatchesPerImage = 50;
-patchSize = 30;
+patchSize = 10;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
-randPatches = zeros(numTotalPatches,patchSize,patchSize);
+randPatches = cell(1,numTotalPatches);
 randIndices = randperm(nImgs);
 imgIndex = 1;
 
 for j=1:nImgs
     
-    curImage = reshape(allImgs(randIndices(j),:,:),imgSize);
+    curImage = allImgs{randIndices(j)};
     
     for k = 1:numPatchesPerImage
         
-       randStartInd = ceil(rand(1,2).*(imgSize - [patchSize patchSize]));
+       randStartInd = ceil(rand(1,2).*(size(curImage) - [patchSize patchSize]));
        randStartRow = randStartInd(1);
        randStartCol = randStartInd(2);
        randPatch = curImage(...
@@ -71,7 +71,7 @@ for j=1:nImgs
            randStartCol:(randStartCol+patchSize-1));
        
        patchSum(imgIndex) = sum(randPatch(:));
-       randPatches(imgIndex,:,:) = randPatch;
+       randPatches{imgIndex} = randPatch;
        imgIndex = imgIndex+1;
        
        if(mod(imgIndex,1000) == 0)
@@ -83,20 +83,20 @@ end
 
 %%
 
-save('largePatchSet.mat','randPatches','patchSum','-v7.3');
+save('largePatchSet2.mat','randPatches','patchSum','-v7.3');
 
 %%
 
-load('largePatchSet.mat');
+load('largePatchSet2.mat');
 
 %%
 numBins = 30;
 [N,data] = hist(patchSum,numBins);
-%semilogy(N);
-
+semilogy(N);
+%%
 %obtains a very large sample of patches
-nImgs = size(randPatches,1);
-patchSize = 30;
+nImgs = length(randPatches);
+patchSize = 10;
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
 numPickedInBin = zeros(1,numBins);
@@ -106,13 +106,13 @@ imagesInEachBin = cell(1,numBins);
 
 for j=1:nImgs
     
-    curImage = reshape(randPatches(j,:,:),[patchSize patchSize]);
-    patchSum = sum(curImage(:));
-    [~,binNum] = min(abs(data-patchSum));
+    curImage = randPatches{j};
+    curPatchSum = sum(curImage(:));
+    [~,binNum] = min(abs(data-curPatchSum));
     
     if(numPickedInBin(binNum) < numPerBinMax)
         numPickedInBin(binNum) = numPickedInBin(binNum) + 1;
-        newPatches(imgIndex,:,:) = randPatches(j,:,:);
+        newPatches(imgIndex,:,:) = randPatches{j};
         imagesInEachBin{binNum} = [imagesInEachBin{binNum} imgIndex];
         imgIndex = imgIndex + 1;
     end
@@ -130,22 +130,22 @@ newPatches = newPatches(1:(imgIndex-1),:,:);
 
 %%
 
-save('rejectionSamplingPatches.mat','newPatches','-v7.3');
+save('rejectionSamplingPatches2.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
 
 %%
 
-load('rejectionSamplingPatches.mat');
+load('rejectionSamplingPatches2.mat');
 
 %%
 
 %display random images from our set
 
-patchSize = 30;
+patchSize = 10;
 numImages = size(newPatches,1);
 
-numHoriz = 5;
+numHoriz = 4;
 numVert = 6;
-binNum = 1;
+binNum = 2;
 
 figure
 for h = 1:numHoriz
