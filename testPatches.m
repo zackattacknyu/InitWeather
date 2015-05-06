@@ -96,25 +96,33 @@ basePatch = patches{1};
 
 nImages = length(patches);
 emdDists = zeros(1,nImages);
+emdDistsWithPenalty = zeros(1,nImages);
+emdDistsWithPenSquared = zeros(1,nImages);
 curMaxPixel = 0;
-alpha1 = 1e-4;
-alpha2 = 1e-8;
+%alpha1 = 1e-4;
+alpha1 = 1;
+%alpha2 = 1e-8;
+alpha2 = 1;
 for i = 1:nImages
     curPatch = patches{i};
     curMaxPixel = max(max(max(curPatch)),curMaxPixel);
     [weight,pixelLocs] = getFeatureWeight(curPatch);
-    [~,f] = emd(pixelLocs,basePixelLocs,weight,baseWeight,@getPixelDist);
+    [xVals,f] = emd(pixelLocs,basePixelLocs,weight,baseWeight,@getPixelDist);
     
     %approach where we add alpha(x - x^)
-    %f = f + alpha1*abs(sum(sum(curPatchResized)) - sum(sum(basePatchResized)));
+    f1 = f + (alpha1/sum(xVals))*abs(sum(sum(curPatch)) - sum(sum(basePatch)));
     
     %approach where ad add alpha*(x-x^)^2
-    %f = f + alpha2*(sum(sum(curPatchResized)) - sum(sum(basePatchResized)))^2;
+    f2 = f + (alpha2/sum(xVals))*(sum(sum(curPatch)) - sum(sum(basePatch)))^2;
     f
     emdDists(i) = f;
+    emdDistsWithPenSquared(i) = f2;
+    emdDistsWithPenalty(i) = f1;
 end
 
 [~,bestIndices] = sort(emdDists);
+[~,bestIndicesPen] = sort(emdDistsWithPenalty);
+[~,bestIndicesPenSqu] = sort(emdDistsWithPenSquared);
 
 %%
 
@@ -130,12 +138,9 @@ load('goodEMDResults2.mat');
 
 numPatches = length(patches);
 
-figure
-colormap bone;
-colorbar;
-for k = 1:numPatches
-   subplot(3,4,k);
-   imagesc(patches{bestIndices(k)})
+maxPixel = 0;
+for k = 1:length(patches)
+   maxPixel = max( max(max(patches{k})) , maxPixel); 
 end
 
 figure
@@ -143,5 +148,29 @@ colormap bone;
 colorbar;
 for k = 1:numPatches
    subplot(3,4,k);
-   imagesc(patches{indices(k)})
+   imagesc(patches{indices(k)}, [0 maxPixel])
+end
+
+figure
+colormap bone;
+colorbar;
+for k = 1:numPatches
+   subplot(3,4,k);
+   imagesc(patches{bestIndices(k)}, [0 maxPixel])
+end
+
+figure
+colormap bone;
+colorbar;
+for k = 1:numPatches
+   subplot(3,4,k);
+   imagesc(patches{bestIndicesPen(k)}, [0 maxPixel])
+end
+
+figure
+colormap bone;
+colorbar;
+for k = 1:numPatches
+   subplot(3,4,k);
+   imagesc(patches{bestIndicesPenSqu(k)}, [0 maxPixel])
 end
