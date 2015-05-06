@@ -84,13 +84,15 @@ end
 %%
 
 %got good results with 10 by 10 patches
-save('goodEMDResults2.mat','indices','distsFromCenter',...
+save('goodEMDResults3.mat','indices',...
     'patches','basePatch','bestIndices','emdDists','-v7.3');
 
 %%
 load('goodEMDResults.mat');
 %%
 load('goodEMDResults2.mat');
+%%
+load('goodEMDResults3.mat');
 %%
 
 numPatches = length(patches);
