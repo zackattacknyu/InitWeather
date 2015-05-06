@@ -2,7 +2,7 @@ patchSize = 10;
 numRows = 3;
 numCol = 4;
 numPatches = numRows*numCol;
-maxRadius = 6;
+maxRadius = 3;
 minRadius = 1;
 centerVariation = 4;
 
@@ -22,7 +22,7 @@ for k = 1:numPatches
    for i = 1:patchSize
        for j = 1:patchSize
            dist = norm([i j] - centers(k,:));
-           newPatch(i,j) = dist/curRadius;
+           newPatch(i,j) = (dist/curRadius)^(1/2);
        end
    end
     patches{k} = newPatch;
@@ -119,9 +119,16 @@ end
 %%
 
 %got good results with 10 by 10 patches
-save('goodEMDResults.mat','patches','basePatch','bestIndices','emdDists','-v7.3');
+save('goodEMDResults2.mat','indices','distsFromCenter',...
+    'patches','basePatch','bestIndices','emdDists','-v7.3');
 
 %%
+load('goodEMDResults.mat');
+%%
+load('goodEMDResults2.mat');
+%%
+
+numPatches = length(patches);
 
 figure
 colormap bone;
