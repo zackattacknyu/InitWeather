@@ -110,7 +110,7 @@ imagesc(basePatch, [0 maxPixel])
 
 %%
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(3,4,k);
@@ -118,7 +118,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(3,4,k);
@@ -126,7 +126,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(3,4,k);
@@ -134,7 +134,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(3,4,k);
