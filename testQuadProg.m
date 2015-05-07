@@ -20,7 +20,7 @@ f = gdm(F1, F2, Func);
 wMat = zeros(m,n);
 for i = 1:m
     for j = 1:n
-        wMat(i, j) = -2*(W1(i)-W2(j));
+        wMat(i, j) = -2*(W1(i)+W2(j));
     end
 end
 wMat = wMat';
@@ -48,9 +48,11 @@ beq = ones(m + n, 1) * min(sum(W1), sum(W2));
 lb = zeros(1, m * n);
 
 Hmat = getHmatrix(n);
-
-%%
+Hmat = Hmat.*2;
 
 % quadratic programming
 [x, fval] = quadprog(Hmat,fVec, A, b, Aeq, beq, lb);
 fval = fval / sum(x);
+
+%%
+wVal = fval + sum(W1.^2) + sum(W2.^2);
