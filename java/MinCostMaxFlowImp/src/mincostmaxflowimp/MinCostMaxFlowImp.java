@@ -36,7 +36,8 @@ public class MinCostMaxFlowImp {
         }*/
         
         //just the name of the file, folder is sorted out below
-        String currentFileName = "patches.txt";
+        //String currentFileName = "patches.txt";
+        String currentFileName = "fMat.txt";
         
         /*
          * The variable initPath indicates the folder where the MATLAB
