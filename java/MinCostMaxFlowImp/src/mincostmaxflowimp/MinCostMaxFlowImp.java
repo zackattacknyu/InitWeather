@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -25,6 +26,15 @@ public class MinCostMaxFlowImp {
      */
     public static void main(String[] args) throws IOException {
         
+        /*
+         * The variable initPath indicates the folder where the MATLAB
+         *      text documents are stored and that is where we will
+         *      be reading from for this program
+         */
+        Path curLocation = Paths.get("manifest.mf");
+        Path curPath = curLocation.toAbsolutePath();
+        Path initPath = curPath.getParent().getParent().getParent();
+        
         /*int[][] capacity = {{0,2,2,0},{2,0,0,2},{2,0,0,2},{0,2,2,0}};
         int[][] cost = {{0,1,1,0},{1,0,0,1},{1,0,0,1},{0,1,1,0}};
         int source = 0; int sink = 3;
@@ -36,35 +46,51 @@ public class MinCostMaxFlowImp {
         }*/
         
         //just the name of the file, folder is sorted out below
-        //String currentFileName = "patches.txt";
-        String currentFileName = "fMat.txt";
-        
-        /*
-         * The variable initPath indicates the folder where the MATLAB
-         *      text documents are stored and that is where we will
-         *      be reading from for this program
-         */
-        Path curLocation = Paths.get("manifest.mf");
-        Path curPath = curLocation.toAbsolutePath();
-        Path initPath = curPath.getParent().getParent().getParent();
-        
-        //gets the file path we need
-        Path fileToRead = initPath.resolve(currentFileName);
+        String costMatrixFileName = "costMatrix.txt";
+        String capMatrixFileName = "capMatrix.txt";
+
+        //gets the file paths we need
+        Path costMatrixFile = initPath.resolve(costMatrixFileName);
+        Path capMatrixFile = initPath.resolve(capMatrixFileName);
         
         //gets the matrix from the file
-        double[][] matrix = getMatrixFromFile(fileToRead);
+        int[][] costMatrix = getMatrixFromFile(costMatrixFile,10);
+        int[][] capMatrix = getMatrixFromFile(capMatrixFile,1);
         
-        //reads the matrix obtained
+        int source = costMatrix.length-2;
+        int sink = costMatrix.length-1;
+        System.out.println("Source=" + source);
+        System.out.println("Sink=" + sink);
+        
+        MinCostMaxFlow nf = new MinCostMaxFlow();
+        
+        displayMatrix(costMatrix);
+        System.out.println();
+        displayMatrix(capMatrix);
+        
+        
+        System.out.println("Entering max flow calc...");
+        long maxFlowStart = Calendar.getInstance().getTimeInMillis();
+        int[] maxflow = nf.getMaxFlow(capMatrix,costMatrix,source,sink);
+        long maxFlowEnd = Calendar.getInstance().getTimeInMillis();
+        System.out.println("Total Time For Max Flow Calc: " + 
+                (maxFlowEnd-maxFlowStart) + " ms");
+        for(int j = 0; j < maxflow.length; j++){
+            System.out.println(maxflow[j]);
+        }
+
+    }
+    
+    public static void displayMatrix(int[][] matrix){
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[i].length; j++){
                 System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
         }
-
     }
     
-    public static double[][] getMatrixFromFile(Path fileToRead) throws IOException{
+    public static int[][] getMatrixFromFile(Path fileToRead, double multiplier) throws IOException{
         ArrayList<String> lines = (ArrayList<String>) 
                 Files.readAllLines(fileToRead, StandardCharsets.US_ASCII);
         
@@ -72,13 +98,16 @@ public class MinCostMaxFlowImp {
         ArrayList<Double> currentRowNumbers = new ArrayList<Double>();
         String[] currentLine;
         int numColumns = 1;
+        double entry;
         
         for(int row=0; row<lines.size(); row++){
             currentRowNumbers.clear();
             currentLine = lines.get(row).split(" ");
             for(int j = 0; j < currentLine.length; j++){
-                if(currentLine[j].length() > 0){
-                    currentRowNumbers.add(Double.parseDouble(currentLine[j]));
+                String currentEntry = currentLine[j];
+                if(currentEntry.length() > 0){
+                    entry = Double.parseDouble(currentLine[j]);
+                    currentRowNumbers.add(entry*multiplier);
                 }
             }
             Double[] nums = new Double[currentRowNumbers.size()];
@@ -87,12 +116,12 @@ public class MinCostMaxFlowImp {
             matrixRows.add(nums);
         }
         
-        double[][] matrix = new double[matrixRows.size()][numColumns];
+        int[][] matrix = new int[matrixRows.size()][numColumns];
         Double[] currentRow;
         for(int i = 0; i < matrixRows.size(); i++){
             currentRow = matrixRows.get(i);
             for(int j = 0; j < numColumns; j++){
-                matrix[i][j] = currentRow[j];
+                matrix[i][j] = (int)Math.floor(currentRow[j]);
             }
         }
         return matrix;
