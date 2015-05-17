@@ -36,16 +36,21 @@ public class MinCostMaxFlowImp {
         Path initPath = curPath.getParent().getParent().getParent();
         
         //just the name of the file, folder is sorted out below
-        String costMatrixFileName = "costMatrix.txt";
-        String capMatrixFileName = "capMatrix.txt";
-
-        //gets the file paths we need
-        Path costMatrixFile = initPath.resolve(costMatrixFileName);
-        Path capMatrixFile = initPath.resolve(capMatrixFileName);
+        String costMatrixFileName;
+        String capMatrixFileName;
+        Path costMatrixFile;
+        Path capMatrixFile;
         
-        
-        System.out.println("EMD = " + getEMD(costMatrixFile,capMatrixFile));
-        
+        for(int docNum = 1; docNum <= 12; docNum++){
+            costMatrixFileName = "costMatrix" + docNum + ".txt";
+            capMatrixFileName = "capMatrix" + docNum + ".txt";
+            
+            //gets the file paths we need
+            costMatrixFile = initPath.resolve(costMatrixFileName);
+            capMatrixFile = initPath.resolve(capMatrixFileName);
+            
+            System.out.println("EMD = " + getEMD(costMatrixFile,capMatrixFile));
+        }
 
     }
     
