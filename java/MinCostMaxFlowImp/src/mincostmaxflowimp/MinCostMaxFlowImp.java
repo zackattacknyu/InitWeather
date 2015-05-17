@@ -35,16 +35,6 @@ public class MinCostMaxFlowImp {
         Path curPath = curLocation.toAbsolutePath();
         Path initPath = curPath.getParent().getParent().getParent();
         
-        /*int[][] capacity = {{0,2,2,0},{2,0,0,2},{2,0,0,2},{0,2,2,0}};
-        int[][] cost = {{0,1,1,0},{1,0,0,1},{1,0,0,1},{0,1,1,0}};
-        int source = 0; int sink = 3;
-        MinCostMaxFlow nf = new MinCostMaxFlow();
-        int[] maxflow = nf.getMaxFlow(capacity,cost,source,sink);
-        for(int j = 0; j < maxflow.length; j++){
-            System.out.println(maxflow[j]);
-        
-        }*/
-        
         //just the name of the file, folder is sorted out below
         String costMatrixFileName = "costMatrix.txt";
         String capMatrixFileName = "capMatrix.txt";
@@ -53,6 +43,13 @@ public class MinCostMaxFlowImp {
         Path costMatrixFile = initPath.resolve(costMatrixFileName);
         Path capMatrixFile = initPath.resolve(capMatrixFileName);
         
+        
+        System.out.println("EMD = " + getEMD(costMatrixFile,capMatrixFile));
+        
+
+    }
+    
+    public static double getEMD(Path costMatrixFile, Path capMatrixFile) throws IOException{
         //gets the matrix from the file
         double costMultiplier = 1000; //do this for approximation
         int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
@@ -60,31 +57,16 @@ public class MinCostMaxFlowImp {
         
         int source = costMatrix.length-2;
         int sink = costMatrix.length-1;
-        System.out.println("Source=" + source);
-        System.out.println("Sink=" + sink);
-        
+
         MinCostMaxFlow nf = new MinCostMaxFlow();
-        
-        //displayMatrix(costMatrix);
-        //System.out.println();
-        //displayMatrix(capMatrix);
-        
-        
-        //System.out.println("Entering max flow calc...");
-        long maxFlowStart = Calendar.getInstance().getTimeInMillis();
         int[] maxflow = nf.getMaxFlow(capMatrix,costMatrix,source,sink);
-        long maxFlowEnd = Calendar.getInstance().getTimeInMillis();
-        System.out.println("Total Time For Max Flow Calc: " + 
-                (maxFlowEnd-maxFlowStart) + " ms");
         
         double totalFlow = maxflow[0];
         double totalCost = maxflow[1];
         totalCost = totalCost/costMultiplier;
         
-        double emd = totalCost/totalFlow;
+        return totalCost/totalFlow;
         
-        System.out.println("EMD = " + emd);
-
     }
     
     public static void displayMatrix(int[][] matrix){
