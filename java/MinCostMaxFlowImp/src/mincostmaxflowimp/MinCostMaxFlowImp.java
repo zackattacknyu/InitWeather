@@ -54,7 +54,8 @@ public class MinCostMaxFlowImp {
         Path capMatrixFile = initPath.resolve(capMatrixFileName);
         
         //gets the matrix from the file
-        int[][] costMatrix = getMatrixFromFile(costMatrixFile,10);
+        double costMultiplier = 1000; //do this for approximation
+        int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
         int[][] capMatrix = getMatrixFromFile(capMatrixFile,1);
         
         int source = costMatrix.length-2;
@@ -64,20 +65,25 @@ public class MinCostMaxFlowImp {
         
         MinCostMaxFlow nf = new MinCostMaxFlow();
         
-        displayMatrix(costMatrix);
-        System.out.println();
-        displayMatrix(capMatrix);
+        //displayMatrix(costMatrix);
+        //System.out.println();
+        //displayMatrix(capMatrix);
         
         
-        System.out.println("Entering max flow calc...");
+        //System.out.println("Entering max flow calc...");
         long maxFlowStart = Calendar.getInstance().getTimeInMillis();
         int[] maxflow = nf.getMaxFlow(capMatrix,costMatrix,source,sink);
         long maxFlowEnd = Calendar.getInstance().getTimeInMillis();
         System.out.println("Total Time For Max Flow Calc: " + 
                 (maxFlowEnd-maxFlowStart) + " ms");
-        for(int j = 0; j < maxflow.length; j++){
-            System.out.println(maxflow[j]);
-        }
+        
+        double totalFlow = maxflow[0];
+        double totalCost = maxflow[1];
+        totalCost = totalCost/costMultiplier;
+        
+        double emd = totalCost/totalFlow;
+        
+        System.out.println("EMD = " + emd);
 
     }
     

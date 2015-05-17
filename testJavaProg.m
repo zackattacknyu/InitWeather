@@ -1,6 +1,11 @@
 basePatch = [[100 200 300];[200 300 100]; [300 100 200]];
 curPatch = repmat([100 200 300],3,1);
 %%
+
+basePatch = patches{9};
+curPatch = patches{3};
+
+%%
 totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 [weight,pixelLocs] = getFeatureWeight(curPatch);
@@ -10,6 +15,7 @@ W1 = baseWeight;
 
 F2 = pixelLocs;
 W2 = weight;
+%Func = @getPixelSquaredDist;
 Func = @getPixelDist;
 
 % number and length of feature vectors
@@ -64,8 +70,8 @@ for i = 1:N2
 end
 
 %makes edges from base to current
-costMatrix(1:N1,1:N2) = f;
-capMatrix(1:N1,1:N2) = ones(N1,N2).*totalFlow;
+costMatrix(1:N1,(N1+1):(N2+N1)) = f;
+capMatrix(1:N1,(N1+1):(N2+N1)) = ones(N1,N2).*totalFlow;
 
 %%
 save('costMatrix.txt','costMatrix','-ascii');
