@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -84,7 +85,11 @@ public class MinCostMaxFlowImp {
         int sink = costMatrix.length-1;
 
         MinCostMaxFlow nf = new MinCostMaxFlow();
+        System.out.println("Entering Max Flow: ");
+        long maxFlowStart = Calendar.getInstance().getTimeInMillis();
         int[] maxflow = nf.getMaxFlow(capMatrix,costMatrix,source,sink);
+        long maxFlowEnd = Calendar.getInstance().getTimeInMillis();
+        System.out.println("Time for Flow Calculation: " + (maxFlowEnd-maxFlowStart) + " ms");
         
         double totalFlow = maxflow[0];
         double totalCost = maxflow[1];
