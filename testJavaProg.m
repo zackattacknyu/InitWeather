@@ -1,7 +1,7 @@
 %basePatch = [[100 200 300];[200 300 100]; [300 100 200]];
 %curPatch = repmat([100 200 300],3,1);
 
-basePatch = patches{9};
+basePatch = patches{4};
 
 for patchNum = 1:12
     curPatch = patches{patchNum};
@@ -72,8 +72,8 @@ for patchNum = 1:12
     costMatrix(1:N1,(N1+1):(N2+N1)) = f;
     capMatrix(1:N1,(N1+1):(N2+N1)) = ones(N1,N2).*totalFlow;
 
-    file1 = strcat('costMatrix',num2str(patchNum),'.txt');
-    file2 = strcat('capMatrix',num2str(patchNum),'.txt');
+    file1 = strcat('matricesToCompute/costMatrix',num2str(patchNum),'.txt');
+    file2 = strcat('matricesToCompute/capMatrix',num2str(patchNum),'.txt');
     save(file1,'costMatrix','-ascii');
     save(file2,'capMatrix','-ascii');
     

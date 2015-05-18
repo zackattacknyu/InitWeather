@@ -6,14 +6,12 @@
 
 package mincostmaxflowimp;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  *
@@ -33,7 +31,7 @@ public class MinCostMaxFlowImp {
          */
         Path curLocation = Paths.get("manifest.mf");
         Path curPath = curLocation.toAbsolutePath();
-        Path initPath = curPath.getParent().getParent().getParent();
+        Path initPath = curPath.getParent().getParent().getParent().resolve("matricesToCompute");
         
         //just the name of the file, folder is sorted out below
         String costMatrixFileName;
