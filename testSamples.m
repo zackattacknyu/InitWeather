@@ -2,6 +2,15 @@ load('rejectionSamplingPatches2.mat');
 
 %%
 
+patchSize=10;
+patches = cell(1,size(newPatches,1));
+for i = 1:size(newPatches,1)
+    imgToShow = reshape(newPatches(i,:,:),[patchSize patchSize]); 
+    patches{i} = imgToShow;
+end
+
+%%
+
 %display random images from our set
 
 patchSize = 10;
@@ -32,7 +41,7 @@ end
 
 
 %%
-basePatchNum = floor(rand(1,1)*numPatches) + 1;
+basePatchNum = floor(rand(1,1)*length(patches)) + 1;
 basePatch = patches{basePatchNum};
 
 figure

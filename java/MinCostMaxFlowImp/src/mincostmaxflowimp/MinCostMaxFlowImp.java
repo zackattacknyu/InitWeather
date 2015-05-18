@@ -39,7 +39,9 @@ public class MinCostMaxFlowImp {
         Path costMatrixFile;
         Path capMatrixFile;
         
-        for(int docNum = 1; docNum <= 12; docNum++){
+        int docNum = 1;
+        
+        while(true){
             costMatrixFileName = "costMatrix" + docNum + ".txt";
             capMatrixFileName = "capMatrix" + docNum + ".txt";
             
@@ -47,7 +49,13 @@ public class MinCostMaxFlowImp {
             costMatrixFile = initPath.resolve(costMatrixFileName);
             capMatrixFile = initPath.resolve(capMatrixFileName);
             
+            if(!costMatrixFile.toFile().exists() || !capMatrixFile.toFile().exists()){
+                break;
+            }
+            
             System.out.println("EMD = " + getEMD(costMatrixFile,capMatrixFile));
+            
+            docNum++;
         }
 
     }

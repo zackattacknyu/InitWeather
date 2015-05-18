@@ -1,9 +1,24 @@
-%basePatch = [[100 200 300];[200 300 100]; [300 100 200]];
-%curPatch = repmat([100 200 300],3,1);
+load('rejectionSamplingPatches2.mat');
 
-basePatch = patches{4};
+%%
 
-for patchNum = 1:12
+patchSize=10;
+patches = cell(1,size(newPatches,1));
+for i = 1:size(newPatches,1)
+    imgToShow = reshape(newPatches(i,:,:),[patchSize patchSize]); 
+    patches{i} = imgToShow;
+end
+
+%%
+basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+basePatch = patches{basePatchNum};
+
+figure
+imagesc(basePatch);
+%%
+basePatch = patches{basePatchNum};
+
+for patchNum = 1:length(patches)
     curPatch = patches{patchNum};
     
     totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
@@ -76,5 +91,9 @@ for patchNum = 1:12
     file2 = strcat('matricesToCompute/capMatrix',num2str(patchNum),'.txt');
     save(file1,'costMatrix','-ascii');
     save(file2,'capMatrix','-ascii');
+    
+    if(mod(patchNum,20) == 0)
+       patchNum 
+    end
     
 end
