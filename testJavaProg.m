@@ -97,3 +97,8 @@ for patchNum = 1:length(patches)
     end
     
 end
+
+%%
+
+load('emdResults.txt');
+[emdVals bestIndices] = sort(emdResults);

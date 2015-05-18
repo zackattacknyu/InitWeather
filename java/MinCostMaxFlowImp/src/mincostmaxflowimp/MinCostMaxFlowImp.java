@@ -31,7 +31,8 @@ public class MinCostMaxFlowImp {
          */
         Path curLocation = Paths.get("manifest.mf");
         Path curPath = curLocation.toAbsolutePath();
-        Path initPath = curPath.getParent().getParent().getParent().resolve("matricesToCompute");
+        Path initPath = curPath.getParent().getParent().getParent();
+        Path inputPath = initPath.resolve("matricesToCompute");
         
         //just the name of the file, folder is sorted out below
         String costMatrixFileName;
@@ -40,23 +41,36 @@ public class MinCostMaxFlowImp {
         Path capMatrixFile;
         
         int docNum = 1;
+
+        ArrayList<String> emdResults = new ArrayList<String>(100);
+        double currentEMD;
         
         while(true){
             costMatrixFileName = "costMatrix" + docNum + ".txt";
             capMatrixFileName = "capMatrix" + docNum + ".txt";
             
             //gets the file paths we need
-            costMatrixFile = initPath.resolve(costMatrixFileName);
-            capMatrixFile = initPath.resolve(capMatrixFileName);
+            costMatrixFile = inputPath.resolve(costMatrixFileName);
+            capMatrixFile = inputPath.resolve(capMatrixFileName);
             
             if(!costMatrixFile.toFile().exists() || !capMatrixFile.toFile().exists()){
                 break;
             }
             
-            System.out.println("EMD = " + getEMD(costMatrixFile,capMatrixFile));
+            currentEMD = getEMD(costMatrixFile,capMatrixFile);
+            emdResults.add(Double.toString(currentEMD));
+            System.out.println("EMD = " + currentEMD);
             
             docNum++;
         }
+        
+        Path emdResultFile = initPath.resolve("emdResults.txt");
+        try {
+            Files.write(emdResultFile, emdResults, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
 
     }
     
