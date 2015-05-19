@@ -25,7 +25,10 @@ W1 = baseWeight;
 Func = @getPixelDist;
 [m a] = size(F1);
 
-for patchNum = 1:10
+numPatches = 100;
+W2vectors = cell(1,numPatches);
+
+for patchNum = 1:numPatches
     curPatch = patches{patchNum};
     
     totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
@@ -33,15 +36,21 @@ for patchNum = 1:10
     
     F2 = pixelLocs;
     W2 = weight;
+    W2vectors{patchNum} = W2;
     
     % number and length of feature vectors    
     [n a] = size(F2);
 
     % gets ground distance matrix
     f = zeros(m,n);
+    capF = zeros(m,n); %capacity of link. set to zero.
+    maxDist = 5;
     for i = 1:m
         for j = 1:n
             f(i, j) = Func(F1(i, 1:a), F2(j, 1:a));
+            if( norm(F1(i, 1:a)-F2(j, 1:a),Inf) <= maxDist)
+               capF(i,j)=1; 
+            end
         end
     end
 
@@ -85,18 +94,53 @@ for patchNum = 1:10
 
     %makes edges from base to current
     costMatrix(1:N1,(N1+1):(N2+N1)) = f;
-    capMatrix(1:N1,(N1+1):(N2+N1)) = ones(N1,N2).*totalFlow;
+    capMatrix(1:N1,(N1+1):(N2+N1)) = capF.*totalFlow;
 
     file1 = strcat('matricesToCompute/costMatrix',num2str(patchNum),'.txt');
     file2 = strcat('matricesToCompute/capMatrix',num2str(patchNum),'.txt');
     save(file1,'costMatrix','-ascii');
     save(file2,'capMatrix','-ascii');
     
-    if(mod(patchNum,20) == 0)
+    if(mod(patchNum,10) == 0)
        patchNum 
     end
     
 end
+
+%%
+
+percentToMax=zeros(1,numPatches);
+percentOverMin = zeros(1,numPatches);
+sumW1 = sum(W1);
+for i = 1:numPatches
+    
+    sourceFile = strcat('emdResults/sourceFlow',num2str(i),'.txt');
+    sinkFile = strcat('emdResults/sinkFlow',num2str(i),'.txt');
+    
+    sourceFlow = load(sourceFile);
+    sinkFlow = load(sinkFile);
+    currentW2 = W2vectors{i};
+    sumSquError = sum((sourceFlow-W1).^2) + sum((sinkFlow-currentW2).^2);
+    sumSquError2 = norm((sourceFlow-W1),2)^2 + norm((sinkFlow-currentW2),2)^2;
+
+    %{
+    This part calculates the min
+        and max of the quadratic error
+        part of the quadratic program
+        to see how close we are
+
+    Details are in Weather Project folder
+        under MinMaxQuadraticPart.JPG
+    %}
+    maxSquaredError = (sumW1 - sum(currentW2))^2;
+    minSquaredError = maxSquaredError/length(W1);
+    
+    percentToMax(i) = (sumSquError-minSquaredError)/(maxSquaredError-minSquaredError);
+    percentOverMin(i) = (sumSquError-minSquaredError)/minSquaredError;
+end
+
+
+
 
 %%
 

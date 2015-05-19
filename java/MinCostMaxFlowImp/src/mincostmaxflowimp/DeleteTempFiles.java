@@ -26,6 +26,11 @@ public class DeleteTempFiles {
         Path curPath = curLocation.toAbsolutePath();
         Path initPath = curPath.getParent().getParent().getParent().resolve("matricesToCompute");
         
+        deleteFilesInDir(initPath);
+        
+    }
+    
+    public static void deleteFilesInDir(Path initPath){
         File[] matrixFiles = initPath.toFile().listFiles();
         for(File f:matrixFiles){
             try {
@@ -34,7 +39,6 @@ public class DeleteTempFiles {
                 System.out.println("Cannot delete file " + f.getName());
             }
         }
-        
     }
     
         
