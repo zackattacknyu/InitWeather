@@ -139,8 +139,19 @@ for i = 1:numPatches
     percentOverMin(i) = (sumSquError-minSquaredError)/minSquaredError;
 end
 
+%%
 
+figure
+[P1, I] = sort(percentToMax(percentToMax<1));
+plot(P1);
+xlabel('Image Patch');
+ylabel('Error on 0-1 scale with 0 as min, 1 as max');
 
+figure
+[P2, I] = sort(percentOverMin(percentOverMin<100));
+plot(P2)
+xlabel('Image Patch');
+ylabel('Ratio of Error to Min Error');
 
 %%
 
