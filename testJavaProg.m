@@ -2,10 +2,10 @@ load('rejectionSamplingPatches2.mat');
 
 %%
 
-patchSize=15;
+patchSize=20;
 patches = cell(1,size(newPatches,1));
 for i = 1:size(newPatches,1)
-    imgToShow = reshape(newPatches(i,1:15,1:15),[patchSize patchSize]); 
+    imgToShow = reshape(newPatches(i,1:20,1:20),[patchSize patchSize]); 
     patches{i} = imgToShow;
 end
 
@@ -18,23 +18,23 @@ imagesc(basePatch);
 %%
 basePatch = patches{basePatchNum};
 
+[baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
+F1 = basePixelLocs;
+W1 = baseWeight;
+%Func = @getPixelSquaredDist;
+Func = @getPixelDist;
+[m a] = size(F1);
+
 for patchNum = 1:10
     curPatch = patches{patchNum};
     
     totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
-    [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
     [weight,pixelLocs] = getFeatureWeight(curPatch);
-
-    F1 = basePixelLocs;
-    W1 = baseWeight;
-
+    
     F2 = pixelLocs;
     W2 = weight;
-    %Func = @getPixelSquaredDist;
-    Func = @getPixelDist;
-
-    % number and length of feature vectors
-    [m a] = size(F1);
+    
+    % number and length of feature vectors    
     [n a] = size(F2);
 
     % gets ground distance matrix
