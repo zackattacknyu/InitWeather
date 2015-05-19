@@ -45,6 +45,7 @@ public class MinCostMaxFlowImp {
 
         ArrayList<String> emdResults = new ArrayList<String>(100);
         double currentEMD;
+        EmdResults currentResults;
         
         while(true){
             costMatrixFileName = "costMatrix" + docNum + ".txt";
@@ -58,7 +59,8 @@ public class MinCostMaxFlowImp {
                 break;
             }
             
-            currentEMD = getEMD(costMatrixFile,capMatrixFile);
+            currentResults = new EmdResults(costMatrixFile,capMatrixFile);
+            currentEMD = currentResults.getEmd();
             emdResults.add(Double.toString(currentEMD));
             System.out.println("EMD = " + currentEMD);
             
@@ -75,30 +77,6 @@ public class MinCostMaxFlowImp {
 
     }
     
-    public static double getEMD(Path costMatrixFile, Path capMatrixFile) throws IOException{
-        //gets the matrix from the file
-        double costMultiplier = 1000; //do this for approximation
-        int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
-        int[][] capMatrix = getMatrixFromFile(capMatrixFile,1);
-        
-        int source = costMatrix.length-2;
-        int sink = costMatrix.length-1;
-
-        MinCostMaxFlow nf = new MinCostMaxFlow();
-        System.out.println("Entering Max Flow: ");
-        long maxFlowStart = Calendar.getInstance().getTimeInMillis();
-        int[] maxflow = nf.getMaxFlow(capMatrix,costMatrix,source,sink);
-        long maxFlowEnd = Calendar.getInstance().getTimeInMillis();
-        System.out.println("Time for Flow Calculation: " + (maxFlowEnd-maxFlowStart) + " ms");
-        
-        double totalFlow = maxflow[0];
-        double totalCost = maxflow[1];
-        totalCost = totalCost/costMultiplier;
-        
-        return totalCost/totalFlow;
-        
-    }
-    
     public static void displayMatrix(int[][] matrix){
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[i].length; j++){
@@ -108,41 +86,6 @@ public class MinCostMaxFlowImp {
         }
     }
     
-    public static int[][] getMatrixFromFile(Path fileToRead, double multiplier) throws IOException{
-        ArrayList<String> lines = (ArrayList<String>) 
-                Files.readAllLines(fileToRead, StandardCharsets.US_ASCII);
-        
-        ArrayList<Double[]> matrixRows = new ArrayList<Double[]>();
-        ArrayList<Double> currentRowNumbers = new ArrayList<Double>();
-        String[] currentLine;
-        int numColumns = 1;
-        double entry;
-        
-        for(int row=0; row<lines.size(); row++){
-            currentRowNumbers.clear();
-            currentLine = lines.get(row).split(" ");
-            for(int j = 0; j < currentLine.length; j++){
-                String currentEntry = currentLine[j];
-                if(currentEntry.length() > 0){
-                    entry = Double.parseDouble(currentLine[j]);
-                    currentRowNumbers.add(entry*multiplier);
-                }
-            }
-            Double[] nums = new Double[currentRowNumbers.size()];
-            currentRowNumbers.toArray(nums);
-            numColumns = nums.length;
-            matrixRows.add(nums);
-        }
-        
-        int[][] matrix = new int[matrixRows.size()][numColumns];
-        Double[] currentRow;
-        for(int i = 0; i < matrixRows.size(); i++){
-            currentRow = matrixRows.get(i);
-            for(int j = 0; j < numColumns; j++){
-                matrix[i][j] = (int)Math.floor(currentRow[j]);
-            }
-        }
-        return matrix;
-    }
+    
     
 }
