@@ -51,7 +51,7 @@ public class EmdResults {
         sinkFlowVector = new int[numValues];
         for(int index = 0; index < numValues; index++){
             sourceFlowVector[index] = nf.flow[source][index];
-            sinkFlowVector[index] = nf.flow[index][sink];
+            sinkFlowVector[index] = nf.flow[index+numValues][sink];
         }
         
     }

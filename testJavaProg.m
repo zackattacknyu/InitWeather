@@ -2,10 +2,10 @@ load('rejectionSamplingPatches2.mat');
 
 %%
 
-patchSize=10;
+patchSize=15;
 patches = cell(1,size(newPatches,1));
 for i = 1:size(newPatches,1)
-    imgToShow = reshape(newPatches(i,:,:),[patchSize patchSize]); 
+    imgToShow = reshape(newPatches(i,1:15,1:15),[patchSize patchSize]); 
     patches{i} = imgToShow;
 end
 
@@ -18,7 +18,7 @@ imagesc(basePatch);
 %%
 basePatch = patches{basePatchNum};
 
-for patchNum = 1:length(patches)
+for patchNum = 1:10
     curPatch = patches{patchNum};
     
     totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
