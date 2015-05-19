@@ -27,7 +27,7 @@ public class EmdResults {
         
         //gets the matrix from the file
         double costMultiplier = 1000; //do this for approximation
-        double flowMultiplier = 1000; //for approximation
+        double flowMultiplier = 1; //for approximation
         int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
         int[][] capMatrix = getMatrixFromFile(capMatrixFile,flowMultiplier);
         
