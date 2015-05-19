@@ -27,8 +27,9 @@ public class EmdResults {
         
         //gets the matrix from the file
         double costMultiplier = 1000; //do this for approximation
+        double flowMultiplier = 1000; //for approximation
         int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
-        int[][] capMatrix = getMatrixFromFile(capMatrixFile,1);
+        int[][] capMatrix = getMatrixFromFile(capMatrixFile,flowMultiplier);
         
         //displayMatrix(capMatrix);
         
@@ -52,8 +53,8 @@ public class EmdResults {
         sourceFlowVector = new int[numValues];
         sinkFlowVector = new int[numValues];
         for(int index = 0; index < numValues; index++){
-            sourceFlowVector[index] = nf.flow[source][index];
-            sinkFlowVector[index] = nf.flow[index+numValues][sink];
+            sourceFlowVector[index] = (int)Math.floor(nf.flow[source][index]/flowMultiplier);
+            sinkFlowVector[index] = (int)Math.floor(nf.flow[index+numValues][sink]/flowMultiplier);
         }
         
     }

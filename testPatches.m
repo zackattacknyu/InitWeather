@@ -1,10 +1,10 @@
-patchSize = 10;
-numRows = 3;
-numCol = 4;
+patchSize = 20;
+numRows = 6;
+numCol = 8;
 numPatches = numRows*numCol;
 maxRadius = 3;
-minRadius = 1;
-centerVariation = 4;
+minRadius = 2;
+centerVariation = 3;
 
 patches = cell(1,numPatches);
 center = floor([patchSize/2 patchSize/2]);
@@ -21,8 +21,8 @@ for k = 1:numPatches
    curRadius = maxRadius*rand(1,1) + minRadius;
    for i = 1:patchSize
        for j = 1:patchSize
-           dist = norm([i j] - centers(k,:));
-           newPatch(i,j) = (dist/curRadius)^(1/2);
+           dist = norm([i j] - centers(k,:),Inf);
+           newPatch(i,j) = (dist<curRadius)*1;
        end
    end
     patches{k} = newPatch;
@@ -33,8 +33,9 @@ figure
 colormap bone;
 colorbar;
 for k = 1:numPatches
-   subplot(3,4,k);
+   subplot(numRows,numCol,k);
    imagesc(patches{k})
+   axis off
 end
 
 
@@ -90,6 +91,54 @@ load('goodMSEpatches3.mat');
 
 %%
 
+%these are the ones for the revised 20x20 patches
+save('goodMSEpatches4.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the revised 20x20 patches
+load('goodMSEpatches4.mat');
+
+%%
+
+%goes with Java Program
+emdDists = load('emdResults/allEMDvalues.txt');
+nImages = length(patches);
+emdDistsWithPenalty = zeros(1,nImages);
+emdDistsWithPenSquared = zeros(1,nImages);
+%alpha1 = 1e-4;
+alpha1 = 1;
+%alpha2 = 1e-8;
+alpha2 = 1;
+basePatchTotal = sum(sum(basePatch));
+for i = 1:nImages
+    
+    sourceFile = strcat('emdResults/sourceFlow',num2str(i),'.txt');
+    sinkFile = strcat('emdResults/sinkFlow',num2str(i),'.txt');
+    sourceFlow = load(sourceFile);
+    sinkFlow = load(sinkFile);
+    totalFlow = min( sum(sourceFlow), sum(sinkFlow) );
+    
+    f = emdDists(i);
+    curPatch = patches{i};
+    curPatchTotal = sum(sum(curPatch));
+    
+    %approach where we add alpha(x - x^)
+    f1 = f + (alpha1/totalFlow)*abs(curPatchTotal - basePatchTotal);
+    
+    %approach where ad add alpha*(x-x^)^2
+    f2 = f + (alpha2/totalFlow)*(curPatchTotal - basePatchTotal)^2;
+
+    emdDistsWithPenSquared(i) = f2;
+    emdDistsWithPenalty(i) = f1;
+end
+
+[~,bestIndices] = sort(emdDists);
+[~,bestIndicesPen] = sort(emdDistsWithPenalty);
+[~,bestIndicesPenSqu] = sort(emdDistsWithPenSquared);
+
+%%
+
+%older one
 patchSize = 10;
 basePatch = patches{1};
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
@@ -126,8 +175,8 @@ end
 
 %%
 
-%got good results with 10 by 10 patches
-save('goodEMDResults2.mat','indices','distsFromCenter',...
+%got good results with 20 by 20 patches
+save('goodEMDResults3.mat','indices','distsFromCenter',...
     'patches','basePatch','bestIndices','emdDists','-v7.3');
 
 %%
@@ -147,30 +196,34 @@ figure
 colormap bone;
 colorbar;
 for k = 1:numPatches
-   subplot(3,4,k);
+   subplot(numRows,numCol,k);
    imagesc(patches{indices(k)}, [0 maxPixel])
+   axis off
 end
 
 figure
 colormap bone;
 colorbar;
 for k = 1:numPatches
-   subplot(3,4,k);
+   subplot(numRows,numCol,k);
    imagesc(patches{bestIndices(k)}, [0 maxPixel])
+   axis off
 end
 
 figure
 colormap bone;
 colorbar;
 for k = 1:numPatches
-   subplot(3,4,k);
+   subplot(numRows,numCol,k);
    imagesc(patches{bestIndicesPen(k)}, [0 maxPixel])
+   axis off
 end
 
 figure
 colormap bone;
 colorbar;
 for k = 1:numPatches
-   subplot(3,4,k);
+   subplot(numRows,numCol,k);
    imagesc(patches{bestIndicesPenSqu(k)}, [0 maxPixel])
+   axis off
 end

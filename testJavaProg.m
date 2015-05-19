@@ -17,7 +17,7 @@ figure
 imagesc(basePatch);
 %%
 basePatch = patches{basePatchNum};
-
+%%
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 F1 = basePixelLocs;
 W1 = baseWeight;
@@ -25,7 +25,7 @@ W1 = baseWeight;
 Func = @getPixelDist;
 [m a] = size(F1);
 
-numPatches = 100;
+numPatches = 48;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
