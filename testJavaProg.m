@@ -29,7 +29,7 @@ Func = @getPixelDist;
 [m a] = size(F1);
 
 errorFunc = @(x) getTotalError(f,W1,W2,x);
-numPatches = 10;
+numPatches = 100;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
@@ -180,11 +180,13 @@ figure
 [P1, I] = sort(percentToMax(percentToMax<1));
 plot(P1,'g-');
 hold on
-[P2, I] = sort(percentToMaxOther);
+[P2, I] = sort(percentToMaxOther(percentToMaxOther<0.2));
 plot(P2,'r-')
 xlabel('Image Patch');
 ylabel('Error on 0-1 scale with 0 as min, 1 as max');
-legend('Max Flow Algorithm','Non-Linear Optimization');
+legend('Max Flow Algorithm','Non-Linear Optimization','Location','Northwest');
+%%
+save('algorithmRunResults.mat','percentToMax','percentToMaxOther','-v7.3');
 
 %{
 figure
