@@ -177,10 +177,12 @@ end
 %%
 
 figure
-[P1, I] = sort(percentToMax(percentToMax<1));
+%[P1, I] = sort(percentToMax(percentToMax<1));
+P1 = percentToMax; P1(P1 > 0.09)=0;
 plot(P1,'g-');
 hold on
-[P2, I] = sort(percentToMaxOther(percentToMaxOther<0.2));
+%[P2, I] = sort(percentToMaxOther(percentToMaxOther<0.2));
+P2 = percentToMaxOther; P2(P2>0.09)=0;
 plot(P2,'r-')
 xlabel('Image Patch');
 ylabel('Error on 0-1 scale with 0 as min, 1 as max');
