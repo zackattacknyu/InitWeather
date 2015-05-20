@@ -22,6 +22,7 @@ public class EmdResults {
     private double emd;
     private int[] sourceFlowVector;
     private int[] sinkFlowVector;
+    private int[][] pixelFlowMatrix;
     
     public EmdResults(Path costMatrixFile, Path capMatrixFile) throws IOException{
         
@@ -53,10 +54,19 @@ public class EmdResults {
         sourceFlowVector = new int[numValues];
         sinkFlowVector = new int[numValues];
         for(int index = 0; index < numValues; index++){
-            sourceFlowVector[index] = (int)Math.floor(nf.flow[source][index]/flowMultiplier);
-            sinkFlowVector[index] = (int)Math.floor(nf.flow[index+numValues][sink]/flowMultiplier);
+            sourceFlowVector[index] = (int)Math.floor(
+                    nf.flow[source][index]/flowMultiplier);
+            sinkFlowVector[index] = (int)Math.floor(
+                    nf.flow[index+numValues][sink]/flowMultiplier);
         }
         
+        pixelFlowMatrix = new int[numValues][numValues];
+        for(int i = 0; i < numValues; i++){
+            for(int j = 0; j < numValues; j++){
+                pixelFlowMatrix[i][j] = (int)Math.floor(
+                        nf.flow[i][j+numValues]/flowMultiplier);
+            }
+        }
     }
 
     public static void displayMatrix(int[][] matrix){
@@ -66,6 +76,10 @@ public class EmdResults {
             }
             System.out.println();
         }
+    }
+
+    public int[][] getPixelFlowMatrix() {
+        return pixelFlowMatrix;
     }
     
     public double getEmd() {

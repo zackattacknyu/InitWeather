@@ -52,6 +52,9 @@ public class MinCostMaxFlowImp {
         Path sourceFlowVectorFile;
         Path sinkFlowVectorFile;
         
+        String pixelFlowMatrixFileName;
+        Path pixelFlowMatrixFile;
+        
         int docNum = 1;
 
         ArrayList<String> emdResults = new ArrayList<String>(100);
@@ -67,6 +70,8 @@ public class MinCostMaxFlowImp {
             sourceFlowVectorFileName = "sourceFlow" + docNum + ".txt";
             sinkFlowVectorFileName = "sinkFlow" + docNum + ".txt";
             
+            pixelFlowMatrixFileName = "pixelFlowMatrix" + docNum + ".txt";
+            
             //gets the file paths we need
             costMatrixFile = inputPath.resolve(costMatrixFileName);
             capMatrixFile = inputPath.resolve(capMatrixFileName);
@@ -74,6 +79,7 @@ public class MinCostMaxFlowImp {
             //gets output file paths
             sourceFlowVectorFile = outputPath.resolve(sourceFlowVectorFileName);
             sinkFlowVectorFile = outputPath.resolve(sinkFlowVectorFileName);
+            pixelFlowMatrixFile = outputPath.resolve(pixelFlowMatrixFileName);
             
             if(!costMatrixFile.toFile().exists() || !capMatrixFile.toFile().exists()){
                 break;
@@ -88,6 +94,8 @@ public class MinCostMaxFlowImp {
                     makeLinesFromArray(currentResults.getSourceFlowVector()));
             writeTextFile(sinkFlowVectorFile,
                     makeLinesFromArray(currentResults.getSinkFlowVector()));
+            writeTextFile(pixelFlowMatrixFile,
+                    makeLinesFromMatrix(currentResults.getPixelFlowMatrix()));
             
             docNum++;
         }
@@ -95,6 +103,21 @@ public class MinCostMaxFlowImp {
         Path emdResultFile = outputPath.resolve("allEMDvalues.txt");
         writeTextFile(emdResultFile,emdResults);
 
+    }
+    
+    public static ArrayList<String> makeLinesFromMatrix(int[][] matrix){
+        ArrayList<String> lines = new ArrayList<String>();
+        StringBuilder curString;
+        for(int i = 0; i < matrix.length; i++){
+            curString = new StringBuilder();
+            for(int j = 0; j < matrix[0].length; j++){
+                curString.append(matrix[i][j]);
+                curString.append(",");
+            }
+            curString.deleteCharAt(curString.length()-1); //deletes last comma
+            lines.add(curString.toString());
+        }
+        return lines;
     }
     
     public static ArrayList<String> makeLinesFromArray(int[] array){

@@ -1,6 +1,8 @@
 basePatch = patches{9};
 curPatch = patches{8};
-
+%%
+xInit = load('emdResults/pixelFlowMatrix1.txt');
+%%
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 [weight,pixelLocs] = getFeatureWeight(curPatch);
 
@@ -49,9 +51,9 @@ lb = zeros(1, m * n);
 
 Hmat = getHmatrix(n);
 Hmat = Hmat.*2;
-
+%%
 % quadratic programming
-[x, fval] = quadprog(Hmat,fVec, A, b, Aeq, beq, lb);
+[x, fval] = quadprog(Hmat,fVec, A, b, Aeq, beq, lb,[],xInit);
 fval = fval / sum(x);
 
 %%

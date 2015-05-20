@@ -1,5 +1,8 @@
 load('rejectionSamplingPatches2.mat');
+%%
 
+load('goodPatches3.mat');
+newPatches = randPatches;
 %%
 
 patchSize=20;
@@ -25,7 +28,7 @@ W1 = baseWeight;
 Func = @getPixelDist;
 [m a] = size(F1);
 
-numPatches = 48;
+numPatches = 1;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
