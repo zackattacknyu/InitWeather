@@ -1,7 +1,12 @@
 basePatch = patches{9};
 curPatch = patches{8};
 %%
-xInit = load('emdResults/pixelFlowMatrix1.txt');
+curPatchNum = 3;
+flowMatrixFile = strcat('emdResults/pixelFlowMatrix',num2str(curPatchNum),'.txt');
+xInit = load(flowMatrixFile);
+curPatches = patches{curPatchNum};
+xInit = xInit';
+xInit = xInit(:);
 %%
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 [weight,pixelLocs] = getFeatureWeight(curPatch);

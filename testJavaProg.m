@@ -5,10 +5,10 @@ load('goodPatches3.mat');
 newPatches = randPatches;
 %%
 
-patchSize=20;
+patchSize=10;
 patches = cell(1,size(newPatches,1));
 for i = 1:size(newPatches,1)
-    imgToShow = reshape(newPatches(i,1:20,1:20),[patchSize patchSize]); 
+    imgToShow = reshape(newPatches(i,1:patchSize,1:patchSize),[patchSize patchSize]); 
     patches{i} = imgToShow;
 end
 
@@ -28,7 +28,8 @@ W1 = baseWeight;
 Func = @getPixelDist;
 [m a] = size(F1);
 
-numPatches = 1;
+errorFunc = @(x) getTotalError(f,W1,W2,x);
+numPatches = 10;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
@@ -47,13 +48,14 @@ for patchNum = 1:numPatches
     % gets ground distance matrix
     f = zeros(m,n);
     capF = zeros(m,n); %capacity of link. set to zero.
-    maxDist = 5;
+    %maxDist = 5;
     for i = 1:m
         for j = 1:n
             f(i, j) = Func(F1(i, 1:a), F2(j, 1:a));
-            if( norm(F1(i, 1:a)-F2(j, 1:a),Inf) <= maxDist)
-               capF(i,j)=1; 
-            end
+            capF(i,j)=1;
+            %if( norm(F1(i, 1:a)-F2(j, 1:a),Inf) <= maxDist)
+            %   capF(i,j)=1; 
+            %end
         end
     end
 
@@ -112,19 +114,48 @@ end
 
 %%
 
+% inequality constraints
+NN = length(W1);
+A1 = zeros(NN, NN * NN);
+A2 = zeros(NN, NN * NN);
+for i = 1:NN
+    for j = 1:NN
+        k = j + (i - 1) * NN;
+        A1(i, k) = 1;
+        A2(j, k) = 1;
+    end
+end
+A = [A1; A2];
+Aeq = ones(NN + NN, NN * NN);
+lb = zeros(1, NN * NN);
+f = f';
+f = f(:);
+
 percentToMax=zeros(1,numPatches);
-percentOverMin = zeros(1,numPatches);
+percentToMaxOther=zeros(1,numPatches);
+%percentOverMin = zeros(1,numPatches);
 sumW1 = sum(W1);
 for i = 1:numPatches
     
     sourceFile = strcat('emdResults/sourceFlow',num2str(i),'.txt');
     sinkFile = strcat('emdResults/sinkFlow',num2str(i),'.txt');
     
+    flowMatrixFile = strcat('emdResults/pixelFlowMatrix',num2str(i),'.txt');
+    xInit = load(flowMatrixFile);
+    xInit = xInit';
+    xInit = xInit(:);
+    
     sourceFlow = load(sourceFile);
     sinkFlow = load(sinkFile);
     currentW2 = W2vectors{i};
     sumSquError = sum((sourceFlow-W1).^2) + sum((sinkFlow-currentW2).^2);
-    sumSquError2 = norm((sourceFlow-W1),2)^2 + norm((sinkFlow-currentW2),2)^2;
+    
+    b = [W1; currentW2];
+    beq = ones(NN + NN, 1) * min(sum(W1), sum(currentW2));
+    
+    errorFunc = @(x) getTotalError(f,W1,currentW2,x);
+    [newX,fvals] = fmincon(errorFunc,xInit,A,b,Aeq,beq,lb,[]);
+    sumSquErrorOther = getSquaredError(newX,W1,currentW2);
 
     %{
     This part calculates the min
@@ -139,22 +170,29 @@ for i = 1:numPatches
     minSquaredError = maxSquaredError/length(W1);
     
     percentToMax(i) = (sumSquError-minSquaredError)/(maxSquaredError-minSquaredError);
-    percentOverMin(i) = (sumSquError-minSquaredError)/minSquaredError;
+    percentToMaxOther(i) = (sumSquErrorOther-minSquaredError)/(maxSquaredError-minSquaredError);
+    %percentOverMin(i) = (sumSquError-minSquaredError)/minSquaredError;
 end
 
 %%
 
 figure
 [P1, I] = sort(percentToMax(percentToMax<1));
-plot(P1);
+plot(P1,'g-');
+hold on
+[P2, I] = sort(percentToMaxOther);
+plot(P2,'r-')
 xlabel('Image Patch');
 ylabel('Error on 0-1 scale with 0 as min, 1 as max');
+legend('Max Flow Algorithm','Non-Linear Optimization');
 
+%{
 figure
 [P2, I] = sort(percentOverMin(percentOverMin<100));
 plot(P2)
 xlabel('Image Patch');
 ylabel('Ratio of Error to Min Error');
+%}
 
 %%
 
