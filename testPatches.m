@@ -21,7 +21,7 @@ for k = 1:numPatches
    curRadius = maxRadius*rand(1,1) + minRadius;
    for i = 1:patchSize
        for j = 1:patchSize
-           dist = norm([i j] - centers(k,:),Inf);
+           dist = norm([i j] - centers(k,:),2);
            newPatch(i,j) = (dist<curRadius)*1;
        end
    end
@@ -91,12 +91,19 @@ load('goodMSEpatches3.mat');
 
 %%
 
-%these are the ones for the revised 20x20 patches
+%these are the ones for the revised 20x20 patches with L_Inf norm
 save('goodMSEpatches4.mat','patches','basePatch','-v7.3');
 %%
 
-%these are the ones for the revised 20x20 patches
+%these are the ones for the revised 20x20 patches with L_Inf norm
 load('goodMSEpatches4.mat');
+%%
+%these are the ones for the revised 20x20 patches with L_1 norm
+save('goodMSEpatches5.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the revised 20x20 patches with L_1 norm
+load('goodMSEpatches5.mat');
 
 %%
 

@@ -5,7 +5,7 @@ load('goodPatches3.mat');
 newPatches = randPatches;
 %%
 
-patchSize=10;
+patchSize=20;
 patches = cell(1,size(newPatches,1));
 for i = 1:size(newPatches,1)
     imgToShow = reshape(newPatches(i,1:patchSize,1:patchSize),[patchSize patchSize]); 
@@ -29,7 +29,7 @@ Func = @getPixelDist;
 [m a] = size(F1);
 
 errorFunc = @(x) getTotalError(f,W1,W2,x);
-numPatches = 100;
+numPatches = 48;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
