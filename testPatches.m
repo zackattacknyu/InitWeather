@@ -193,9 +193,10 @@ end
 
 %%
 
-%got good results with 20 by 20 patches
-save('goodEMDResults3.mat','indices','distsFromCenter',...
-    'patches','basePatch','bestIndices','emdDists','-v7.3');
+%got good results with 20 by 20 patches from original data set
+save('goodEMDResults4.mat','indices',...
+    'patches','basePatch','bestIndices','bestIndicesPen','bestIndicesPenSqu'...
+    ,'emdDists','emdDistsWithPenalty','emdDistsWithPenSquared','-v7.3');
 
 %%
 load('goodEMDResults.mat');
@@ -203,7 +204,8 @@ load('goodEMDResults.mat');
 load('goodEMDResults2.mat');
 %%
 
-numPatches = length(patches);
+%numPatches = length(patches);
+numPatches = numRows*numCol;
 
 maxPixel = 0;
 for k = 1:length(patches)

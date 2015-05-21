@@ -17,7 +17,7 @@ end
 %to select a number of random patches from the newPatches batch
 patchSize=20;
 randInds = randperm(size(newPatches,1));
-numPatches = 48;
+numPatches = 700;
 patches = cell(1,numPatches);
 for i = 1:numPatches
     ind = randInds(i);
@@ -43,7 +43,7 @@ Func = @getPixelDist;
 [m a] = size(F1);
 
 errorFunc = @(x) getTotalError(f,W1,W2,x);
-numPatches = 48;
+numPatches = 700;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
