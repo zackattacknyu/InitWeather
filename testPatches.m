@@ -49,6 +49,16 @@ for k = 1:numPatches
 end
 [orderedMSE,indices] = sort(mseVals);
 
+%%
+
+mseVals = zeros(1,numPatches);
+for k = 1:numPatches
+    curPatch = patches{patchIndices(k)};
+    mseVals(k) = mean((curPatch(:)-basePatch(:)).^2);
+end
+[orderedMSE,indices] = sort(mseVals);
+
+
 %{
 figure
 colormap bone;

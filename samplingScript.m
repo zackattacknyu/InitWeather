@@ -49,7 +49,7 @@ load('gtImages.mat');
 %obtains a very large sample of patches
 nImgs = length(allImgs);
 numPatchesPerImage = 50;
-patchSize = 10;
+patchSize = 20;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
@@ -83,12 +83,14 @@ end
 
 %%
 
-save('largePatchSet2.mat','randPatches','patchSum','-v7.3');
+save('largePatchSet3.mat','randPatches','patchSum','-v7.3');
 
 %%
 
-load('largePatchSet2.mat');
+load('largePatchSet3.mat');
 
+%%
+patchSum(patchSum<0) = [];
 %%
 numBins = 30;
 [N,data] = hist(patchSum,numBins);
@@ -96,7 +98,7 @@ semilogy(N);
 %%
 %obtains a very large sample of patches
 nImgs = length(randPatches);
-patchSize = 10;
+patchSize = 20;
 numTotal = 2000;
 newPatches = zeros(numTotal,patchSize,patchSize);
 numPickedInBin = zeros(1,numBins);
@@ -130,17 +132,17 @@ newPatches = newPatches(1:(imgIndex-1),:,:);
 
 %%
 
-save('rejectionSamplingPatches2.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
+save('rejectionSamplingPatches3.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
 
 %%
 
-load('rejectionSamplingPatches2.mat');
+load('rejectionSamplingPatches3.mat');
 
 %%
 
 %display random images from our set
 
-patchSize = 10;
+patchSize = 20;
 numImages = size(newPatches,1);
 
 numHoriz = 4;

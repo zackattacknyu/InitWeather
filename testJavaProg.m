@@ -1,4 +1,4 @@
-load('rejectionSamplingPatches2.mat');
+load('rejectionSamplingPatches3.mat');
 %%
 
 load('goodPatches3.mat');
