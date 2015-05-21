@@ -13,7 +13,21 @@ for i = 1:size(newPatches,1)
 end
 
 %%
-basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+
+%to select a number of random patches from the newPatches batch
+patchSize=20;
+randInds = randperm(size(newPatches,1));
+numPatches = 48;
+patches = cell(1,numPatches);
+for i = 1:numPatches
+    ind = randInds(i);
+    imgToShow = reshape(newPatches(ind,1:patchSize,1:patchSize),[patchSize patchSize]); 
+    patches{i} = imgToShow;
+end
+
+%%
+%basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+basePatchNum=1;
 basePatch = patches{basePatchNum};
 
 figure

@@ -1,6 +1,7 @@
 patchSize = 20;
 numRows = 6;
 numCol = 8;
+%%
 numPatches = numRows*numCol;
 maxRadius = 3;
 minRadius = 2;
@@ -53,7 +54,7 @@ end
 
 mseVals = zeros(1,numPatches);
 for k = 1:numPatches
-    curPatch = patches{patchIndices(k)};
+    curPatch = patches{k};
     mseVals(k) = mean((curPatch(:)-basePatch(:)).^2);
 end
 [orderedMSE,indices] = sort(mseVals);
@@ -210,7 +211,7 @@ for k = 1:length(patches)
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -219,7 +220,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -228,7 +229,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -237,7 +238,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
