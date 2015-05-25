@@ -1,6 +1,7 @@
 patchSize = 20;
 numRows = 6;
 numCol = 8;
+%%
 numPatches = numRows*numCol;
 maxRadius = 3;
 minRadius = 2;
@@ -21,7 +22,7 @@ for k = 1:numPatches
    curRadius = maxRadius*rand(1,1) + minRadius;
    for i = 1:patchSize
        for j = 1:patchSize
-           dist = norm([i j] - centers(k,:),Inf);
+           dist = norm([i j] - centers(k,:),2);
            newPatch(i,j) = (dist<curRadius)*1;
        end
    end
@@ -48,6 +49,16 @@ for k = 1:numPatches
     mseVals(k) = mean((curPatch(:)-basePatch(:)).^2);
 end
 [orderedMSE,indices] = sort(mseVals);
+
+%%
+
+mseVals = zeros(1,numPatches);
+for k = 1:numPatches
+    curPatch = patches{k};
+    mseVals(k) = mean((curPatch(:)-basePatch(:)).^2);
+end
+[orderedMSE,indices] = sort(mseVals);
+
 
 %{
 figure
@@ -91,12 +102,19 @@ load('goodMSEpatches3.mat');
 
 %%
 
-%these are the ones for the revised 20x20 patches
+%these are the ones for the revised 20x20 patches with L_Inf norm
 save('goodMSEpatches4.mat','patches','basePatch','-v7.3');
 %%
 
-%these are the ones for the revised 20x20 patches
+%these are the ones for the revised 20x20 patches with L_Inf norm
 load('goodMSEpatches4.mat');
+%%
+%these are the ones for the revised 20x20 patches with L_1 norm
+save('goodMSEpatches5.mat','patches','basePatch','-v7.3');
+%%
+
+%these are the ones for the revised 20x20 patches with L_1 norm
+load('goodMSEpatches5.mat');
 
 %%
 
@@ -175,9 +193,10 @@ end
 
 %%
 
-%got good results with 20 by 20 patches
-save('goodEMDResults3.mat','indices','distsFromCenter',...
-    'patches','basePatch','bestIndices','emdDists','-v7.3');
+%got good results with 20 by 20 patches from original data set
+save('goodEMDResults4.mat','indices',...
+    'patches','basePatch','bestIndices','bestIndicesPen','bestIndicesPenSqu'...
+    ,'emdDists','emdDistsWithPenalty','emdDistsWithPenSquared','-v7.3');
 
 %%
 load('goodEMDResults.mat');
@@ -185,7 +204,8 @@ load('goodEMDResults.mat');
 load('goodEMDResults2.mat');
 %%
 
-numPatches = length(patches);
+%numPatches = length(patches);
+numPatches = numRows*numCol;
 
 maxPixel = 0;
 for k = 1:length(patches)
@@ -193,7 +213,7 @@ for k = 1:length(patches)
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -202,7 +222,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -211,7 +231,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
@@ -220,7 +240,7 @@ for k = 1:numPatches
 end
 
 figure
-colormap bone;
+colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);

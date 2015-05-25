@@ -64,6 +64,7 @@ public class MinCostMaxFlowImp {
         DeleteTempFiles.deleteFilesInDir(outputPath);
         
         while(true){
+            System.out.println("Matrix " + docNum);
             costMatrixFileName = "costMatrix" + docNum + ".txt";
             capMatrixFileName = "capMatrix" + docNum + ".txt";
             
