@@ -54,9 +54,24 @@ public class GeneratePatches {
             }
         }
         //fill in gaps in rows
-        //for(int row = 0; row < patch.length; row++){
-        //    
-        //}
+        for(int row = 0; row < patch.length; row++){
+            minFound = false; minI = 0; maxI = 0;
+            for(int i = 0; i < patch.length; i++){
+                if(patch[row][i] > 0){
+                    if(!minFound){
+                        minFound = true;
+                        minI = i;
+                    }
+                    maxI = i;
+                }
+            }
+            
+            if(minFound){
+                for(int j = minI; j <= maxI; j++){
+                    patch[row][j] = 8;
+                }
+            }
+        }
         
         
         displayPatch(patch);
