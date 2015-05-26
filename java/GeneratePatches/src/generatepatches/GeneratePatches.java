@@ -16,12 +16,12 @@ public class GeneratePatches {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int size = 10;
+        int size = 20;
         int[][] patch = new int[size][size];
         
-        patch[5][5] = 8;
+        patch[10][10] = 8;
         double num;
-        for(int pass = 1; pass < 3; pass++){
+        for(int pass = 1; pass < 6; pass++){
             int[][] oldPatch = copyPatch(patch);
             for(int i = 1; i < size-1; i++){
                 for(int j = 1; j < size-1; j++){
