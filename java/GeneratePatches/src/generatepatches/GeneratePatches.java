@@ -24,13 +24,14 @@ public class GeneratePatches {
         int centerCol = getRandom(size,centerRange);
         
         patch[centerRow][centerCol] = 8;
-        double num;
+        double num,currentProb;
         for(int pass = 1; pass < 6; pass++){
             int[][] oldPatch = copyPatch(patch);
+            currentProb = 0.6-0.05*pass;
             for(int i = 1; i < size-1; i++){
                 for(int j = 1; j < size-1; j++){
                     num = Math.random();
-                    if(isCandidate(oldPatch,i,j) && (num < (0.6-0.05*pass))){
+                    if(isCandidate(oldPatch,i,j) && (num < currentProb)){
                         patch[i][j] = 8;
                     }
                 }
