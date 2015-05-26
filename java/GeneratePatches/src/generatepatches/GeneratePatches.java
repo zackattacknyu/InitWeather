@@ -18,14 +18,28 @@ public class GeneratePatches {
     public static void main(String[] args) {
         int size = 20;
         int centerRange = 5;
-        int[][] patch = new int[size][size];
+        int intToFill = 8;
+        int numPasses = 5;
         
+        int[][] patch = initializePatch(size,centerRange,intToFill);
+        patch = generatePositivePixels(patch,intToFill,numPasses);
+        patch = fillInGaps(patch,intToFill);
+        
+        displayPatch(patch);
+    }
+    
+    public static int[][] initializePatch(int size, int centerRange, int intToFill){
+        int[][] patch = new int[size][size];
         int centerRow = getRandom(size,centerRange);
         int centerCol = getRandom(size,centerRange);
-        int intToFill = 8;
         patch[centerRow][centerCol] = intToFill;
+        return patch;
+    }
+    
+    public static int[][] generatePositivePixels(int[][] patch, int intToFill, int numPasses){
+        int size = patch.length;
         double num,currentProb;
-        for(int pass = 1; pass < 6; pass++){
+        for(int pass = 1; pass <= numPasses; pass++){
             int[][] oldPatch = copyPatch(patch);
             currentProb = getProbability(pass);
             for(int i = 1; i < size-1; i++){
@@ -37,10 +51,7 @@ public class GeneratePatches {
                 }
             }
         }
-        
-        patch = fillInGaps(patch,intToFill);
-        
-        displayPatch(patch);
+        return patch;
     }
     
     public static double getProbability(double pass){
