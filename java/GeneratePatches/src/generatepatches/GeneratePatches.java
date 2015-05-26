@@ -18,22 +18,24 @@ public class GeneratePatches {
     public static void main(String[] args) {
         int size = 20;
         int centerRange = 5;
-        int intToFill1 = 8;
-        int numPasses1 = 5;
-        int intToFill2 = 6;
-        int numPasses2 = 4;
         
-        int[][] patch = initializePatch(size,centerRange,intToFill1);
-        
-        //first wave of numbers
-        patch = generatePositivePixels(patch,intToFill1,numPasses1);
-        patch = fillInGaps(patch,intToFill1);
-        
-        //second wave of numbers
-        patch = generatePositivePixels(patch,intToFill2,numPasses2);
-        patch = fillInGaps(patch,intToFill2);
+        int[] intsToFill = {8,6};
+        int[] numPasses = {5,4};
+
+        int[][] patch = generatePatch(size,centerRange,intsToFill,numPasses);
         
         displayPatch(patch);
+    }
+    
+    public static int[][] generatePatch(int size, int centerRange, int[] intsToFill, int[] numPasses){
+        int[][] patch = initializePatch(size,centerRange,intsToFill[0]);
+        
+        for(int wave = 0; wave < intsToFill.length; wave++){
+            //first wave of numbers
+            patch = generatePositivePixels(patch,intsToFill[wave],numPasses[wave]);
+            patch = fillInGaps(patch,intsToFill[wave]);
+        }
+        return patch;
     }
     
     public static int[][] initializePatch(int size, int centerRange, int intToFill){
