@@ -19,8 +19,8 @@ public class GeneratePatches {
         int size = 20;
         int centerRange = 5;
         
-        int[] intsToFill = {8,6};
-        int[] numPasses = {5,4};
+        int[] intsToFill = {8,6,4};
+        int[] numPasses = {3,3,2};
 
         int[][] patch = generatePatch(size,centerRange,intsToFill,numPasses);
         
@@ -31,7 +31,7 @@ public class GeneratePatches {
         int[][] patch = initializePatch(size,centerRange,intsToFill[0]);
         
         for(int wave = 0; wave < intsToFill.length; wave++){
-            //first wave of numbers
+
             patch = generatePositivePixels(patch,intsToFill[wave],numPasses[wave]);
             patch = fillInGaps(patch,intsToFill[wave]);
         }
