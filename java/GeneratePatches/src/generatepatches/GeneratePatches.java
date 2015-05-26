@@ -22,23 +22,33 @@ public class GeneratePatches {
         
         int centerRow = getRandom(size,centerRange);
         int centerCol = getRandom(size,centerRange);
-        
-        patch[centerRow][centerCol] = 8;
+        int intToFill = 8;
+        patch[centerRow][centerCol] = intToFill;
         double num,currentProb;
         for(int pass = 1; pass < 6; pass++){
             int[][] oldPatch = copyPatch(patch);
-            currentProb = 0.6-0.05*pass;
+            currentProb = getProbability(pass);
             for(int i = 1; i < size-1; i++){
                 for(int j = 1; j < size-1; j++){
                     num = Math.random();
                     if(isCandidate(oldPatch,i,j) && (num < currentProb)){
-                        patch[i][j] = 8;
+                        patch[i][j] = intToFill;
                     }
                 }
             }
         }
         
-        boolean minFound; int minI=0, maxI=0;
+        patch = fillInGaps(patch,intToFill);
+        
+        displayPatch(patch);
+    }
+    
+    public static double getProbability(double pass){
+        return 0.6-0.05*pass;
+    }
+    
+    public static int[][] fillInGaps(int[][] patch, int intToFill){
+        boolean minFound; int minI,maxI;
         //fill in gaps in columns
         for(int col = 0; col < patch.length; col++){
             minFound = false; minI = 0; maxI = 0;
@@ -54,7 +64,9 @@ public class GeneratePatches {
             
             if(minFound){
                 for(int j = minI; j <= maxI; j++){
-                    patch[j][col] = 8;
+                    if(patch[j][col] <= 0){
+                        patch[j][col] = intToFill;
+                    }
                 }
             }
         }
@@ -73,13 +85,13 @@ public class GeneratePatches {
             
             if(minFound){
                 for(int j = minI; j <= maxI; j++){
-                    patch[row][j] = 8;
+                    if(patch[row][j] <= 0){
+                        patch[row][j] = intToFill;
+                    }
                 }
             }
         }
-        
-        
-        displayPatch(patch);
+        return patch;
     }
     
     public static int getRandom(int size, int centerRange){
@@ -101,8 +113,9 @@ public class GeneratePatches {
         
         for(int i = row-1; i <= row+1; i++){
             for(int j = col-1; j <= col+1; j++){
-                if(patch[i][j] > 0)
+                if(patch[i][j] > 0) {
                     return true;
+                }
             }
         }
         return false;
