@@ -18,12 +18,20 @@ public class GeneratePatches {
     public static void main(String[] args) {
         int size = 20;
         int centerRange = 5;
-        int intToFill = 8;
-        int numPasses = 5;
+        int intToFill1 = 8;
+        int numPasses1 = 5;
+        int intToFill2 = 6;
+        int numPasses2 = 4;
         
-        int[][] patch = initializePatch(size,centerRange,intToFill);
-        patch = generatePositivePixels(patch,intToFill,numPasses);
-        patch = fillInGaps(patch,intToFill);
+        int[][] patch = initializePatch(size,centerRange,intToFill1);
+        
+        //first wave of numbers
+        patch = generatePositivePixels(patch,intToFill1,numPasses1);
+        patch = fillInGaps(patch,intToFill1);
+        
+        //second wave of numbers
+        patch = generatePositivePixels(patch,intToFill2,numPasses2);
+        patch = fillInGaps(patch,intToFill2);
         
         displayPatch(patch);
     }
@@ -138,7 +146,7 @@ public class GeneratePatches {
                 if(patch[j][i] <= 0){
                     System.out.print("o ");
                 }else{
-                    System.out.print("x ");
+                    System.out.print(patch[j][i] + " ");
                 }
             }
             System.out.println();
