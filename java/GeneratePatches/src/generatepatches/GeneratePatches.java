@@ -19,15 +19,15 @@ public class GeneratePatches {
         int size = 20;
         int centerRange = 5;
         
-        int[] intsToFill = {8,6,4};
-        int[] numPasses = {3,3,2};
+        Integer[] intsToFill = {8,6,4};
+        Integer[] numPasses = {3,3,2};
 
         int[][] patch = generatePatch(size,centerRange,intsToFill,numPasses);
         
         displayPatch(patch);
     }
-    
-    public static int[][] generatePatch(int size, int centerRange, int[] intsToFill, int[] numPasses){
+        
+    public static int[][] generatePatch(Integer size, Integer centerRange, Integer[] intsToFill, Integer[] numPasses){
         int[][] patch = initializePatch(size,centerRange,intsToFill[0]);
         
         for(int wave = 0; wave < intsToFill.length; wave++){
