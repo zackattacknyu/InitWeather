@@ -17,16 +17,20 @@ public class GeneratePatches {
      */
     public static void main(String[] args) {
         int size = 20;
+        int centerRange = 5;
         int[][] patch = new int[size][size];
         
-        patch[10][10] = 8;
+        int centerRow = getRandom(size,centerRange);
+        int centerCol = getRandom(size,centerRange);
+        
+        patch[centerRow][centerCol] = 8;
         double num;
         for(int pass = 1; pass < 6; pass++){
             int[][] oldPatch = copyPatch(patch);
             for(int i = 1; i < size-1; i++){
                 for(int j = 1; j < size-1; j++){
                     num = Math.random();
-                    if(isCandidate(oldPatch,i,j) && (num < (0.6-0.1*pass))){
+                    if(isCandidate(oldPatch,i,j) && (num < (0.6-0.05*pass))){
                         patch[i][j] = 8;
                     }
                 }
@@ -75,6 +79,10 @@ public class GeneratePatches {
         
         
         displayPatch(patch);
+    }
+    
+    public static int getRandom(int size, int centerRange){
+        return (int)Math.floor(centerRange*Math.random()) + (size-centerRange)/2;
     }
     
     public static int[][] copyPatch(int[][] patch){
