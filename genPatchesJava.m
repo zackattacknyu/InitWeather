@@ -1,14 +1,13 @@
 javaaddpath('java/GeneratePatches/build/classes')
 %%
-intsArray = javaArray('java.lang.Integer',3);
-intsArray(1) = java.lang.Integer(8);
-intsArray(2) = java.lang.Integer(6);
-intsArray(3) = java.lang.Integer(4);
-
-numPassesArray = javaArray('java.lang.Integer',3);
-numPassesArray(1) = java.lang.Integer(3);
-numPassesArray(2) = java.lang.Integer(3);
-numPassesArray(3) = java.lang.Integer(2);
+ints = [6 5 4 3 2 1];
+numPasses = [2 2 1 1 1 1];
+intsArray = javaArray('java.lang.Integer',length(ints));
+numPassesArray = javaArray('java.lang.Integer',length(numPasses));
+for i = 1:length(ints)
+    intsArray(i) = java.lang.Integer(ints(i));
+    numPassesArray(i) = java.lang.Integer(numPasses(i));
+end
 
 size = java.lang.Integer(20);
 centerVariance = java.lang.Integer(5);
@@ -16,16 +15,18 @@ centerVariance = java.lang.Integer(5);
 %%
 numHoriz = 10;
 numVert = 6;
-total = numHoriz*numVert;
-arrays = cell(1,total);
-for i = 1:length(arrays)
-   arrays{i} = javaMethod('generatePatch','generatepatches.GeneratePatches'...
+numDispTotal = numHoriz*numVert;
+numPatchesTotal = 700;
+patches = cell(1,numPatchesTotal);
+for i = 1:length(patches)
+   patches{i} = javaMethod('generatePatch','generatepatches.GeneratePatches'...
     ,size,centerVariance,intsArray,numPassesArray);
 end
 
+indices = randperm(numPatchesTotal);
 figure
-for i = 1:length(arrays)
-   imgToShow = arrays{i};
+for i = 1:numDispTotal
+   imgToShow = patches{indices(i)};
    subplot(numVert,numHoriz,i);
    imagesc(imgToShow);
    colormap jet;

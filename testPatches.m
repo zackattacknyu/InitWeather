@@ -193,8 +193,8 @@ end
 
 %%
 
-%got good results with 20 by 20 patches from original data set
-save('goodEMDResults4.mat','indices',...
+%got good results with 20 by 20 patches from simulated data
+save('goodEMDResults5.mat','indices',...
     'patches','basePatch','bestIndices','bestIndicesPen','bestIndicesPenSqu'...
     ,'emdDists','emdDistsWithPenalty','emdDistsWithPenSquared','-v7.3');
 

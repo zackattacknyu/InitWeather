@@ -65,32 +65,12 @@ public class GeneratePatches {
     }
     
     public static double getProbability(double pass){
-        return 0.6-0.05*pass;
+        //return 0.6-0.05*pass;
+        return 0.40;
     }
     
-    public static int[][] fillInGaps(int[][] patch, int intToFill){
+    public static int[][] fillInGapsInRows(int[][] patch, int intToFill){
         boolean minFound; int minI,maxI;
-        //fill in gaps in columns
-        for(int col = 0; col < patch.length; col++){
-            minFound = false; minI = 0; maxI = 0;
-            for(int i = 0; i < patch.length; i++){
-                if(patch[i][col] > 0){
-                    if(!minFound){
-                        minFound = true;
-                        minI = i;
-                    }
-                    maxI = i;
-                }
-            }
-            
-            if(minFound){
-                for(int j = minI; j <= maxI; j++){
-                    if(patch[j][col] <= 0){
-                        patch[j][col] = intToFill;
-                    }
-                }
-            }
-        }
         //fill in gaps in rows
         for(int row = 0; row < patch.length; row++){
             minFound = false; minI = 0; maxI = 0;
@@ -113,6 +93,37 @@ public class GeneratePatches {
             }
         }
         return patch;
+    }
+    
+    public static int[][] fillInGapsInColumns(int[][] patch, int intToFill){
+        boolean minFound; int minI,maxI;
+        //fill in gaps in columns
+        for(int col = 0; col < patch.length; col++){
+            minFound = false; minI = 0; maxI = 0;
+            for(int i = 0; i < patch.length; i++){
+                if(patch[i][col] > 0){
+                    if(!minFound){
+                        minFound = true;
+                        minI = i;
+                    }
+                    maxI = i;
+                }
+            }
+            
+            if(minFound){
+                for(int j = minI; j <= maxI; j++){
+                    if(patch[j][col] <= 0){
+                        patch[j][col] = intToFill;
+                    }
+                }
+            }
+        }
+        return patch;
+    }
+    
+    public static int[][] fillInGaps(int[][] patch, int intToFill){
+        patch = fillInGapsInColumns(patch,intToFill);
+        return fillInGapsInRows(patch,intToFill);
     }
     
     public static int getRandom(int size, int centerRange){
