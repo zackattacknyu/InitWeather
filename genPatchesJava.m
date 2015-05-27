@@ -2,6 +2,8 @@ javaaddpath('java/GeneratePatches/build/classes')
 %%
 ints = [6 5 4 3 2 1];
 numPasses = [2 2 1 1 1 1];
+%ints = [8 6];
+%numPasses = [2 2];
 intsArray = javaArray('java.lang.Integer',length(ints));
 numPassesArray = javaArray('java.lang.Integer',length(numPasses));
 for i = 1:length(ints)

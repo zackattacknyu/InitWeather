@@ -19,8 +19,8 @@ public class GeneratePatches {
         int size = 20;
         int centerRange = 5;
         
-        Integer[] intsToFill = {8,6,4};
-        Integer[] numPasses = {3,3,2};
+        Integer[] intsToFill = {8,6};
+        Integer[] numPasses = {2,2};
 
         int[][] patch = generatePatch(size,centerRange,intsToFill,numPasses);
         
@@ -28,13 +28,21 @@ public class GeneratePatches {
     }
         
     public static int[][] generatePatch(Integer size, Integer centerRange, Integer[] intsToFill, Integer[] numPasses){
-        int[][] patch = initializePatch(size,centerRange,intsToFill[0]);
+        //int[][] patch = initializePatch(size,centerRange,intsToFill[0]);
+        
+        //initializes the patch
+        int[][] patch = new int[size][size];
+        int centerRow = getRandom(size,centerRange);
+        int centerCol = getRandom(size,centerRange);
+        patch[centerRow][centerCol] = intsToFill[0];
         
         for(int wave = 0; wave < intsToFill.length; wave++){
 
             patch = generatePositivePixels(patch,intsToFill[wave],numPasses[wave]);
             patch = fillInGaps(patch,intsToFill[wave]);
         }
+        
+        //patch = fillInByEuclidDistance(patch,centerRow,centerCol);
         return patch;
     }
     
@@ -43,6 +51,22 @@ public class GeneratePatches {
         int centerRow = getRandom(size,centerRange);
         int centerCol = getRandom(size,centerRange);
         patch[centerRow][centerCol] = intToFill;
+        return patch;
+    }
+    
+    public static int[][] fillInByEuclidDistance(int[][] patch, int centerRow, int centerCol){
+        int size = patch.length;
+        double dist,x, y;
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                if(patch[i][j] <= 0){
+                    y = centerRow-i; x = centerCol-j;
+                    dist = Math.sqrt(x*x + y*y);
+                    patch[i][j] = (int)Math.floor((1.0/dist)*16.0);
+                }
+                
+            }
+        }
         return patch;
     }
     
