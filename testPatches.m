@@ -51,7 +51,7 @@ end
 [orderedMSE,indices] = sort(mseVals);
 
 %%
-
+numPatches = 555;
 mseVals = zeros(1,numPatches);
 for k = 1:numPatches
     curPatch = patches{k};
@@ -194,7 +194,7 @@ end
 %%
 
 %got good results with 20 by 20 patches from simulated data
-save('goodEMDResults5.mat','indices',...
+save('goodEMDResults6.mat','indices',...
     'patches','basePatch','bestIndices','bestIndicesPen','bestIndicesPenSqu'...
     ,'emdDists','emdDistsWithPenalty','emdDistsWithPenSquared','-v7.3');
 
@@ -212,38 +212,54 @@ for k = 1:length(patches)
    maxPixel = max( max(max(patches{k})) , maxPixel); 
 end
 
+maxPixel2 = 0;
+for k = 1:numPatches
+   maxPixel2 = max( max(max(patches{indices(k)})) , maxPixel2); 
+end
 figure
 colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
-   imagesc(patches{indices(k)}, [0 maxPixel])
+   imagesc(patches{indices(k)}, [0 maxPixel2])
    axis off
 end
 
+maxPixel3 = 0;
+for k = 1:numPatches
+   maxPixel3 = max( max(max(patches{bestIndices(k)})) , maxPixel3); 
+end
 figure
 colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
-   imagesc(patches{bestIndices(k)}, [0 maxPixel])
+   imagesc(patches{bestIndices(k)}, [0 maxPixel3])
    axis off
 end
 
+maxPixel4 = 0;
+for k = 1:numPatches
+   maxPixel4 = max( max(max(patches{bestIndicesPen(k)})) , maxPixel4); 
+end
 figure
 colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
-   imagesc(patches{bestIndicesPen(k)}, [0 maxPixel])
+   imagesc(patches{bestIndicesPen(k)}, [0 maxPixel4])
    axis off
 end
 
+maxPixel5 = 0;
+for k = 1:numPatches
+   maxPixel5 = max( max(max(patches{bestIndicesPenSqu(k)})) , maxPixel5); 
+end
 figure
 colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
-   imagesc(patches{bestIndicesPenSqu(k)}, [0 maxPixel])
+   imagesc(patches{bestIndicesPenSqu(k)}, [0 maxPixel5])
    axis off
 end

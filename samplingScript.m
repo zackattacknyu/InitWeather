@@ -186,7 +186,7 @@ load('rejectionSamplingPatches4.mat');
 patchSize = 20;
 numImages = size(newPatches,1);
 
-numHoriz = 4;
+numHoriz = 5;
 numVert = 6;
 binNum = 2;
 
