@@ -54,7 +54,7 @@ nImgs = length(allImgs);
 %make octree for all the slots where sample
 %   could come from in (x,y,t) space
 minDist = 10;
-slots = zeros([floor(nImgs/minDist) floor(size(img1)/minDist)]);
+slots = zeros([floor(nImgs/minDist)+1 floor(size(img1)/minDist)]+1);
 
 %
 numPatchesPerImage = 50;
@@ -62,7 +62,7 @@ patchSize = 20;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
-randPatches = cell(1,numTotalPatches);
+randPatches2 = cell(1,numTotalPatches);
 randIndices = randperm(nImgs);
 imgIndex = 1;
 
@@ -84,39 +84,51 @@ for j=1:nImgs
        slotT = floor(curIndex/minDist)+1;
        slotX = floor(randStartRow/minDist)+1;
        slotY = floor(randStartCol/minDist)+1;
-       for ii = -1:1
-          for jj = -1:1
-             for kk = -1:1
-                 slotTii = slotT + ii;
-                 slotXjj = slotX + jj;
-                 slotYkk = slotY + kk;
-                 if(slotTii > 0 && slotXjj > 0 && slotYkk > 0)
-                     slots(slotT+ii,slotX+jj,slotY+kk)=1;
+       
+       if(slots(slotT,slotX,slotY) <= 0)
+           for ii = -1:1
+              for jj = -1:1
+                 for kk = -1:1
+                     slotTii = slotT + ii;
+                     slotXjj = slotX + jj;
+                     slotYkk = slotY + kk;
+                     if(slotTii > 0 && slotTii <= size(slots,1) &&...
+                             slotXjj > 0 && slotXjj <= size(slots,2) &&...
+                             slotYkk > 0 && slotYkk <= size(slots,3))
+                         slots(slotT+ii,slotX+jj,slotY+kk)=1;
+                     end
+
                  end
-                 
-             end
-          end
+              end
+           end
+
+
+           patchSum(imgIndex) = sum(randPatch(:));
+           randPatches2{imgIndex} = randPatch;
+           imgIndex = imgIndex+1;
+
+           if(mod(imgIndex,1000) == 0)
+             imgIndex 
+           end
        end
        
-       
-       patchSum(imgIndex) = sum(randPatch(:));
-       randPatches{imgIndex} = randPatch;
-       imgIndex = imgIndex+1;
-       
-       if(mod(imgIndex,1000) == 0)
-         imgIndex 
-       end
 
     end
+end
+%%
+patchSum = patchSum(1:(imgIndex-1));
+randPatches = cell(1,imgIndex-1);
+for i = 1:(imgIndex-1)
+    randPatches{i} = randPatches2{i};
 end
 
 %%
 
-save('largePatchSet3.mat','randPatches','patchSum','-v7.3');
+save('largePatchSet4.mat','randPatches','patchSum','-v7.3');
 
 %%
 
-load('largePatchSet3.mat');
+load('largePatchSet4.mat');
 
 %%
 patchSum(patchSum<0) = [];
@@ -161,11 +173,11 @@ newPatches = newPatches(1:(imgIndex-1),:,:);
 
 %%
 
-save('rejectionSamplingPatches3.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
+save('rejectionSamplingPatches4.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
 
 %%
 
-load('rejectionSamplingPatches3.mat');
+load('rejectionSamplingPatches4.mat');
 
 %%
 
