@@ -201,7 +201,7 @@ save('goodEMDResults6.mat','indices',...
 %%
 load('goodEMDResults.mat');
 %%
-load('goodEMDResults2.mat');
+load('goodEMDResults5.mat');
 %%
 
 %numPatches = length(patches);
