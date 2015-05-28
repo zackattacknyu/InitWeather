@@ -51,7 +51,7 @@ end
 [orderedMSE,indices] = sort(mseVals);
 
 %%
-numPatches = 555;
+numPatches = 50;
 mseVals = zeros(1,numPatches);
 for k = 1:numPatches
     curPatch = patches{k};
@@ -120,7 +120,8 @@ load('goodMSEpatches5.mat');
 
 %goes with Java Program
 emdDists = load('emdResults/allEMDvalues.txt');
-nImages = length(patches);
+%nImages = length(patches);
+nImages = 50;
 emdDistsWithPenalty = zeros(1,nImages);
 emdDistsWithPenSquared = zeros(1,nImages);
 %alpha1 = 1e-4;

@@ -26,8 +26,8 @@ for i = 1:numPatches
 end
 
 %%
-basePatchNum = floor(rand(1,1)*length(patches)) + 1;
-%basePatchNum=1;
+%basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+basePatchNum=1;
 basePatch = patches{basePatchNum};
 
 figure
@@ -43,7 +43,7 @@ Func = @getPixelDist;
 [m a] = size(F1);
 
 errorFunc = @(x) getTotalError(f,W1,W2,x);
-numPatches = 700;
+numPatches = 50;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches

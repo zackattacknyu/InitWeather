@@ -1,6 +1,6 @@
 javaaddpath('java/GeneratePatches/build/classes')
 %%
-ints = [6 5 4 3 2 1];
+ints = [6000 5000 4000 3000 2000 1000];
 numPasses = [2 2 1 1 1 1];
 %ints = [8 6];
 %numPasses = [2 2];
