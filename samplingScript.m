@@ -14,6 +14,7 @@ gt1 = ST4.I;
 
 %%
 %allImgs = zeros([nImgs size(gt1)]);
+%nImgs = 100;
 allImgs = cell(1,nImgs);
 
 %%
@@ -47,7 +48,15 @@ load('gtImages.mat');
 %%
 
 %obtains a very large sample of patches
+img1 = allImgs{1};
 nImgs = length(allImgs);
+
+%make octree for all the slots where sample
+%   could come from in (x,y,t) space
+minDist = 10;
+slots = zeros([floor(nImgs/minDist) floor(size(img1)/minDist)]);
+
+%
 numPatchesPerImage = 50;
 patchSize = 20;
 maxAttempts = 50;
@@ -59,7 +68,9 @@ imgIndex = 1;
 
 for j=1:nImgs
     
-    curImage = allImgs{randIndices(j)};
+    curIndex = randIndices(j);
+    
+    curImage = allImgs{curIndex};
     
     for k = 1:numPatchesPerImage
         
@@ -69,6 +80,24 @@ for j=1:nImgs
        randPatch = curImage(...
            randStartRow:(randStartRow+patchSize-1),...
            randStartCol:(randStartCol+patchSize-1));
+       
+       slotT = floor(curIndex/minDist)+1;
+       slotX = floor(randStartRow/minDist)+1;
+       slotY = floor(randStartCol/minDist)+1;
+       for ii = -1:1
+          for jj = -1:1
+             for kk = -1:1
+                 slotTii = slotT + ii;
+                 slotXjj = slotX + jj;
+                 slotYkk = slotY + kk;
+                 if(slotTii > 0 && slotXjj > 0 && slotYkk > 0)
+                     slots(slotT+ii,slotX+jj,slotY+kk)=1;
+                 end
+                 
+             end
+          end
+       end
+       
        
        patchSum(imgIndex) = sum(randPatch(:));
        randPatches{imgIndex} = randPatch;
