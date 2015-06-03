@@ -58,7 +58,7 @@ slots = zeros([floor(nImgs/minDist)+1 floor(size(img1)/minDist)]+1);
 
 %
 numPatchesPerImage = 50;
-patchSize = 40;
+patchSize = 20;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
@@ -103,7 +103,7 @@ for j=1:nImgs
            end
            
            
-           ourPatch = imresize(randPatch,0.5);
+           %ourPatch = imresize(randPatch,0.5);
            patchSum(imgIndex) = sum(ourPatch(:));
            randPatches2{imgIndex} = ourPatch;
            imgIndex = imgIndex+1;
