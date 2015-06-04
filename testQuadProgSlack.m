@@ -1,9 +1,11 @@
+%{
 basePatch = patches{98};
 curPatch = patches{8};
 
 curN = 10;
 basePatch = basePatch(1:curN,1:curN);
 curPatch = curPatch(1:curN,1:curN);
+%}
 
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 [weight,pixelLocs] = getFeatureWeight(curPatch);
