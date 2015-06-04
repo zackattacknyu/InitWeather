@@ -56,7 +56,7 @@ Func = @getPixelDist;
 [m a] = size(F1);
 
 errorFunc = @(x) getTotalError(f,W1,W2,x);
-numPatches = 50;
+numPatches = 100;
 W2vectors = cell(1,numPatches);
 
 for patchNum = 1:numPatches
