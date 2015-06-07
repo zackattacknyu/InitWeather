@@ -91,17 +91,16 @@ for patchNum = 1:numPatches
     
     numEdges = size(costMatrix,1);
     
-    costMatrixArray = javaArray('java.lang.Integer',[numEdges numEdges]);
-    capMatrixArray = javaArray('java.lang.Integer',[numEdges numEdges]);
-    for i = 1:numEdges
-       for j = 1:numEdges
-           costMatrixArray(i,j) = java.lang.Integer(costMatrix(i,j));
-           capMatrixArray(i,j) = java.lang.Integer(capMatrix(i,j));
-       end
-    end
+    file1 = strcat('matricesToCompute/costMatrix',num2str(patchNum),'.txt');
+    file2 = strcat('matricesToCompute/capMatrix',num2str(patchNum),'.txt');
+    save(file1,'costMatrix','-ascii');
+    save(file2,'capMatrix','-ascii');
+    
+    file1String = java.lang.String(strcat(pwd,'/',file1));
+    file2String = java.lang.String(strcat(pwd,'/',file2));
     
     clear result;
-    result = javaMethod('obtainEmdResults','mincostmaxflowimp.EmdResults',costMatrixArray,capMatrixArray);
+    result = javaMethod('obtainEmdResults','mincostmaxflowimp.EmdResults',file1String,file2String);
 
     sourceFlow = javaMethod('getSourceFlowVector',result);
     sinkFlow = javaMethod('getSinkFlowVector',result);

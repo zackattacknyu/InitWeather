@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -18,6 +19,11 @@ import java.util.Calendar;
  * @author Zach
  */
 public class EmdResults {
+    
+    static final Path curLocation = Paths.get("manifest.mf");
+    static final Path curPath = curLocation.toAbsolutePath();
+    static final Path initPath = curPath.getParent().getParent().getParent();
+    static final Path inputPath = initPath.resolve("matricesToCompute");
     
     public static final double costMultiplier = 1000; //do this for approximation
     public static final double flowMultiplier = 1; //for approximation
@@ -37,6 +43,12 @@ public class EmdResults {
             }
         }
         return new EmdResults(costMat,capMat);
+    }
+    
+    public static EmdResults obtainEmdResults(String costMatrixFileName, String capMatrixFileName) throws IOException{
+        Path costMatrixFile = Paths.get(costMatrixFileName);
+        Path capMatrixFile = Paths.get(capMatrixFileName);
+        return new EmdResults(costMatrixFile,capMatrixFile);
     }
     
     public EmdResults(int[][] costMatrix,int[][] capMatrix){
