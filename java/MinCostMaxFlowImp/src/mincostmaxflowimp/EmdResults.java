@@ -19,18 +19,41 @@ import java.util.Calendar;
  */
 public class EmdResults {
     
+    public static final double costMultiplier = 1000; //do this for approximation
+    public static final double flowMultiplier = 1; //for approximation
+    
     private double emd;
     private int[] sourceFlowVector;
     private int[] sinkFlowVector;
     private int[][] pixelFlowMatrix;
     
+    public static EmdResults obtainEmdResults(Integer[][] costMatrix, Integer[][] capMatrix){
+        int[][] costMat = new int[costMatrix.length][costMatrix[0].length];
+        int[][] capMat = new int[capMatrix.length][capMatrix[0].length];
+        for(int i = 0; i < costMat.length; i++){
+            for(int j = 0; j < costMat[0].length; j++){
+                costMat[i][j] = costMatrix[i][j];
+                capMat[i][j] = capMatrix[i][j];
+            }
+        }
+        return new EmdResults(costMat,capMat);
+    }
+    
+    public EmdResults(int[][] costMatrix,int[][] capMatrix){
+        generateResults(costMatrix,capMatrix);
+    }
+    
     public EmdResults(Path costMatrixFile, Path capMatrixFile) throws IOException{
         
-        //gets the matrix from the file
-        double costMultiplier = 1000; //do this for approximation
-        double flowMultiplier = 1; //for approximation
         int[][] costMatrix = getMatrixFromFile(costMatrixFile,costMultiplier);
         int[][] capMatrix = getMatrixFromFile(capMatrixFile,flowMultiplier);
+        
+        generateResults(costMatrix,capMatrix);
+    }
+    
+    private void generateResults(int[][] costMatrix, int[][] capMatrix){
+        //gets the matrix from the file
+        
         
         //displayMatrix(capMatrix);
         
