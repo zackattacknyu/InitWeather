@@ -50,7 +50,7 @@ beq = [W1; W2; zeros(m,1)];
 lb = zeros(1, m * n + m);
 
 %H matrix which jusct has identity around slack vars
-H = [zeros(m*n,m*n) zeros(m*n,m);zeros(m,m*n) eye(m,m)];
+H = [sparse(m*n,m*n) sparse(m*n,m);sparse(m,m*n) speye(m,m)];
 
 
 % quadratic programming

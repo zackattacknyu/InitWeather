@@ -17,7 +17,7 @@ end
 %to select a number of random patches from the newPatches batch
 patchSize=20;
 randInds = randperm(size(newPatches,1));
-numPatches = 700;
+numPatches =100;
 patches = cell(1,numPatches);
 for i = 1:numPatches
     ind = randInds(i);
@@ -30,7 +30,7 @@ end
 %to select a number of random patches from the newPatches batch
 patchSize=20;
 randInds = randperm(length(newPatches));
-numPatches = 700;
+numPatches = 100;
 patches = cell(1,numPatches);
 for i = 1:numPatches
     ind = randInds(i);

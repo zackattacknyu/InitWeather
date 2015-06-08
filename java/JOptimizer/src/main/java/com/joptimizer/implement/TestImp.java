@@ -20,6 +20,8 @@ import com.joptimizer.functions.LinearMultivariateRealFunction;
 import com.joptimizer.functions.PDQuadraticMultivariateRealFunction;
 import com.joptimizer.optimizers.JOptimizer;
 import com.joptimizer.optimizers.OptimizationRequest;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +31,16 @@ import java.util.logging.Logger;
  */
 public class TestImp {
     
+    static final Path curLocation = Paths.get("manifest.mf");
+    static final Path curPath = curLocation.toAbsolutePath();
+    static final Path initPath = curPath.getParent().getParent().getParent();
+    static final Path inputPath = initPath.resolve("matricesToCompute");
+    
     public static void main(String[] args){
+        
+        
+        double[][] sample = new double[10100][10100];
+        
         
         // Objective function
         double[][] P = new double[][] {{ 1., 0.4 }, { 0.4, 1. }};

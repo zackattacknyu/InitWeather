@@ -1,7 +1,7 @@
 %%
 %save('qpTestPatches.mat','patches');
 %%
-%load('qpTestPatches.mat');
+load('qpTestPatches.mat');
 %%
 
 basePatch = patches{4};
