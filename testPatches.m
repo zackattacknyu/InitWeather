@@ -211,17 +211,6 @@ numPatches = numRows*numCol;
 
 maxPixel = max(basePatch(:));
 
-%{
-maxPixel = 0;
-for k = 1:length(patches)
-   maxPixel = max( max(max(patches{k})) , maxPixel); 
-end
-
-maxPixel2 = 0;
-for k = 1:numPatches
-   maxPixel2 = max( max(max(patches{indices(k)})) , maxPixel2); 
-end
-%}
 figure
 colormap jet;
 colorbar;
@@ -231,12 +220,6 @@ for k = 1:numPatches
    axis off
 end
 
-%{
-maxPixel3 = 0;
-for k = 1:numPatches
-   maxPixel3 = max( max(max(patches{bestIndices(k)})) , maxPixel3); 
-end
-%}
 figure
 colormap jet;
 colorbar;
@@ -246,12 +229,6 @@ for k = 1:numPatches
    axis off
 end
 
-%{
-maxPixel4 = 0;
-for k = 1:numPatches
-   maxPixel4 = max( max(max(patches{bestIndicesPen(k)})) , maxPixel4); 
-end
-%}
 figure
 colormap jet;
 colorbar;
@@ -261,17 +238,39 @@ for k = 1:numPatches
    axis off
 end
 
-%{
-maxPixel5 = 0;
-for k = 1:numPatches
-   maxPixel5 = max( max(max(patches{bestIndicesPenSqu(k)})) , maxPixel5); 
-end
-%}
 figure
 colormap jet;
 colorbar;
 for k = 1:numPatches
    subplot(numRows,numCol,k);
    imagesc(patches{bestIndicesPenSqu(k)}, [0 maxPixel])
+   axis off
+end
+
+%%
+
+%numPatches = length(patches);
+numPatches = numRows*numCol;
+
+maxPixel = max(basePatch(:));
+
+[~,bestIndicesGraph] = sort(emdDistsGraphQuad);
+[~,bestIndicesQP] = sort(emdDistsQP);
+
+figure
+colormap jet;
+colorbar;
+for k = 1:numPatches
+   subplot(numRows,numCol,k);
+   imagesc(patches{bestIndicesGraph(k)}, [0 maxPixel])
+   axis off
+end
+
+figure
+colormap jet;
+colorbar;
+for k = 1:numPatches
+   subplot(numRows,numCol,k);
+   imagesc(patches{bestIndicesQP(k)}, [0 maxPixel])
    axis off
 end
