@@ -1,0 +1,194 @@
+<project name="JOptimizer" default="dist" basedir=".">
+<!--
+/*
+ * Copyright 2011-2014 JOptimizer
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+ -->
+
+<!-- ===================== Property Definitions =========================== -->
+  <property file="build.properties"/>
+  <property name="app.name"      value="joptimizer"/>
+  <property name="app.version"   value="3.4.0"/>
+  <property name="src.home"      value="${basedir}/src"/>
+  <property name="build.home"    value="${basedir}/target"/>
+  <property name="reports.home"  value="${basedir}/target/test-reports"/>
+  <property name="dist.home"     value="${basedir}/target"/>
+  <property name="docs.home"     value="${basedir}/target/docs"/>
+  <property name="lib.home"      value="${src.home}/etc/lib"/><!-- configure this -->
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="true"/>
+
+
+<!-- ==================== Compilation Classpath =========================== -->
+  <path id="compile.classpath">
+    <fileset dir="${lib.home}">
+      <include name="*.jar"/>
+    </fileset>
+    <!--pathelement path="${build.home}/classes"/-->
+  </path>
+  
+  <path id="test.compile.classpath">
+		<pathelement location="${build.home}/classes" />
+		<path refid="compile.classpath" />
+	</path>
+
+
+<!-- ==================== Clean Target ==================================== -->
+  <target name="clean" description="Delete old build and dist directories">
+    <delete dir="${build.home}"/>
+  </target>
+
+
+<!-- ==================== Compile Target ================================== -->
+  <target name="compile" depends="prepare" description="Compile Java sources">
+
+    <!-- Compile main Java classes as necessary -->
+    <javac srcdir="${src.home}/main/java"
+          destdir="${build.home}/classes"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+    <!-- Compile test Java classes as necessary -->
+    <javac srcdir="${src.home}/test/java"
+          destdir="${build.home}/test-classes"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="test.compile.classpath"/>
+    </javac>
+
+    <!-- Copy main application resources -->
+    <copy  todir="${build.home}/classes">
+      <fileset dir="${src.home}/main/resources" excludes="**/*.java"/>
+    </copy>
+    <!-- Copy test application resources -->
+    <copy  todir="${build.home}/test-classes">
+      <fileset dir="${src.home}/test/resources" excludes="**/*.java"/>
+    </copy>
+
+  </target>
+
+
+
+<!-- ==================== Dist Target ===================================== -->
+  <!--target name="dist" depends="touch,compile,-dependencies-dist" description="Create binary distribution"-->
+  <target name="dist" depends="test" description="Create distribution archives">
+
+    <!-- Create application JAR file -->
+    <jar jarfile="${dist.home}/${app.name}-${app.version}.jar"
+         basedir="${build.home}/classes">
+      <manifest>
+		    <section name="common">
+		      <attribute name="Specification-Title"    value="JOptimizer"/>
+		      <attribute name="Specification-Version"  value="${app.version}"/>
+		      <attribute name="Specification-Vendor"   value="JOptimizer"/>
+		      <attribute name="Implementation-Title"   value="JOptimizer"/>
+		      <attribute name="Implementation-Version" value="${app.version}"/> 
+		      <attribute name="Implementation-Vendor"  value="JOptimizer"/>
+		    </section>
+		  </manifest>
+    </jar>
+
+		<!-- Create source JAR file (with no Netlib resources) -->
+    <zip destfile="${dist.home}/${app.name}-${app.version}-sources.jar">
+		  <zipfileset dir="${basedir}" includes="*.xml,*.txt"/>
+		  <zipfileset dir="${src.home}/main/java" prefix="src/main/java"/>
+		  <zipfileset dir="${src.home}/main/resources" prefix="src/main/resources"/>
+		  <zipfileset dir="${src.home}/test/java" excludes="**/*NetlibTest.java" prefix="src/test/java"/>
+		  <zipfileset dir="${src.home}/test/resources" excludes="**/netlib/**/*.*" prefix="src/test/resources"/>
+		</zip>
+		
+		<!-- Create source JAR file (with Netlib resources) -->
+    <zip destfile="${dist.home}/${app.name}-${app.version}-full-sources.jar">
+		  <zipfileset dir="${basedir}" includes="*.xml,*.txt"/>
+		  <zipfileset dir="${src.home}/main/java" prefix="src/main/java"/>
+		  <zipfileset dir="${src.home}/main/resources" prefix="src/main/resources"/>
+		  <zipfileset dir="${src.home}/test/java" prefix="src/test/java"/>
+		  <zipfileset dir="${src.home}/test/resources" prefix="src/test/resources"/>
+		</zip>
+		
+		<!-- Create dependencies ZIP file -->
+    <zip destfile="${dist.home}/${app.name}-${app.version}-dependencies.zip">
+		  <zipfileset dir="${lib.home}" includes="*.jar,*.zip,*.pom,*.cmd"/>
+		</zip>
+
+  </target>
+
+<!-- ==================== Test Target ================================== -->
+  <target name="test" depends="compile" description="Test the library">
+    <junit printsummary="yes" haltonfailure="yes">
+	  	<classpath>
+	  		<pathelement location="${build.home}/test-classes"/>
+    		<pathelement location="${build.home}/classes"/>
+    		<path refid="compile.classpath"/>
+    	</classpath>
+    	<batchtest fork="yes" todir="${reports.home}">
+				<fileset dir="${build.home}/test-classes">
+					<include name="**/*Test.class"/>
+					<exclude name="**/*NetlibTest.class"/>
+					<exclude name="**/*ComparisonTest.class"/>
+				</fileset>
+			</batchtest>
+			<formatter type="plain"/>
+		</junit>
+  </target>
+
+<!-- ==================== Javadoc Target ================================== -->
+  <target name="javadoc" depends="compile" description="Create Javadoc API documentation">
+
+    <mkdir          dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${src.home}/main/java"
+                destdir="${dist.home}/docs/api"
+           packagenames="*">
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+
+  </target>
+
+<!-- ==================== Prepare Target ================================== -->
+  <target name="prepare" depends="clean">
+    <mkdir  dir="${build.home}"/>
+    <mkdir  dir="${build.home}/classes"/>
+    <mkdir  dir="${build.home}/test-classes"/>
+    <mkdir  dir="${build.home}/test-classes"/>
+    <mkdir  dir="${reports.home}"/>
+    <available file="${lib.home}" property="lib.present"/>
+  </target>
+  
+  <!-- ==================== Touch Target ================================== -->
+  <target name="touch">
+    <touch>
+    	<fileset dir="${src.home}/main/java" includes="**/*.java"/>
+    	<fileset dir="${src.home}/test/java" includes="**/*.java"/>
+    	<fileset dir="${src.home}/test" includes="**/*.csv"/>
+    	<fileset dir="${src.home}/test" includes="**/*.txt"/>
+    	<fileset dir="${src.home}/test" includes="**/*.mps"/>
+    	<fileset dir="${src.home}/test" includes="**/*.nb"/>
+    	<fileset dir="${src.home}/test" includes="**/*.properties"/>
+    	<fileset dir="${src.home}/test" includes="**/*.xml"/>
+  	</touch>
+  </target>
+  
+  <!-- ==================== DeleteSvn Target ================================== -->
+  <target name="deletesvn">
+    <delete includeemptydirs="true">
+      <fileset dir="." includes="**/.svn/**" defaultexcludes="no"/>
+    </delete>
+  </target>
+
+</project>

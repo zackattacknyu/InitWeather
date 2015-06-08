@@ -25,3 +25,8 @@
 /largePatchSet4.mat
 /@kde/
 /java/MinCostMaxFlowImp/dist/
+/java/QuadProgImp/nbproject/private/
+/java/QuadProgImp/build/
+/java/QuadProgImp/target/
+/java/QPSolving/nbproject/private/
+/java/JOptimizer/target/
