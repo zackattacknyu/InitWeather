@@ -4,7 +4,7 @@
 %load('qpTestPatches.mat');
 %%
 
-basePatch = patches{4};
+basePatch = patches{44};
 basePatch = floor(abs(basePatch));
 
 xQP = cell(1,length(patches));
@@ -22,7 +22,7 @@ for i = 1:length(patches)
     [xx2,ff2] = getGraphAlgResult(basePatch,curPatch); 
     
     %THIS CURRENTLY SEEMS SOLID
-    [xx,ff] = getQuadProgResult(basePatch,curPatch);
+    [xx,ff] = getQuadProgResult(basePatch,curPatch,0.1);
     
     
     xQP{i} = xx;
@@ -75,8 +75,8 @@ for i = 1:length(xQP)
 end
 
 %%
-%[vals,inds] = sort(quadErrorsConst2);
-inds = inds(5:end);
+[vals,inds] = sort(quadErrorsGraph);
+%inds = inds(5:end);
 %%
 semilogy(quadErrorsConst(inds)./quadErrorsGraph(inds));
 %%

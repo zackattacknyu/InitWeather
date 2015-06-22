@@ -1,4 +1,4 @@
-function [ x,fval ] = getQuadProgResult( basePatch,curPatch )
+function [ x,fval ] = getQuadProgResult( basePatch,curPatch,alphaValue )
 %GETQUADPROGRESULT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -46,7 +46,7 @@ lb = zeros(1, m * n + m);
 
 %H matrix which jusct has identity around slack vars
 H = [sparse(m*n,m*n) sparse(m*n,m);sparse(m,m*n) speye(m,m)];
-H = H.*2;
+H = H.*(2*alphaValue);
 
 
 % quadratic programming

@@ -53,16 +53,17 @@ nImgs = length(allImgs);
 
 %make octree for all the slots where sample
 %   could come from in (x,y,t) space
-minDist = 10;
+minDist = 30;
 slots = zeros([floor(nImgs/minDist)+1 floor(size(img1)/minDist)]+1);
 
 %
 numPatchesPerImage = 50;
-patchSize = 20;
+patchSize = 40;
 maxAttempts = 50;
 numTotalPatches = numPatchesPerImage*nImgs;
 patchSum = zeros(1,numTotalPatches);
 randPatches2 = cell(1,numTotalPatches);
+patchIndex = cell(1,numTotalPatches);
 randIndices = randperm(nImgs);
 imgIndex = 1;
 
@@ -107,6 +108,7 @@ for j=1:nImgs
            curPatchSum = sum(ourPatch(:));
            if(curPatchSum > 10000)
                 patchSum(imgIndex) = sum(ourPatch(:));
+                patchIndex{imgIndex} = [curIndex;randStartRow;randStartCol];
                randPatches2{imgIndex} = ourPatch;
                imgIndex = imgIndex+1;
 
@@ -122,10 +124,8 @@ for j=1:nImgs
 end
 %%
 patchSum = patchSum(1:(imgIndex-1));
-randPatches = cell(1,imgIndex-1);
-for i = 1:(imgIndex-1)
-    randPatches{i} = randPatches2{i};
-end
+randPatches = randPatches2(1:(imgIndex-1));
+patchIndex = patchIndex(1:(imgIndex-1));
 
 %%
 
@@ -144,9 +144,8 @@ semilogy(N);
 %%
 %obtains a very large sample of patches
 nImgs = length(randPatches);
-patchSize = 20;
 numTotal = 2000;
-newPatches = zeros(numTotal,patchSize,patchSize);
+newPatches = cell(1,numTotal);
 numPickedInBin = zeros(1,numBins);
 numPerBinMax = 50;
 imgIndex = 1;
@@ -160,7 +159,7 @@ for j=1:nImgs
     
     if(numPickedInBin(binNum) < numPerBinMax)
         numPickedInBin(binNum) = numPickedInBin(binNum) + 1;
-        newPatches(imgIndex,:,:) = randPatches{j};
+        newPatches{imgIndex} = randPatches{j};
         imagesInEachBin{binNum} = [imagesInEachBin{binNum} imgIndex];
         imgIndex = imgIndex + 1;
     end
@@ -174,7 +173,7 @@ for j=1:nImgs
    end
 end
 
-newPatches = newPatches(1:(imgIndex-1),:,:);
+newPatches = newPatches(1:(imgIndex-1));
 
 %%
 
@@ -202,9 +201,9 @@ for h = 1:numHoriz
        binNum = binNum+1;
        if(~isempty(imageNumbers))
            curImageNum = floor(rand(1,1)*length(imageNumbers))+1;
-           imgToShow = reshape(newPatches(imageNumbers(curImageNum),:,:),[patchSize patchSize]); 
+           imgToShow = newPatches{imageNumbers(curImageNum)};
            subplot(numHoriz,numVert,binNum-1);
-           imagesc(imgToShow,[0 max(max(max(newPatches)))]);
+           imagesc(imgToShow,[0 5000]);
            colormap jet;
            axis image;
        end

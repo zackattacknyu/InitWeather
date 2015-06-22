@@ -192,7 +192,41 @@ end
 [~,bestIndices] = sort(emdDists);
 [~,bestIndicesPen] = sort(emdDistsWithPenalty);
 [~,bestIndicesPenSqu] = sort(emdDistsWithPenSquared);
+%%
 
+%NEWEST ONE TO USE:
+%   Uses graph alg call
+patchSize = 10;
+basePatch = patches{1};
+[baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
+
+nImages = length(patches);
+emdDists = zeros(1,nImages);
+emdDistsWithPenalty = zeros(1,nImages);
+emdDistsWithPenSquared = zeros(1,nImages);
+curMaxPixel = 0;
+alpha1 = 1e-2;
+%alpha1 = 1;
+alpha2 = 1e-4;
+%alpha2 = 1;
+for i = 1:nImages
+    curPatch = patches{i};
+    [xVals,f] = getGraphAlgResult(basePatch,curPatch); 
+    
+    %approach where we add alpha(x - x^)
+    f1 = f + (alpha1/sum(sum(xVals)))*abs(sum(sum(curPatch)) - sum(sum(basePatch)));
+    
+    %approach where ad add alpha*(x-x^)^2
+    f2 = f + (alpha2/sum(sum(xVals)))*(sum(sum(curPatch)) - sum(sum(basePatch)))^2;
+    f
+    emdDists(i) = f;
+    emdDistsWithPenSquared(i) = f2;
+    emdDistsWithPenalty(i) = f1;
+end
+
+[~,bestIndices] = sort(emdDists);
+[~,bestIndicesPen] = sort(emdDistsWithPenalty);
+[~,bestIndicesPenSqu] = sort(emdDistsWithPenSquared);
 %%
 
 %got good results with 20 by 20 patches from simulated data
@@ -211,6 +245,7 @@ numPatches = numRows*numCol;
 
 maxPixel = max(basePatch(:));
 
+%{
 figure
 colormap jet;
 colorbar;
@@ -219,6 +254,7 @@ for k = 1:numPatches
    imagesc(patches{indices(k)}, [0 maxPixel])
    axis off
 end
+%}
 
 figure
 colormap jet;
