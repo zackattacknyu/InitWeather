@@ -53,7 +53,7 @@ nImgs = length(allImgs);
 
 %make octree for all the slots where sample
 %   could come from in (x,y,t) space
-minDist = 30;
+minDist = 10;
 slots = zeros([floor(nImgs/minDist)+1 floor(size(img1)/minDist)]+1);
 
 %

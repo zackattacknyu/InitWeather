@@ -39,8 +39,8 @@ for i = 1:numPatches
 end
 
 %%
-basePatchNum = floor(rand(1,1)*length(patches)) + 1;
-%basePatchNum=1;
+%basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+basePatchNum=271;
 basePatch = patches{basePatchNum};
 
 figure

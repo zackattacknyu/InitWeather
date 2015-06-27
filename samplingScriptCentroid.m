@@ -68,7 +68,7 @@ nImgs = length(allImgs);
 
 %make octree for all the slots where sample
 %   could come from in (x,y,t) space
-minDist = 30;
+minDist = 20;
 slots = zeros([floor(nImgs/minDist)+1 floor(size(img1)/minDist)]+1);
 
 %
@@ -87,17 +87,27 @@ for j=1:nImgs
     curIndex = randIndices(j);
     
     curImage = allImgs{curIndex};
+    binImage = curImage>100;
+    s = regionprops(binImage,'Centroid');
+    centroids = cat(1, s.Centroid);
+    centroidInds = randperm(size(centroids,1));
+    numTries = min(maxAttempts,size(centroids,1));
     
-    for k = 1:numPatchesPerImage
+    for k = 1:numTries
         
         %INSERT CODE HERE TO FIND THE CENTROIDS
         %   AND THEN CHOOSE AMONG THEM
-       randStartInd = ceil(rand(1,2).*(size(curImage) - [patchSize patchSize]));
-       randStartRow = randStartInd(1);
-       randStartCol = randStartInd(2);
+       randStartRow = floor(centroids(centroidInds(k),1));
+       randStartCol = floor(centroids(centroidInds(k),2));
+       if(randStartRow-patchSize/2 < 1 || randStartRow+patchSize/2 > size(curImage,1))
+          continue; 
+       end
+       if(randStartCol-patchSize/2 < 1 || randStartCol+patchSize/2 > size(curImage,2))
+          continue; 
+       end
        randPatch = curImage(...
-           randStartRow:(randStartRow+patchSize-1),...
-           randStartCol:(randStartCol+patchSize-1));
+           (randStartRow-patchSize/2):(randStartRow+patchSize/2-1),...
+           (randStartCol-patchSize/2):(randStartCol+patchSize/2-1));
        
        slotT = floor(curIndex/minDist)+1;
        slotX = floor(randStartRow/minDist)+1;
@@ -123,7 +133,7 @@ for j=1:nImgs
            
            ourPatch = halfPatch(randPatch);
            curPatchSum = sum(ourPatch(:));
-           if(curPatchSum > 10000)
+           if(curPatchSum > 1000)
                 patchSum(imgIndex) = sum(ourPatch(:));
                 patchIndex{imgIndex} = [curIndex;randStartRow;randStartCol];
                randPatches2{imgIndex} = ourPatch;
@@ -146,7 +156,7 @@ patchIndex = patchIndex(1:(imgIndex-1));
 
 %%
 
-save('largePatchSet4.mat','randPatches','patchSum','-v7.3');
+save('centroidPatchSet.mat','randPatches','patchSum','-v7.3');
 
 %%
 
@@ -224,6 +234,38 @@ for h = 1:numHoriz
            colormap jet;
            axis image;
        end
+       
+    end
+end
+%%
+%display random images from our set
+%   no binning
+patchSize = 20;
+numImages = size(newPatches,1);
+
+numHoriz = 5;
+numVert = 6;
+index = 1;
+patchNums = randperm(numImages);
+
+maxPixel = 0;
+for i = 1:(numHoriz*numVert)
+   curImage = newPatches{i};
+   maxCurImage = max(curImage(:));
+   maxPixel = max(maxPixel,maxCurImage);
+end
+
+figure
+for h = 1:numHoriz
+    for v = 1:numVert
+        curImageNum = patchNums(index);
+       imgToShow = newPatches{curImageNum};
+       subplot(numHoriz,numVert,index);
+       index = index + 1;
+       imagesc(imgToShow);
+       %imagesc(imgToShow,[0 maxPixel]);
+       colormap jet;
+       axis image;
        
     end
 end

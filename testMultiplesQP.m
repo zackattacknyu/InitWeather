@@ -1,10 +1,10 @@
 %%
-%save('qpTestPatches.mat','patches');
+save('qpTestPatchesCurrent.mat','patches');
 %%
 %load('qpTestPatches.mat');
 %%
 
-basePatch = patches{44};
+basePatch = patches{271};
 basePatch = floor(abs(basePatch));
 
 xQP = cell(1,length(patches));
@@ -32,7 +32,6 @@ for i = 1:length(patches)
     fvalGraphAlg{i} = ff2;
 end
 
-%%
 
 emdDistsQP = zeros(1,length(xQP));
 emdDistsGraph = zeros(1,length(xGraphAlg));
@@ -97,9 +96,9 @@ xlabel('Patch Number sorted by r0');
 ylabel('Value');
 %%
 figure
-semilogy(emdDistsGraph2)
+semilogy(emdDistsGraph2(inds))
 hold on
-semilogy(emdDistsGraphQuad2)
+semilogy(emdDistsGraphQuad2(inds))
 legend('h1(f1star)','h2(f1star)')
 %%
 emdDistsGraph2 = zeros(1,length(emdDistsGraph));

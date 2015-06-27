@@ -1,4 +1,4 @@
-function [ xvals,fval ] = getGraphAlgResult( basePatch,curPatch )
+function [ xvals,fval,quadError,totalFlow ] = getGraphAlgResult( basePatch,curPatch )
 %GETGRAPHALGRESULT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -85,6 +85,9 @@ result = javaMethod('obtainEmdResults','mincostmaxflowimp.EmdResults',file1Strin
 
 xvals = javaMethod('getPixelFlowMatrix',result);
 fval = javaMethod('getEmd',result);
+
+quadError = sum((W1-sum(xvals,2)).^2) + ...
+        sum((W2-sum(xvals,1)').^2);
 
 end
 

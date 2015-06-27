@@ -1,9 +1,10 @@
-function [ x,fval ] = getQuadProgResult( basePatch,curPatch,alphaValue )
+function [ x,fval,emdDistQP,quadErrorQP,totalFlow ] = getQuadProgResult( basePatch,curPatch,alphaValue )
 %GETQUADPROGRESULT Summary of this function goes here
 %   Detailed explanation goes here
 
 [baseWeight,basePixelLocs] = getFeatureWeight(basePatch);
 [weight,pixelLocs] = getFeatureWeight(curPatch);
+totalFlow = min(sum(sum(basePatch)),sum(sum(curPatch)));
 
 if(sum(weight) < sum(baseWeight))
     F2 = pixelLocs;
@@ -52,6 +53,9 @@ H = H.*(2*alphaValue);
 % quadratic programming
 myOpt = optimset('Algorithm','interior-point-convex');
 [x, fval] = quadprog(H,fVec, [], [], Aeq, beq, lb,[],[],myOpt);
+
+quadErrorQP = 0.5*x'*H*x;
+emdDistQP = fVec'*x;
 
 end
 
