@@ -92,3 +92,7 @@ maxPixel = max(basePatch(:));
 
 displayBestPatches( patches,bestIndicesGraph,maxPixel,numRows,numCol );
 displayBestPatches( patches,bestIndicesQP,maxPixel,numRows,numCol );
+
+%%
+displayBestPatchesInStack(patches,bestIndicesGraph,maxPixel);
+displayBestPatchesInStack(patches,bestIndicesQP,maxPixel);
