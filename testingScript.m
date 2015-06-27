@@ -96,3 +96,12 @@ displayBestPatches( patches,bestIndicesQP,maxPixel,numRows,numCol );
 %%
 displayBestPatchesInStack(patches,bestIndicesGraph,maxPixel);
 displayBestPatchesInStack(patches,bestIndicesQP,maxPixel);
+
+
+%{
+rescaledImg = basePatch./max(basePatch(:));
+rescaledImg = rescaledImg*255;
+resizedImg = imresize(rescaledImg,20,'Method','nearest');
+myMap = colormap('jet'); 
+%}
+imwrite(resizedImg,myMap,'sampleSave.png');
