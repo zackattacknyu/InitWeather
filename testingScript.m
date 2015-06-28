@@ -53,28 +53,60 @@ for i = 1:numPatches
     emdDistsQPQuad(i) = rawF/totalFlow;
     quadErrorsQP(i) = rawQuadError; %NOTE: alpha is accounted for
 end
+%%
+%[vals,inds] = sort(quadErrorsConst);
+%[vals,inds] = sort(quadErrorsGraph);
+%[vals,inds] = sort(emdDistsGraphQuad);
+[vals,inds] = sort(emdDistsQPQuad);
+%[vals,inds] = sort(emdDistsGraphH3);
 
-[vals,inds] = sort(quadErrorsConst);
-
+%%
 figure
-semilogy(quadErrorsConst(inds));
+%semilogy(quadErrorsConst(inds(2:end)));
 hold on
-semilogy(quadErrorsGraph(inds));
-semilogy(quadErrorsQP(inds));
-legend('r0','r1(f1star)','r1(f2star)')
+plot(quadErrorsGraph(inds(1:500)));
+plot(quadErrorsQP(inds(1:500)));
+legend('r1(f1star)','r1(f2star)')
+%legend('r0','r1(f1star)','r1(f2star)')
 xlabel('Patch Number sorted by r0');
 ylabel('Value');
-
+%%
 figure
-semilogy(quadErrorsConst(inds));
+%semilogy(quadErrorsConst(inds));
 hold on
+%semilogy(quadErrorsGraph(inds(1:500)));
+%semilogy(quadErrorsQP(inds(1:500)));
+plot(emdDistsGraphQuad(inds(1:50)));
+plot(emdDistsQPQuad(inds(1:50)));
+legend('h2(f1star)','h2(f2star)','Location','SouthEast')
+%legend('r0','h2(f1star)','h2(f2star)','Location','SouthEast')
+%legend('r1(f1star)','r1(f2star)','h2(f1star)','h2(f2star)','Location','SouthEast')
+xlabel('Patch Number sorted by h2(f2star)');
+ylabel('Value');
+%%
+figure
+%semilogy(quadErrorsConst(inds));
+hold on
+%semilogy(emdDistsQPH3(inds));
+semilogy(emdDistsGraphH3(inds));
+%semilogy(emdDistsQPQuad(inds));
 semilogy(emdDistsGraphQuad(inds));
-semilogy(emdDistsQPQuad(inds));
-legend('r0','h2(f1star)','h2(f2star)','Location','SouthEast')
-xlabel('Patch Number sorted by r0');
+%legend('r0','h2(f1star)','h2(f2star)','Location','SouthEast')
+legend('h3(f1star)','h2(f1star)','Location','SouthEast')
+xlabel('Patch Number sorted by h2(f1star)');
 ylabel('Value');
-
-[vals,inds2] = sort(emdDistsGraph);
+%%
+figure
+%semilogy(quadErrorsConst(inds));
+hold on
+semilogy(emdDistsGraphH3(inds(1:50)));
+semilogy(emdDistsQPQuad(inds(1:50)));
+%legend('r0','h2(f1star)','h2(f2star)','Location','SouthEast')
+legend('h3(f1star)','h2(f2star)','Location','SouthEast')
+xlabel('Patch Number sorted by h2(f2star)');
+ylabel('Value');
+%%
+[vals,inds2] = sort(emdDistsGraphQuad);
 figure
 semilogy(emdDistsGraph(inds2))
 hold on
@@ -82,16 +114,24 @@ semilogy(emdDistsGraphQuad(inds2))
 legend('h1(f1star)','h2(f1star)')
 xlabel('Patch Number sorted by h1(f1star)');
 
-
+%%
 numRows = 6;
 numCol = 8;
 maxPixel = max(basePatch(:));
 
-[~,bestIndicesGraph] = sort(emdDistsGraphQuad);
-[~,bestIndicesQP] = sort(emdDistsQPQuad);
+[~,bestIndicesGraphQuad] = sort(emdDistsGraphQuad);
+[~,bestIndicesQPQuad] = sort(emdDistsQPQuad);
+[~,bestIndicesGraph] = sort(emdDistsGraph);
+[~,bestIndicesQP] = sort(emdDistsQP);
+[~,bestIndicesQPH3] = sort(emdDistsQPH3);
+[~,bestIndicesGraphH3] = sort(emdDistsGraphH3);
 
-displayBestPatches( patches,bestIndicesGraph,maxPixel,numRows,numCol );
-displayBestPatches( patches,bestIndicesQP,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesGraphQuad,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesQPQuad,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesGraph,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesQP,maxPixel,numRows,numCol );
+displayBestPatches( patches,bestIndicesQPH3,maxPixel,numRows,numCol );
+displayBestPatches( patches,bestIndicesGraphH3,maxPixel,numRows,numCol );
 
 %%
 displayBestPatchesInStack(patches,bestIndicesGraph,maxPixel);
