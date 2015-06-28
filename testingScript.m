@@ -47,6 +47,7 @@ for i = 1:numPatches
     quadErrorsGraph(i) = alphaVal*quadError;
     emdDistsGraphQuad(i) = emdGraph + alphaVal*(quadError/totalFlow);
     
+    
     %THIS IS SOLID
     [quadX,rawF,rawEmdDist,rawQuadError,totalFlow] = getQuadProgResult(basePatch,curPatch,alphaVal);
     emdDistsQP(i) = rawEmdDist/totalFlow;
@@ -115,6 +116,15 @@ legend('h1(f1star)','h2(f1star)')
 xlabel('Patch Number sorted by h1(f1star)');
 
 %%
+[vals,inds2] = sort(emdDistsQPQuad);
+figure
+semilogy(emdDistsQP(inds2(3:end)))
+hold on
+semilogy(emdDistsQPQuad(inds2(3:end)))
+legend('h1(f1star)','h2(f1star)')
+xlabel('Patch Number sorted by h1(f1star)');
+
+%%
 numRows = 6;
 numCol = 8;
 maxPixel = max(basePatch(:));
@@ -127,11 +137,11 @@ maxPixel = max(basePatch(:));
 [~,bestIndicesGraphH3] = sort(emdDistsGraphH3);
 
 %displayBestPatches( patches,bestIndicesGraphQuad,maxPixel,numRows,numCol );
-%displayBestPatches( patches,bestIndicesQPQuad,maxPixel,numRows,numCol );
+displayBestPatches( patches,bestIndicesQPQuad,maxPixel,numRows,numCol );
 %displayBestPatches( patches,bestIndicesGraph,maxPixel,numRows,numCol );
 %displayBestPatches( patches,bestIndicesQP,maxPixel,numRows,numCol );
-displayBestPatches( patches,bestIndicesQPH3,maxPixel,numRows,numCol );
-displayBestPatches( patches,bestIndicesGraphH3,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesQPH3,maxPixel,numRows,numCol );
+%displayBestPatches( patches,bestIndicesGraphH3,maxPixel,numRows,numCol );
 
 %%
 displayBestPatchesInStack(patches,bestIndicesGraph,maxPixel);
