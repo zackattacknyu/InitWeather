@@ -1,10 +1,13 @@
 %basePatchNum = floor(rand(1,1)*length(patches)) + 1;
-basePatchNum=432;
+basePatchNum=500; %medium patch, total = 8982
+%basePatchNum = 432; %high patch, total=43156
+%basePatchNum = 124; %low patch, total = 1314
 basePatch = patches{basePatchNum};
+sum(basePatch(:))
 
-%figure
-%imagesc(basePatch);
-
+figure
+imagesc(basePatch);
+%%
 basePatch = floor(abs(basePatch));
 
 numPatches = length(patches);
@@ -30,6 +33,8 @@ quadErrorsGraph = zeros(1,numPatches);
 %constant squared error from target and prediction patches
 quadErrorsConst = zeros(1,numPatches);
 
+qpCalcTime = cell(1,numPatches);
+
 %value in front of sqared error term
 alphaVal = 0.1;
 
@@ -49,7 +54,12 @@ for i = 1:numPatches
     
     
     %THIS IS SOLID
+    startTime = datetime('now');
     [quadX,rawF,rawEmdDist,rawQuadError,totalFlow] = getQuadProgResult(basePatch,curPatch,alphaVal);
+    endTime = datetime('now');
+    calcTime = endTime-startTime;
+    calcTime
+    qpCalcTime{i} = calcTime;
     emdDistsQP(i) = rawEmdDist/totalFlow;
     emdDistsQPQuad(i) = rawF/totalFlow;
     quadErrorsQP(i) = rawQuadError; %NOTE: alpha is accounted for

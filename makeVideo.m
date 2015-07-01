@@ -21,7 +21,7 @@ colorbar;
 
 %%
 magFactor = 20;
-writerObj = VideoWriter('sampleVideo.avi');
+writerObj = VideoWriter('sampleVideo3.avi');
 writerObj.FrameRate=8;
 open(writerObj);
 
