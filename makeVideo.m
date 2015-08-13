@@ -21,7 +21,7 @@ colorbar;
 
 %%
 magFactor = 20;
-writerObj = VideoWriter('sampleVideo3.avi');
+writerObj = VideoWriter('bestPatchesQPII_Low_alpha0.05.avi');
 writerObj.FrameRate=8;
 open(writerObj);
 

@@ -149,14 +149,14 @@ for j=1:nImgs
 
     end
 end
-%%
+
 patchSum = patchSum(1:(imgIndex-1));
 randPatches = randPatches2(1:(imgIndex-1));
 patchIndex = patchIndex(1:(imgIndex-1));
 
 %%
 
-save('centroidPatchSet.mat','randPatches','patchSum','-v7.3');
+save('centroidPatchSet2.mat','randPatches','patchSum','-v7.3');
 
 %%
 
@@ -241,7 +241,7 @@ end
 %display random images from our set
 %   no binning
 patchSize = 20;
-numImages = size(newPatches,1);
+numImages = length(newPatches);
 
 numHoriz = 5;
 numVert = 6;

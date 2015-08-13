@@ -1,10 +1,36 @@
-%basePatchNum = floor(rand(1,1)*length(patches)) + 1;
-basePatchNum=500; %medium patch, total = 8982
+basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+
+%Numbers with second patch set
+%basePatchNum=280; %low patch, total = 2997
+%basePatchNum=422; %high patch, total = 169640
+%basePatchNum=579; %medium patch, total = 54954
+
+%Numbers with first centroid patch set
+%basePatchNum=106; %scatterd patch, total = 4160
+%basePatchNum=500; %medium patch, total = 8982
 %basePatchNum = 432; %high patch, total=43156
+%basePatchNum = 607; %high patch 2, total = 47825
+%basePatchNum = 601; %highest patch, total=230520
 %basePatchNum = 124; %low patch, total = 1314
+%basePatchNum = 59; %lowest patch, total = 1008
 basePatch = patches{basePatchNum};
 sum(basePatch(:))
+imagesc(basePatch);
+%%
 
+minPrecip = 100000;
+maxInd = 1;
+numPatches = length(patches);
+for k =1:numPatches
+    curPatch = patches{k};
+    currentSum = sum(curPatch(:));
+    if(currentSum < minPrecip)
+       minPrecip = currentSum;
+       maxInd = k;
+    end
+end
+
+%%
 figure
 imagesc(basePatch);
 %%
@@ -36,7 +62,7 @@ quadErrorsConst = zeros(1,numPatches);
 qpCalcTime = cell(1,numPatches);
 
 %value in front of sqared error term
-alphaVal = 0.1;
+alphaVal = 0.03;
 
 for i = 1:numPatches
     
@@ -143,8 +169,8 @@ maxPixel = max(basePatch(:));
 [~,bestIndicesQPQuad] = sort(emdDistsQPQuad);
 [~,bestIndicesGraph] = sort(emdDistsGraph);
 [~,bestIndicesQP] = sort(emdDistsQP);
-[~,bestIndicesQPH3] = sort(emdDistsQPH3);
-[~,bestIndicesGraphH3] = sort(emdDistsGraphH3);
+%[~,bestIndicesQPH3] = sort(emdDistsQPH3);
+%[~,bestIndicesGraphH3] = sort(emdDistsGraphH3);
 
 %displayBestPatches( patches,bestIndicesGraphQuad,maxPixel,numRows,numCol );
 displayBestPatches( patches,bestIndicesQPQuad,maxPixel,numRows,numCol );
