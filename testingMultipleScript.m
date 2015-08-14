@@ -42,7 +42,7 @@ With the 8-5 kde set, some sample nums:
 alphaVal = 0.1;
 call_7_29;
 save('matlabRun_alpha0.1_kdePatches8-12.mat');
-
+%%
 alphaVal = 0.05;
 call_7_29;
 save('matlabRun_alpha0.05_kdePatches8-12.mat');
@@ -51,7 +51,7 @@ save('matlabRun_alpha0.05_kdePatches8-12.mat');
 numRows = 6;
 numCol = 8;
 pp = 1;
-for pp = 1:4
+%for pp = 1:4
     
     basePatchNum = patchNums(pp);
     basePatch = patches{basePatchNum};
@@ -59,7 +59,11 @@ for pp = 1:4
     maxPixel = max(basePatch(:));
     emdQP = emdQPArrays{pp};
     [~,inds] = sort(emdQP);
+    %[~,inds2] = sort(patchesPointCloudDist(pp,:));
     displayBestPatches( patches,inds,maxPixel,numRows,numCol );
-end
+    %displayBestPatches( patches,inds2,maxPixel,numRows,numCol )
+    displayBestPatchesPoints( patchesData,inds,maxPixel,numRows,numCol )
+    %displayBestPatchesPoints( patchesData,inds2,maxPixel,numRows,numCol )
+%end
 
 
