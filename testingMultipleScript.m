@@ -39,17 +39,21 @@ With the 8-5 kde set, some sample nums:
 %basePatchNum = 59; %lowest patch, total = 1008
 %patchNums = [106 500 432 607 601 124 59];
 
+%for the 9-14 patch set
+patchNums = [292 940 689];
+
 alphaVal = 0.1;
 call_7_29;
-save('matlabRun_alpha0.1_kdePatches8-12.mat');
-
+%%
+save('matlabRun_alpha0.1_gradientPatches9-14.mat','-v7.3');
+%%
 alphaVal = 0.05;
 call_7_29;
 save('matlabRun_alpha0.05_kdePatches8-12.mat');
 
 %%
-numRows = 6;
-numCol = 8;
+numRows = 2;
+numCol = 5;
 pp = 1;
 for pp = 1:4
     
@@ -58,8 +62,11 @@ for pp = 1:4
     basePatch = floor(abs(basePatch));
     maxPixel = max(basePatch(:));
     emdQP = emdQPArrays{pp};
+    mseArr = getMSEarray(basePatch,patches);
     [~,inds] = sort(emdQP);
+    [~,inds2] = sort(mseArr);
     displayBestPatches( patches,inds,maxPixel,numRows,numCol );
+    displayBestPatches( patches,inds2,maxPixel,numRows,numCol );
 end
 
 
