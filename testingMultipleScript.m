@@ -42,6 +42,9 @@ With the 8-5 kde set, some sample nums:
 %for the 9-14 patch set
 patchNums = [292 940 689];
 
+%for 9-15 patch set
+patchNums = [198 802 413 678];
+
 alphaVal = 0.1;
 call_7_29;
 %%
