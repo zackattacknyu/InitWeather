@@ -40,11 +40,14 @@ With the 8-5 kde set, some sample nums:
 %patchNums = [106 500 432 607 601 124 59];
 
 %for the 9-14 patch set
-patchNums = [292 940 689];
+%patchNums = [292 940 689];
 
 %for 9-15 patch set
-patchNums = [198 802 413 678];
+%patchNums = [198 802 413 678];
 
+%for the second 9-15 patch set
+patchNums = [270 323 888 367 997 419 502 514 840 834 798 332 876 724];
+%%
 alphaVal = 0.1;
 call_7_29;
 %%

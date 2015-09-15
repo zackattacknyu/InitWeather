@@ -46,21 +46,6 @@ save('gtImages.mat','allImgs','-v7.3');
 load('gtImages.mat');
 
 %%
-origImage = allImgs{150};
-image = origImage>100;
-s = regionprops(image,'Centroid');
-centroids = cat(1, s.Centroid);
-
-figure
-imagesc(origImage)
-
-figure
-imagesc(image)
-hold on
-plot(centroids(:,1),centroids(:,2), 'r*')
-hold off
-
-%%
 
 %obtains a very large sample of patches
 img1 = allImgs{1};
@@ -89,11 +74,12 @@ for j=1:nImgs
     curImage = allImgs{curIndex};
     
     [Gmag,Gdir] = imgradient(curImage);
-    inds = (Gmag<100)&(curImage>100);
+    %inds = (Gmag<100)&(curImage>100);
+    inds = (curImage>100);
     randGoods = find(inds);
     goodInds = randGoods(randperm(length(randGoods)));
     [indsR,indsC] = ind2sub(size(curImage),goodInds);
-    numTries = length(randGoods);
+    numTries = min(length(randGoods),500);
     
     for k = 1:numTries
         
@@ -133,7 +119,8 @@ for j=1:nImgs
            
            ourPatch = halfPatch(randPatch);
            curPatchSum = sum(ourPatch(:));
-           if(curPatchSum > 1000)
+           %if(curPatchSum > 1000)
+           if(curPatchSum > 0)
                 patchSum(imgIndex) = sum(ourPatch(:));
                 patchIndex{imgIndex} = [curIndex;randStartRow;randStartCol];
                randPatches2{imgIndex} = ourPatch;
@@ -159,91 +146,12 @@ patchIndex = patchIndex(1:(imgIndex-1));
 save('gradientPatchSet_9-14.mat','randPatches','patchSum','-v7.3');
 
 %%
-
-load('largePatchSet4.mat');
-
-%%
-patchSum(patchSum<0) = [];
-%%
-numBins = 30;
-[N,data] = hist(patchSum,numBins);
-semilogy(N);
-%%
-%obtains a very large sample of patches
-nImgs = length(randPatches);
-numTotal = 2000;
-newPatches = cell(1,numTotal);
-numPickedInBin = zeros(1,numBins);
-numPerBinMax = 50;
-imgIndex = 1;
-imagesInEachBin = cell(1,numBins);
-
-for j=1:nImgs
-    
-    curImage = randPatches{j};
-    curPatchSum = sum(curImage(:));
-    [~,binNum] = min(abs(data-curPatchSum));
-    
-    if(numPickedInBin(binNum) < numPerBinMax)
-        numPickedInBin(binNum) = numPickedInBin(binNum) + 1;
-        newPatches{imgIndex} = randPatches{j};
-        imagesInEachBin{binNum} = [imagesInEachBin{binNum} imgIndex];
-        imgIndex = imgIndex + 1;
-    end
-    
-    if(imgIndex > numTotal)
-       break; 
-    end
-
-   if(mod(j,1000) == 0)
-     imgIndex 
-   end
-end
-
-newPatches = newPatches(1:(imgIndex-1));
-
-%%
-
-save('rejectionSamplingPatches4.mat','newPatches','imagesInEachBin','numPickedInBin','-v7.3');
-
-%%
-
-load('rejectionSamplingPatches4.mat');
-
-%%
-
-%display random images from our set
-
-patchSize = 20;
-numImages = size(newPatches,1);
-
-numHoriz = 5;
-numVert = 6;
-binNum = 2;
-
-figure
-for h = 1:numHoriz
-    for v = 1:numVert
-       imageNumbers = imagesInEachBin{binNum};         
-       binNum = binNum+1;
-       if(~isempty(imageNumbers))
-           curImageNum = floor(rand(1,1)*length(imageNumbers))+1;
-           imgToShow = newPatches{imageNumbers(curImageNum)};
-           subplot(numHoriz,numVert,binNum-1);
-           imagesc(imgToShow,[0 5000]);
-           colormap jet;
-           axis image;
-       end
-       
-    end
-end
-%%
 %display random images from our set
 %   no binning
 patchSize = 20;
 numImages = length(newPatches);
 
-numHoriz = 30;
+numHoriz = 10;
 numVert = 10;
 index = 1;
 patchNums = randperm(numImages);
