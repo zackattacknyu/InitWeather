@@ -79,11 +79,11 @@ for pp = 1:1
     basePatch = patches{basePatchNum};
     basePatch = floor(abs(basePatch));
     maxPixel = max(basePatch(:));
-    %emdQP = emdQPArrays{pp};
+    emdQP = emdQPArrays{pp};
     mseArr = getMSEarray(basePatch,patches);
-    %[~,inds] = sort(emdQP);
+    [~,inds] = sort(emdQP);
     [~,inds2] = sort(mseArr);
-    %displayBestPatches( patches,inds,maxPixel,numRows,numCol );
+    displayBestPatches( patches,inds,maxPixel,numRows,numCol );
     displayBestPatches( patches,inds2,maxPixel,numRows,numCol );
 end
 
