@@ -53,14 +53,14 @@ With the 8-5 kde set, some sample nums:
 %patchNums = [1];
 
 %for the second 9-16 pca set
-patchNums=[601];
+patchNums=[1];
 
 
-save('matlabRun_Patches9-16_setupData2.mat','patches','patchNums','inds2');
+save('matlabRun_Patches9-16_setupData3.mat','newRandPatches','newRandPatchesLoc','patchNums','inds2');
 %%
 alphaVal = 0.1;
 call_7_29;
-save('matlabRun_Patches9-16_resultData2.mat','emdQPArrays','patches');
+save('matlabRun_Patches9-16_resultData3.mat','emdQPArrays','patches');
 %save('matlabRun_alpha0.1_pcaSet9-15.mat','-v7.3');
 %%
 save('matlabRun_alpha0.1_gradientPatches9-14.mat','-v7.3');
@@ -79,11 +79,11 @@ for pp = 1:1
     basePatch = patches{basePatchNum};
     basePatch = floor(abs(basePatch));
     maxPixel = max(basePatch(:));
-    emdQP = emdQPArrays{pp};
+    %emdQP = emdQPArrays{pp};
     mseArr = getMSEarray(basePatch,patches);
-    [~,inds] = sort(emdQP);
+    %[~,inds] = sort(emdQP);
     [~,inds2] = sort(mseArr);
-    displayBestPatches( patches,inds,maxPixel,numRows,numCol );
+    %displayBestPatches( patches,inds,maxPixel,numRows,numCol );
     displayBestPatches( patches,inds2,maxPixel,numRows,numCol );
 end
 

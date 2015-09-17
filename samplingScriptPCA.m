@@ -163,17 +163,28 @@ displayBestPatches( patches,inds2,maxPixel,numRows,numCol );
 %%
 
 minDist = 20;
-maxNum = 600;
+maxNum = 3000;
 newRandPatches = cell(1,maxNum);
-targetLoc = randPatchesCornerCoord{basePatchNum};
-curIndex = 1;
+newRandPatchesLoc = cell(1,maxNum);
+curIndex = 2;
+
+newRandPatches{1} = basePatch;
+newRandPatchesLoc{1} = randPatchesCornerCoord{basePatchNum};
 
 %closest ones
 for i = 1:length(inds2)
     curPatchInd = inds2(i);
     patchLoc = randPatchesCornerCoord{curPatchInd};
-    if(norm(patchLoc-targetLoc)>minDist)
-        newRandPatches{curIndex} = randPatches{i};
+    numBad=0;
+    for j=1:(curIndex-1)
+        curLoc = newRandPatchesLoc{j};
+        if(norm(patchLoc-curLoc)<minDist)
+           numBad = numBad+1; 
+        end
+    end
+    if(numBad<1)
+        newRandPatches{curIndex} = randPatches{curPatchInd};
+        newRandPatchesLoc{curIndex} = patchLoc;
         curIndex = curIndex + 1;
     end
     if(curIndex > maxNum/3)
@@ -185,8 +196,16 @@ end
 for i = (floor(length(inds2)/2)):length(inds2)
     curPatchInd = inds2(i);
     patchLoc = randPatchesCornerCoord{curPatchInd};
-    if(norm(patchLoc-targetLoc)>minDist)
-        newRandPatches{curIndex} = randPatches{i};
+    numBad=0;
+    for j=1:(curIndex-1)
+        curLoc = newRandPatchesLoc{j};
+        if(norm(patchLoc-curLoc)<minDist)
+           numBad = numBad+1; 
+        end
+    end
+    if(numBad<1)
+        newRandPatches{curIndex} = randPatches{curPatchInd};
+        newRandPatchesLoc{curIndex} = patchLoc;
         curIndex = curIndex + 1;
     end
     if(curIndex > 2*(maxNum/3))
@@ -198,8 +217,16 @@ end
 for i = length(inds2):-1:1
     curPatchInd = inds2(i);
     patchLoc = randPatchesCornerCoord{curPatchInd};
-    if(norm(patchLoc-targetLoc)>minDist)
-        newRandPatches{curIndex} = randPatches{i};
+    numBad=0;
+    for j=1:(curIndex-1)
+        curLoc = newRandPatchesLoc{j};
+        if(norm(patchLoc-curLoc)<minDist)
+           numBad = numBad+1; 
+        end
+    end
+    if(numBad<1)
+        newRandPatches{curIndex} = randPatches{curPatchInd};
+        newRandPatchesLoc{curIndex} = patchLoc;
         curIndex = curIndex + 1;
     end
     if(curIndex > maxNum)
@@ -207,11 +234,11 @@ for i = length(inds2):-1:1
     end
 end
 
-newRandPatches{maxNum+1} = basePatch;
+
 
 %%
 %displayBestPatches( newRandPatches,1:400,maxPixel,numRows,numCol );
-displayBestPatches( patches,vv,maxPixel,numRows,numCol );
+displayBestPatches( patches,randperm(3000),maxPixel,numRows,numCol );
 
 %%
 %display random images from our set
