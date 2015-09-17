@@ -46,10 +46,22 @@ With the 8-5 kde set, some sample nums:
 %patchNums = [198 802 413 678];
 
 %for the second 9-15 patch set
-patchNums = [270 323 888 367 997 419 502 514 840 834 798 332 876 724];
+%patchNums = [270 323 888 367 997 419 502 514 840 834 798 332 876 724];
+%patchNums = [270 419 840 724];
+
+%for the 9-16 pca set
+%patchNums = [1];
+
+%for the second 9-16 pca set
+patchNums=[601];
+
+
+save('matlabRun_Patches9-16_setupData2.mat','patches','patchNums','inds2');
 %%
 alphaVal = 0.1;
 call_7_29;
+save('matlabRun_Patches9-16_resultData2.mat','emdQPArrays','patches');
+%save('matlabRun_alpha0.1_pcaSet9-15.mat','-v7.3');
 %%
 save('matlabRun_alpha0.1_gradientPatches9-14.mat','-v7.3');
 %%
@@ -61,7 +73,7 @@ save('matlabRun_alpha0.05_kdePatches8-12.mat');
 numRows = 2;
 numCol = 5;
 pp = 1;
-for pp = 1:4
+for pp = 1:1
     
     basePatchNum = patchNums(pp);
     basePatch = patches{basePatchNum};
