@@ -72,8 +72,10 @@ call_7_29;
 save('matlabRun_alpha0.05_kdePatches8-12.mat');
 
 %%
-numRows = 2;
-numCol = 5;
+numRows = 5;
+numCol = 10;
+%numRows = 2;
+%numCol = 5;
 pp = 1;
 for pp = 1:1
     
