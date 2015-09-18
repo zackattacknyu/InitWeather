@@ -75,7 +75,7 @@ for j=1:nImgs
     
     curImage = allImgs{curIndex};
     
-    [Gmag,Gdir] = imgradient(curImage);
+    %[Gmag,Gdir] = imgradient(curImage);
     %inds = (Gmag<100)&(curImage>100);
     inds = (curImage>100);
     randGoods = find(inds);
@@ -135,13 +135,21 @@ for i = 1:length(randPatchesResize)
     curResizedPatch = randPatchesResize{i};
     resizeData(i,:) = curResizedPatch'; 
 end
-
+%%
 [coeff,score,latent] = pca(resizeData);
 
 %%
 numRows = 10;
 numCol = 10;
-basePatchNum = 65155;
+
+%from pca 9-16 set
+%basePatchNum = 65155;
+
+%from pca 9-17 set
+%basePatchNum = 118690;
+%basePatchNum = 87792;
+basePatchNum=17598;
+
 basePatch = patches{basePatchNum};
 basePatch = floor(abs(basePatch));
 maxPixel = max(basePatch(:));
@@ -153,17 +161,19 @@ scoreDiff = abs(scoreCol-scoreCol(basePatchNum));
 distDiff = resizeData-repmat(resizeData(basePatchNum,:),size(resizeData,1),1);
 eucDists = sum(distDiff.^2,2);
 [~,inds2] = sort(eucDists);
-
+%%
+eucDists = sum(resizeData.^2,2);
+[~,inds2] = sort(eucDists);
 %mseArr = getMSEarray(basePatch,patches);
 %[~,inds2] = sort(mseArr);
 %%
-displayBestPatches( patches,inds,maxPixel,numRows,numCol );
-displayBestPatches( patches,inds2,maxPixel,numRows,numCol );
+%displayBestPatches( patches,inds,maxPixel,numRows,numCol );
+displayBestPatches( patches,1:150,maxPixel,numRows,numCol );
 
 %%
 
 minDist = 20;
-maxNum = 3000;
+maxNum = 600;
 newRandPatches = cell(1,maxNum);
 newRandPatchesLoc = cell(1,maxNum);
 curIndex = 2;
@@ -234,6 +244,37 @@ for i = length(inds2):-1:1
     end
 end
 
+%%
+
+minDist = 20;
+maxNum = 150;
+newRandPatches = cell(1,maxNum);
+newRandPatchesLoc = cell(1,maxNum);
+curIndex = 2;
+
+newRandPatches{1} = basePatch;
+newRandPatchesLoc{1} = randPatchesCornerCoord{basePatchNum};
+
+%closest ones
+for i = 1:length(inds2)
+    curPatchInd = inds2(i);
+    patchLoc = randPatchesCornerCoord{curPatchInd};
+    numBad=0;
+    for j=1:(curIndex-1)
+        curLoc = newRandPatchesLoc{j};
+        if(norm(patchLoc-curLoc)<minDist)
+           numBad = numBad+1; 
+        end
+    end
+    if(numBad<1)
+        newRandPatches{curIndex} = randPatches{curPatchInd};
+        newRandPatchesLoc{curIndex} = patchLoc;
+        curIndex = curIndex + 1;
+    end
+    if(curIndex > maxNum)
+       break
+    end
+end
 
 
 %%
