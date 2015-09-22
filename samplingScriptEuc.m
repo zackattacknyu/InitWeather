@@ -48,8 +48,10 @@ save('gtImages.mat','allImgs','-v7.3');
 load('gtImages.mat');
 %%
 
-rawInds = (imgBlock>100);
-possibleInds = find(rawInds);
+imgBlock = zeros(200,200,7147);
+for i = 1:7147
+   imgBlock(:,:,i) = allImgs{i}; 
+end
 
 %%
 
@@ -76,6 +78,10 @@ randIndices = randperm(nImgs);
 imgIndex = 1;
 
 for j=1:nImgs
+    
+    if(mod(j,100) == 0)
+      j 
+    end
     
     curIndex = randIndices(j);
     
@@ -104,6 +110,19 @@ for j=1:nImgs
        
        ourPatch = halfPatch(randPatch);
        curPatchSum = sum(ourPatch(:));
+       
+       curLocation = [randStartRow randStartCol j];
+       numBad=0;
+       for ii = 1:(imgIndex-1)
+           otherLoc = randPatchesCornerCoord2{ii};
+            if(norm(curLocation-otherLoc)<minDist)
+               numBad = numBad+1; 
+            end
+       end
+       if(numBad>0)
+          continue; 
+       end
+       
        %if(curPatchSum > 1000)
        if(curPatchSum > 0)
             patchSum(imgIndex) = sum(ourPatch(:));
@@ -111,7 +130,7 @@ for j=1:nImgs
             randPatches2{imgIndex} = ourPatch;
             shrunkPatch = imresize(ourPatch,0.2);
             randPatchesResize2{imgIndex} = shrunkPatch(:);
-            randPatchesCornerCoord2{imgIndex} = [randStartRow randStartCol j];
+            randPatchesCornerCoord2{imgIndex} = curLocation;
             imgIndex = imgIndex+1;
 
             if(mod(imgIndex,100) == 0)
@@ -122,7 +141,7 @@ for j=1:nImgs
 
     end
 end
-
+%%
 patchSum = patchSum(1:(imgIndex-1));
 randPatches = randPatches2(1:(imgIndex-1));
 randPatchesResize = randPatchesResize2(1:(imgIndex-1));
@@ -132,7 +151,7 @@ patchIndex = patchIndex(1:(imgIndex-1));
 
 %%
 
-save('pcaPatchSet_9-15.mat','randPatches','patchSum','randPatchesResize','-v7.3');
+save('eucPatchSet_9-22.mat','randPatches','patchSum','randPatchesResize','randPatchesCornerCoord','-v7.3');
 %%
 
 resizePatch1 = randPatchesResize{1};
