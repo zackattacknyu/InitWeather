@@ -17,8 +17,8 @@ for i = 1:numTestPatches
     testPatches{i} =  curPatch;
     patches(:,:,i) = curPatch;
 end
-%initBasePatch = mean(patches,3);
-initBasePatch = geomean(patches,3);
+initBasePatch = mean(patches,3);
+%initBasePatch = geomean(patches,3);
 
 diffFromMean = zeros(numRC,numRC);
 totalEMD = zeros(1,numT);
