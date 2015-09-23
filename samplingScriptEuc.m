@@ -113,6 +113,8 @@ for j=1:nImgs
        
        curLocation = [randStartRow randStartCol j];
        numBad=0;
+       
+       %{
        for ii = 1:(imgIndex-1)
            otherLoc = randPatchesCornerCoord2{ii};
             if(norm(curLocation-otherLoc)<minDist)
@@ -122,9 +124,10 @@ for j=1:nImgs
        if(numBad>0)
           continue; 
        end
+       %}
        
        %if(curPatchSum > 1000)
-       if(curPatchSum > 0)
+       if(curPatchSum > 500)
             patchSum(imgIndex) = sum(ourPatch(:));
             patchIndex{imgIndex} = [curIndex;randStartRow;randStartCol];
             randPatches2{imgIndex} = ourPatch;
