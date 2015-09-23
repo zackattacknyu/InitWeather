@@ -152,14 +152,6 @@ patchIndex = patchIndex(1:(imgIndex-1));
 %%
 
 save('eucPatchSet_9-22.mat','randPatches','patchSum','randPatchesResize','randPatchesCornerCoord','-v7.3');
-%%
-
-resizePatch1 = randPatchesResize{1};
-resizeData = zeros(length(randPatchesResize),length(resizePatch1));
-for i = 1:length(randPatchesResize)
-    curResizedPatch = randPatchesResize{i};
-    resizeData(i,:) = curResizedPatch'; 
-end
 
 %%
 numRows = 10;
@@ -189,40 +181,6 @@ eucDists = sum(resizeData.^2,2);
 %%
 %displayBestPatches( patches,inds,maxPixel,numRows,numCol );
 displayBestPatches( patches,1:150,maxPixel,numRows,numCol );
-
-
-
-%%
-
-minDist = 20;
-maxNum = 150;
-newRandPatches = cell(1,maxNum);
-newRandPatchesLoc = cell(1,maxNum);
-curIndex = 2;
-
-newRandPatches{1} = basePatch;
-newRandPatchesLoc{1} = randPatchesCornerCoord{basePatchNum};
-
-%closest ones
-for i = 1:length(inds2)
-    curPatchInd = inds2(i);
-    patchLoc = randPatchesCornerCoord{curPatchInd};
-    numBad=0;
-    for j=1:(curIndex-1)
-        curLoc = newRandPatchesLoc{j};
-        if(norm(patchLoc-curLoc)<minDist)
-           numBad = numBad+1; 
-        end
-    end
-    if(numBad<1)
-        newRandPatches{curIndex} = randPatches{curPatchInd};
-        newRandPatchesLoc{curIndex} = patchLoc;
-        curIndex = curIndex + 1;
-    end
-    if(curIndex > maxNum)
-       break
-    end
-end
 
 
 %%
