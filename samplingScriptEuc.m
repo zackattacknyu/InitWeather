@@ -79,7 +79,7 @@ imgIndex = 1;
 
 for j=1:nImgs
     
-    if(mod(j,100) == 0)
+    if(mod(j,20) == 0)
       j 
     end
     
@@ -151,7 +151,7 @@ patchIndex = patchIndex(1:(imgIndex-1));
 
 %%
 
-save('eucPatchSet_9-22.mat','randPatches','patchSum','randPatchesResize','randPatchesCornerCoord','-v7.3');
+save('eucPatchSet_9-23.mat','randPatches','patchSum','randPatchesResize','randPatchesCornerCoord','-v7.3');
 %%
 
 resizePatch1 = randPatchesResize{1};
