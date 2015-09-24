@@ -1,7 +1,8 @@
 alphaVal = 0.1;
+patchNums = [444];
 call_7_29;
 save('matlabRun_Patches9-23_resultData.mat','emdQPArrays','patches');
-
+%%
 %obtains a very large sample of patches
 img1 = allImgs{1};
 nImgs = length(allImgs);
