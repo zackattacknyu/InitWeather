@@ -31,5 +31,5 @@ for patchI = 1:length(patchNums)
     
     emdQPArrays{patchI} = emdDistsQPQuad;
     
-    save('matlabRun_Patches9-23_resultDataX.mat','emdQPArrays','patches');
+    save('matlabRun_Patches9-26_resultDataX.mat','emdQPArrays','patches');
 end
