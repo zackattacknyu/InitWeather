@@ -1,6 +1,6 @@
 
 %new set of patch numbers
-patchNums = [239 1015 2746 3944 4175];
+patchNums = [2746 239 1015 3944 4175];
 %2476 is the low precip one
 
 %%

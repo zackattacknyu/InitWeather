@@ -1,4 +1,4 @@
-basePatchNum = floor(rand(1,1)*length(patches)) + 1;
+%basePatchNum = floor(rand(1,1)*length(patches)) + 1;
 
 %patchNums = [270 323 888 367 997 419 502 514 840 834 798 332 876 724
 

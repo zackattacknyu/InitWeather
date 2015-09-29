@@ -21,15 +21,19 @@ for patchI = 1:length(patchNums)
         curPatch = floor(abs(curPatch));
 
         %THIS IS SOLID
-        %startTime = datetime('now');
+        startTime = datetime('now');
         [quadX,rawF,rawEmdDist,rawQuadError,totalFlow] = getQuadProgResult(basePatch,curPatch,alphaVal);
-        %endTime = datetime('now');
-        %calcTime = endTime-startTime;
-        %calcTime
+        endTime = datetime('now');
+        calcTime = endTime-startTime;
+        calcTime
         emdDistsQPQuad(i) = rawF/totalFlow;
+        
+        if(mod(i,200)==0)
+            save('matlabRun_Patches9-26_resultDataX2_temp.mat','emdDistsQPQuad');
+        end
     end
     
     emdQPArrays{patchI} = emdDistsQPQuad;
     
-    save('matlabRun_Patches9-26_resultDataX.mat','emdQPArrays','patches');
+    save('matlabRun_Patches9-26_resultDataX2.mat','emdQPArrays','patches');
 end
