@@ -57,6 +57,23 @@
 Target patch has pixels $x_i$\\
 Predicted patch has pixels $\hat{x}_j$\\
 \\
+Without loss of generality, 
+\[
+\sum_j{\hat{x}_j} \leq \sum_i{x_i}
+\]
+\[
+EMD = \sum_{ij}{c_{ij} f_{ij}} + \alpha \sum_i{(x_i - \sum_j{f_{ij}})^2}
+\]
+subject to the following constraints:\\
+\[
+f_{ij} \geq 0
+\]
+\[
+\sum_i{f_{ij}} = \hat{x}_j
+\]
+\[
+\sum_j{f_{ij}} \leq x_i
+\]
 
 
 \end{document}
