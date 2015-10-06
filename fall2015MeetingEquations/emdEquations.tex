@@ -61,8 +61,10 @@ Without loss of generality,
 \[
 \sum_j{\hat{x}_j} \leq \sum_i{x_i}
 \]
+Let $c_{ij}$ be the Euclidean distance between $i$ and $j$ pixel locations\\
+Let $f$ be a flow vector where entry $f_{ij}$ represents the flow from pixel $i$ to pixel $j$\\
 \[
-EMD = \sum_{ij}{c_{ij} f_{ij}} + \alpha \sum_i{(x_i - \sum_j{f_{ij}})^2}
+WORK = \min_f(\sum_{ij}{c_{ij} f_{ij}} + \alpha \sum_i{(x_i - \sum_j{f_{ij}})^2})
 \]
 subject to the following constraints:\\
 \[
@@ -73,6 +75,10 @@ f_{ij} \geq 0
 \]
 \[
 \sum_j{f_{ij}} \leq x_i
+\]
+Earth-Movers Distance is defined as follows:
+\[
+EMD = \frac{WORK}{\sum_j{\hat{x}_j}}
 \]
 
 
