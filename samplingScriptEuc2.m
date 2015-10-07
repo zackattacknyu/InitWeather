@@ -140,10 +140,10 @@ randPatches = randPatches2(1:(imgIndex-1));
 randPatchesResize = randPatchesResize2(1:(imgIndex-1));
 randPatchesCornerCoord = randPatchesCornerCoord2(1:(imgIndex-1));
 
-save('patchSetGood9-26.mat','randPatches','randPatchesResize',...
+save('patchSetGood10_7.mat','randPatches','randPatchesResize',...
     'randPatchesCornerCoord','patchSum','-v7.3');
 
-save('patchSet9_26_allData.mat','-v7.3');
+save('patchSet10_7_allData.mat','-v7.3');
 
 %%
 
@@ -174,8 +174,8 @@ for i = 1:maxNum
 end
 newRandPatches = newRandPatches2(1:(curIndex-1));
 newRandPatchesLoc = newRandPatchesLoc2(1:(curIndex-1));
-%%
-save('patchSet_9_26_revised.mat','newRandPatches','newRandPatchesLoc','-v7.3');
+
+save('patchSet_10_7_revised.mat','newRandPatches','newRandPatchesLoc','-v7.3');
 
 %%
 %display random images from our set
