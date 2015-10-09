@@ -7,7 +7,7 @@ patchNums = [2746 239 1015 3944 4175];
 numRows = 1;
 numCol = 11;
 pp = 1;
-for pp = 1:1
+for pp = 1:2
     
     basePatchNum = patchNums(pp);
     basePatch = patches{basePatchNum};
