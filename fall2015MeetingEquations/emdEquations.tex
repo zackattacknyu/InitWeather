@@ -54,31 +54,47 @@
 
 \begin{document}
 
-Target patch has pixels $x_i$\\
-Predicted patch has pixels $\hat{x}_j$\\
-\\
+Target patch has pixels $x_{ij}$\\
+\[
+\begin{bmatrix}
+    x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
+    x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    x_{m1} & x_{m2} & x_{m3} & \dots  & x_{mn}
+\end{bmatrix}
+\]
+
+Prediction patch has pixels $\hat{x_{kl}}$\\
+\[
+\begin{bmatrix}
+    \hat{x_{11}} & \hat{x_{12}} & \hat{x_{13}} & \dots  & \hat{x_{1n}} \\
+    \hat{x_{21}} & \hat{x_{22}} & \hat{x_{23}} & \dots  & \hat{x_{2n}} \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    \hat{x_{m1}} & \hat{x_{m2}} & \hat{x_{m3}} & \dots  & \hat{x_{mn}}
+\end{bmatrix}
+\]
 Without loss of generality, 
 \[
-\sum_j{\hat{x}_j} \leq \sum_i{x_i}
+\sum_{kl}{\hat{x}_{kl}} \leq \sum_{ij}{x_{ij}}
 \]
-Let $c_{ij}$ be the Euclidean distance between $i$ and $j$ pixel locations\\
-Let $f$ be a flow vector where entry $f_{ij}$ represents the flow from pixel $i$ to pixel $j$\\
+Let $c_{ijkl} = \sqrt{(i-k)^2 + (j-l)^2}$ \\
+Let $f$ be a flow vector where entry $f_{ijkl}$ represents the flow from pixel $x_{ij}$ to pixel $\hat{x_{kl}}$\\
 \[
-WORK = \min_f(\sum_{ij}{c_{ij} f_{ij}} + \alpha \sum_i{(x_i - \sum_j{f_{ij}})^2})
+WORK = \min_f(\sum_{ij}{\sum_{kl}{c_{ijkl} f_{ijkl}}} + \alpha \sum_{ij}{(x_{ij} - \sum_{kl}{f_{ijkl}})^2})
 \]
 subject to the following constraints:\\
 \[
-f_{ij} \geq 0
+f_{ijkl} \geq 0
 \]
 \[
-\sum_i{f_{ij}} = \hat{x}_j
+\sum_{ij}{f_{ijkl}} = \hat{x}_{kl}
 \]
 \[
-\sum_j{f_{ij}} \leq x_i
+\sum_{kl}{f_{ijkl}} \leq x_{ij}
 \]
 Earth-Movers Distance is defined as follows:
 \[
-EMD = \frac{WORK}{\sum_j{\hat{x}_j}}
+EMD = \frac{WORK}{\sum_{kl}{\hat{x}_{kl}}}
 \]
 
 
