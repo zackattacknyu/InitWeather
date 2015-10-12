@@ -84,13 +84,13 @@ WORK = \min_f(\sum_{ij}{\sum_{kl}{c_{ijkl} f_{ijkl}}} + \alpha \sum_{ij}{(x_{ij}
 \]
 subject to the following constraints:\\
 \[
-f_{ijkl} \geq 0
+f_{ijkl} \geq 0 \, \, \forall ijkl
 \]
 \[
-\sum_{ij}{f_{ijkl}} = \hat{x}_{kl}
+\sum_{ij}{f_{ijkl}} = \hat{x}_{kl} \, \, \forall kl
 \]
 \[
-\sum_{kl}{f_{ijkl}} \leq x_{ij}
+\sum_{kl}{f_{ijkl}} \leq x_{ij} \, \, \forall ij
 \]
 Earth-Movers Distance is defined as follows:
 \[
