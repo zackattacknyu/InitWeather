@@ -77,7 +77,10 @@ Without loss of generality,
 \[
 \sum_{kl}{\hat{x}_{kl}} \leq \sum_{ij}{x_{ij}}
 \]
-Let $c_{ijkl} = \sqrt{(i-k)^2 + (j-l)^2}$ \\
+$c_{ijkl}$ represents the distance between $ij$ and $kl$ pixels thus
+\[
+c_{ijkl} = \sqrt{(i-k)^2 + (j-l)^2}
+\]
 Let $f$ be a flow vector where entry $f_{ijkl}$ represents the flow from pixel $x_{ij}$ to pixel $\hat{x_{kl}}$\\
 \[
 WORK = \min_f(\sum_{ij}{\sum_{kl}{c_{ijkl} f_{ijkl}}} + \alpha \sum_{ij}{(x_{ij} - \sum_{kl}{f_{ijkl}})^2})
