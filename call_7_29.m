@@ -29,11 +29,11 @@ for patchI = 1:length(patchNums)
         emdDistsQPQuad(i) = rawF/totalFlow;
         
         if(mod(i,200)==0)
-            save('matlabRun_Patches10-7_resultDataX_temp.mat','emdDistsQPQuad');
+            save('matlabRun_Patches10-26_resultDataX_temp.mat','emdDistsQPQuad');
         end
     end
     
     emdQPArrays{patchI} = emdDistsQPQuad;
     
-    save('matlabRun_Patches10-7_resultDataX.mat','emdQPArrays','patches');
+    save('matlabRun_Patches10-26_resultDataX.mat','emdQPArrays','patches');
 end
