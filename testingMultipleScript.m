@@ -65,13 +65,16 @@ With the 8-5 kde set, some sample nums:
 %patchNums=[239 1015 325 3656 584 3944 4175 2746];
 
 %for the 10-7 patch set
-patchNums=[4221 6279 1493];
+%patchNums=[4221 6279 1493];
 
-save('matlabRun_Patches10-7_setupData.mat','patches','patchNums');
+%for the 10-26 patch set
+patchNums=[420 5376 5277 4024];
+
+save('matlabRun_Patches10-26_setupData.mat','patches','patchNums');
 %%
 alphaVal = 0.1;
 call_7_29;
-save('matlabRun_Patches10-7_resultData4.mat','emdQPArrays','patches');
+save('matlabRun_Patches10-26_resultData4.mat','emdQPArrays','patches');
 %save('matlabRun_alpha0.1_pcaSet9-15.mat','-v7.3');
 %%
 save('matlabRun_alpha0.1_gradientPatches9-14.mat','-v7.3');
